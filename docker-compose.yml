@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  firestore:
+    platform: linux/amd64
+    build: ./firestore
+    ports:
+      - 6641:6641
+    environment:
+      - PROJECT_ID=charaxiv
+      - PORT=6641
+    volumes:
+      - ./firestore:/firestore
+  backend:
+    platform: linux/amd64
+    build: ./backend
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=./gcp-credentials.json      
+      - FIRESTORE_EMULATOR_HOST=firestore:6641
+      - STORAGE_BUCKET_NAME=charaxiv-assets-local
+      - FRONTEND_HOST=*
+      - PORT=6640
+    volumes:
+      - ./backend:/app
+    ports:
+      - 6640:6640
+    command: air
+  
