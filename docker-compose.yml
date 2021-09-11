@@ -28,9 +28,7 @@ services:
   
   frontend:
     platform: linux/amd64
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.development
+    build: ./frontend
     environment:
       - IMAGE_HOST=https://storage.googleapis.com/charaxiv-assets-local
       - SERVERSIDE_HOST=backend:6640
