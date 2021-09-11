@@ -1,0 +1,2 @@
+*.log
+/firestore_export/

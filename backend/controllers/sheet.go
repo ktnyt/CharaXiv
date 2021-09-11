@@ -28,7 +28,7 @@ func AuthorizedSheets(ctx context.Context, system string, page int, tags []strin
 	sheets, err := actions.ListSheets(ctx, username, system, tags, offset, CHARACTER_PAGE_SIZE)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to list sheets")
-		return nil, app.ErrToCode(err)
+		return nil, ErrToCode(err)
 	}
 	for i := range sheets {
 		sheets[i].Own = true
@@ -48,7 +48,7 @@ func GetSheet(ctx context.Context, sheetId string) (models.Sheet, int) {
 	sheet, err := actions.GetSheet(ctx, sheetId)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to get sheet")
-		return sheet, app.ErrToCode(err)
+		return sheet, ErrToCode(err)
 	}
 
 	if username, ok := app.UseUsername(ctx); ok && username == sheet.Owner {
@@ -71,13 +71,13 @@ func UpdateSheet(ctx context.Context, sheetId string, patcher models.SheetPatche
 	err := actions.CheckSheetOwner(ctx, sheetId)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to check sheet ownership")
-		return app.ErrToCode(err)
+		return ErrToCode(err)
 	}
 
 	logger.Debug().Msg("update sheet")
 	if err := actions.UpdateSheet(ctx, sheetId, patcher); err != nil {
 		logger.Error().Err(err).Msg("failed to update sheet")
-		return app.ErrToCode(err)
+		return ErrToCode(err)
 	}
 
 	logger.Debug().Msg("success")
@@ -99,7 +99,7 @@ func CreateSheet(ctx context.Context, system string) (string, int) {
 	sheetId, err := actions.CreateSheet(ctx, system, username)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to create sheet")
-		return "", app.ErrToCode(err)
+		return "", ErrToCode(err)
 	}
 
 	logger.Debug().Msg("success")
@@ -112,20 +112,20 @@ func DeleteSheet(ctx context.Context, sheetId string) int {
 		return c.Str("sheet_id", sheetId)
 	})
 
-	if _, ok := app.UseUsername(ctx); ok {
+	if _, ok := app.UseUsername(ctx); !ok {
 		return http.StatusUnauthorized
 	}
 
 	logger.Debug().Msg("check sheet ownership")
 	if err := actions.CheckSheetOwner(ctx, sheetId); err != nil {
 		logger.Error().Err(err).Msg("failed to check sheet ownership")
-		return app.ErrToCode(err)
+		return ErrToCode(err)
 	}
 
 	logger.Debug().Msg("delete sheet")
 	if err := actions.DeleteSheet(ctx, sheetId); err != nil {
 		logger.Error().Err(err).Msg("failed to delete sheet")
-		return app.ErrToCode(err)
+		return ErrToCode(err)
 	}
 
 	logger.Debug().Msg("success")

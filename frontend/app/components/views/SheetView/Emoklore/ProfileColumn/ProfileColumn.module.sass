@@ -1,0 +1,11 @@
+@import "../Emoklore.module"
+
+.container
+    display: flex
+    flex-direction: column
+    @include column-width-left()
+    padding-bottom: 16px
+    background-color: transparent
+
+    & > *:not(:first-child)
+        padding: 0px 8px 8px 8px

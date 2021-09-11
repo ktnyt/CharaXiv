@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/ktnyt/charaxiv/backend/app"
+	"github.com/ktnyt/charaxiv/backend/internal/lamp"
 	"github.com/ktnyt/charaxiv/backend/internal/otp"
 	"github.com/ktnyt/charaxiv/backend/models"
 )
@@ -23,4 +24,16 @@ func UserSecret(ctx context.Context, username string) (otp.Secret, error) {
 		return nil, err
 	}
 	return otp.SecretFromString(user.Secret)
+}
+
+func GetSystem(ctx context.Context, username string) (string, error) {
+	var user models.User
+	if err := app.UseLamp(ctx).Get(models.UserTableName, username, &user); err != nil {
+		return "", err
+	}
+	return user.System, nil
+}
+
+func SetSystem(ctx context.Context, username, system string) error {
+	return app.UseLamp(ctx).Update(models.UserTableName, username, []lamp.Patch{{Key: "system", Value: system}})
 }

@@ -1,0 +1,18 @@
+@import "index.module"
+
+.container
+    display: grid
+    grid-template-columns: 64px 64px 64px 64px
+    gap: 8px
+    width: 296px
+    padding: 8px
+    background-color: $color-white
+
+    & > div
+        position: relative
+        width: 64px
+        height: 64px
+        cursor: pointer
+
+    &.darkmode
+        background-color: $color-black

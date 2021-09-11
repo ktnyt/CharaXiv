@@ -15,5 +15,3 @@
 # vendor/
 
 backend/gcp-credentials.json
-firestore/firestore_export
-.env.local

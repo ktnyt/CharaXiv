@@ -1,0 +1,55 @@
+@import "index.module"
+
+.container
+    display: flex
+    flex-direction: column
+    margin-bottom: 8px
+    padding: 8px
+
+.header
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    align-items: center
+    margin-left: 8px
+
+    & > :first-child
+        display: flex
+        flex-direction: row
+        justify-content: space-between
+        align-items: center
+        width: 210px
+
+.grid
+    align-self: center
+    display: grid
+    grid-template-columns: 1em 50px 200px
+    gap: 8px
+    place-items: center
+    padding: 8px
+
+    & :global(.body1)
+        font-weight: 600
+
+.random
+    display: grid
+    grid-template-columns: 1fr
+    gap: 8px
+    min-width: 320px
+    border-radius: 4px
+    padding: 8px
+    background-color: $color-white
+    box-shadow: 0 0 5px 0 transparentize(lighten($color-black, 10), 0.2)
+
+    &.darkmode
+        background-color: $color-black
+        box-shadow: 0 0 5px 0 transparentize(darken($color-black, 10), 0.2)
+
+    & > h2
+        margin-top: 8px
+        margin-bottom: 16px
+
+    & > .grid
+        display: grid
+        grid-template-columns: 1fr 1fr 1fr 1fr
+        gap: 4px

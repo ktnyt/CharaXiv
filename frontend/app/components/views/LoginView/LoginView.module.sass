@@ -1,0 +1,29 @@
+@import "index.module"
+
+.container
+    display: flex
+    justify-content: center
+    align-items: center
+    margin-top: 32px
+
+.content
+    display: grid
+    grid-template-columns: 1fr
+    gap: 16px
+    width: 300px
+    border-radius: 4px
+    padding: 16px
+    background-color: $color-white
+    box-shadow: 0 0 5px 0 transparentize(lighten($color-black, 10), 0.2)
+    @include default-transition()
+
+    &.darkmode
+        background-color: $color-black
+        box-shadow: 0 0 5px 0 transparentize(darken($color-black, 10), 0.2)
+
+.status
+    display: flex
+    justify-content: center
+    align-items: center
+    width: 32px
+    height: 32px

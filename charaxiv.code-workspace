@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "path": "frontend"
+    },
+    {
+      "path": "backend"
+    },
+    {
+      "path": "firestore"
+    }
+  ],
+  "settings": {
+    "go.testEnvVars": {
+      "FIRESTORE_EMULATOR_HOST": "localhost:6641"
+    },
+    "git.ignoreLimitWarning": true
+  }
+}

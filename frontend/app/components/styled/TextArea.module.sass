@@ -1,0 +1,74 @@
+@import "index.module"
+
+.textarea
+    width: 100%
+    border: none
+    border-radius: 4px
+    padding: 8px 6px
+    background-color: $color-white
+    color: $color-black
+    font-size: 1.6rem
+    cursor: text
+    user-select: none
+    @include default-transition()
+
+    @media (hover: hover)
+        &:hover
+            background-color: $color-step900
+
+    &::placeholder
+        color: $color-step200
+
+    &.darkmode
+        background-color: $color-black
+        color: $color-white
+
+        @media (hover: hover)
+            &:hover
+                background-color: $color-step100
+
+        &::placeholder
+            color: $color-step800
+
+    &:active
+        outline: none
+
+    &:focus
+        outline: none
+
+    &:disabled
+        background-color: $color-white
+        color: $color-black
+        font-size: 1.6rem
+
+    &.h1
+        height: 44px
+        font-size: 2.8rem
+
+    &.h2
+        height: 40px
+        font-size: 2.4rem
+
+    &.h3
+        height: 36px
+        font-size: 2.0rem
+
+    &.h4
+        height: 32px
+        font-size: 1.6rem
+
+    &.h5
+        height: 30px
+        font-size: 1.4rem
+
+    &.h6
+        height: 28px
+        font-size: 1.2rem
+
+    &.body1
+        height: 32px
+        font-size: 1.6rem
+
+    &.body2
+        height: 30px
+        font-size: 1.4rem

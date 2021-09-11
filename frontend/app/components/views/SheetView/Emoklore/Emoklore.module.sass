@@ -1,0 +1,40 @@
+@import "index.module"
+
+@mixin column-width-left()
+    width: 100vw
+    @media screen and (min-width: 880px)
+        width: 480px
+
+@mixin column-width-right()
+    width: 100vw
+    @media screen and (min-width: 640px)
+        width: min(400px, calc(100vw - 320px))
+
+.container
+    display: flex
+    justify-content: center
+
+.content
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    justify-content: space-evenly
+    align-items: flex-start
+    width: 100vw
+    max-width: 960px
+
+.column-left
+    @include column-width-left()
+    margin: 8px 0px
+    background-color: $color-white
+    &.darkmode
+        background-color: $color-black
+    @include default-transition()
+
+.column-right
+    @include column-width-right()
+    margin: 8px 0px
+    background-color: $color-white
+    &.darkmode
+        background-color: $color-black
+    @include default-transition()

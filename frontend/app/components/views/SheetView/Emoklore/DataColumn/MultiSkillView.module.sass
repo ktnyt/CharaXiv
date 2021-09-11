@@ -1,0 +1,30 @@
+.container
+    display: flex
+    flex-direction: column
+
+.grid
+    display: grid
+
+.button
+    align-self: center
+    margin: 8px
+    width: 100%
+    max-width: 320px
+
+    & > button
+        display: inline-block
+        width: 100%
+
+.genre
+    display: grid
+    grid-template-columns: 100px 1fr 32px 32px
+    gap: 8px
+    place-items: center
+    height: 32px
+
+    & > :first-child
+        justify-self: start
+
+    & > span:global(.bold)
+        line-height: 1em
+        font-weight: 600

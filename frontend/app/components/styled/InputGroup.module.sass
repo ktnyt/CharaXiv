@@ -1,0 +1,15 @@
+.container
+    display: flex
+    align-content: center
+
+    &.horizontal
+        flex-direction: row
+        height: 32px
+        & > *:not(:last-child)
+            margin-right: 8px
+
+    &.vertical
+        flex-direction: column
+        width: 32px
+        & > *:not(:last-child)
+            margin-top: 8px

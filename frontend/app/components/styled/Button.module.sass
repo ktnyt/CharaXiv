@@ -1,0 +1,343 @@
+@import "index.module"
+
+@mixin color-button($base, $contrast)
+    &.default
+        background-color: $base
+        color: $contrast
+        @media (hover: hover)
+            &:hover
+                background-color: mix($color-black, $base, 10)
+        &:active
+            background-color: mix($color-black, $base, 20)
+        &:disabled
+            background-color: mix($color-white, $base, 50)
+            color: mix($color-white, $contrast, 50)
+    &.textual
+        background-color: $color-white
+        color: $base
+        @media (hover: hover)
+            &:hover
+                background-color: mix($base, $color-white, 10)
+        &:active
+            background-color: mix($base, $color-white, 20)
+        &:disabled
+            background-color: $color-white
+            color: mix($color-white, $base, 50)
+    &.outline
+        border: 1px solid $base
+        background-color: $color-white
+        color: $base
+        @media (hover: hover)
+            &:hover
+                background-color: mix($base, $color-white, 10)
+        &:active
+            background-color: mix($base, $color-white, 20)
+        &:disabled
+            border: 1px solid mix($color-white, $base, 50)
+            background-color: $color-white
+            color: mix($color-white, $base, 50)
+    &.darkmode
+        &.default
+            background-color: $base
+            color: $contrast
+            @media (hover: hover)
+                &:hover
+                    background-color: mix($color-white, $base, 10)
+            &:active
+                background-color: mix($color-white, $base, 20)
+            &:disabled
+                background-color: mix($color-black, $base, 50)
+                color: mix($color-black, $contrast, 50)
+        &.textual
+            background-color: $color-black
+            color: $base
+            @media (hover: hover)
+                &:hover
+                    background-color: mix($base, $color-black, 10)
+            &:active
+                background-color: mix($base, $color-black, 20)
+            &:disabled
+                background-color: $color-black
+                color: mix($color-black, $base, 50)
+        &.outline
+            border: 1px solid $base
+            background-color: $color-black
+            color: $base
+            @media (hover: hover)
+                &:hover
+                    background-color: mix($base, $color-black, 10)
+            &:active
+                background-color: mix($base, $color-black, 20)
+            &:disabled
+                border: 1px solid mix($color-black, $base, 50)
+                background-color: $color-black
+                color: mix($color-black, $base, 50)
+
+.button
+    display: inline-block
+    height: 32px
+    padding: 0 6px
+    border-radius: 4px
+    border: none,
+    font-size: 1.6rem
+    line-height: 1.6rem
+    user-select: none
+    cursor: pointer
+    @include default-transition()
+
+    & *
+        transition: none
+
+    & > .center
+        display: flex
+        justify-content: center
+        align-items: center
+
+    &.full-width
+        width: 100%
+        padding: 0
+
+    &:focus
+        outline: none
+
+    &.shadow
+        box-shadow: 0 0 5px 0 transparentize(lighten($color-black, 10), 0.2)
+        &.darkmode
+            box-shadow: 0 0 5px 0 transparentize(darken($color-black, 10), 0.2)
+
+    &.primary
+        @include color-button($color-primary-base, $color-primary-contrast)
+
+    &.secondary
+        @include color-button($color-secondary-base, $color-secondary-contrast)
+
+    &.tertiary
+        @include color-button($color-tertiary-base, $color-tertiary-contrast)
+
+    &.success
+        @include color-button($color-success-base, $color-success-contrast)
+
+    &.warning
+        @include color-button($color-warning-base, $color-warning-contrast)
+
+    &.danger
+        @include color-button($color-danger-base, $color-danger-contrast)
+
+    &.light
+        &.default
+            background-color: $color-step900
+            color: $color-step200
+            @media (hover: hover)
+                &:hover
+                    background-color: mix($color-black, $color-step900, 10)
+            &:active
+                background-color: mix($color-black, $color-step900, 20)
+            &:disabled
+                background-color: mix($color-white, $color-step900, 50)
+                color: mix($color-white, $color-step200, 50)
+        &.textual
+            background-color: $color-white
+            color: $color-step400
+            @media (hover: hover)
+                &:hover
+                    background-color: mix($color-step400, $color-white, 10)
+            &:active
+                background-color: mix($color-step400, $color-white, 20)
+            &:disabled
+                background-color: $color-white
+                color: mix($color-white, $color-step400, 50)
+        &.outline
+            border: 1px solid $color-step400
+            background-color: $color-white
+            color: $color-step400
+            @media (hover: hover)
+                &:hover
+                    background-color: mix($color-step400, $color-white, 10)
+            &:active
+                background-color: mix($color-step400, $color-white, 20)
+            &:disabled
+                border: 1px solid mix($color-white, $color-step400, 50)
+                background-color: $color-white
+                color: mix($color-white, $color-step400, 50)
+        &.darkmode
+            &.default
+                background-color: $color-step100
+                color: $color-step800
+                @media (hover: hover)
+                    &:hover
+                        background-color: mix($color-white, $color-step100, 10)
+                &:active
+                    background-color: mix($color-white, $color-step100, 20)
+                &:disabled
+                    background-color: mix($color-black, $color-step100, 50)
+                    color: mix($color-black, $color-step800, 50)
+            &.textual
+                background-color: $color-black
+                color: $color-step600
+                @media (hover: hover)
+                    &:hover
+                        background-color: mix($color-step600, $color-black, 10)
+                &:active
+                    background-color: mix($color-step600, $color-black, 20)
+                &:disabled
+                    background-color: $color-black
+                    color: mix($color-black, $color-step600, 50)
+            &.outline
+                border: 1px solid $color-step600
+                background-color: $color-black
+                color: $color-step600
+                @media (hover: hover)
+                    &:hover
+                        background-color: mix($color-step600, $color-black, 10)
+                &:active
+                    background-color: mix($color-step600, $color-black, 20)
+                &:disabled
+                    border: 1px solid mix($color-black, $color-step600, 50)
+                    background-color: $color-black
+                    color: mix($color-black, $color-step600, 50)
+
+    &.medium
+        &.default
+            background-color: $color-step700
+            color: $color-step100
+            @media (hover: hover)
+                &:hover
+                    background-color: mix($color-black, $color-step700, 10)
+            &:active
+                background-color: mix($color-black, $color-step700, 20)
+            &:disabled
+                background-color: mix($color-white, $color-step700, 50)
+                color: mix($color-white, $color-step100, 50)
+        &.textual
+            background-color: $color-white
+            color: $color-step200
+            @media (hover: hover)
+                &:hover
+                    background-color: mix($color-step200, $color-white, 10)
+            &:active
+                background-color: mix($color-step200, $color-white, 20)
+            &:disabled
+                background-color: $color-white
+                color: mix($color-white, $color-step200, 50)
+        &.outline
+            border: 1px solid $color-step200
+            background-color: $color-white
+            color: $color-step200
+            @media (hover: hover)
+                &:hover
+                    background-color: mix($color-step200, $color-white, 10)
+            &:active
+                background-color: mix($color-step200, $color-white, 20)
+            &:disabled
+                border: 1px solid mix($color-white, $color-step200, 50)
+                background-color: $color-white
+                color: mix($color-white, $color-step200, 50)
+        &.darkmode
+            &.default
+                background-color: $color-step300
+                color: $color-step900
+                @media (hover: hover)
+                    &:hover
+                        background-color: mix($color-white, $color-step300, 10)
+                &:active
+                    background-color: mix($color-white, $color-step300, 20)
+                &:disabled
+                    background-color: mix($color-black, $color-step300, 50)
+                    color: mix($color-black, $color-step900, 50)
+            &.textual
+                background-color: $color-black
+                color: $color-step800
+                @media (hover: hover)
+                    &:hover
+                        background-color: mix($color-step800, $color-black, 10)
+                &:active
+                    background-color: mix($color-step800, $color-black, 20)
+                &:disabled
+                    background-color: $color-black
+                    color: mix($color-black, $color-step800, 50)
+            &.outline
+                border: 1px solid $color-step800
+                background-color: $color-black
+                color: $color-step800
+                @media (hover: hover)
+                    &:hover
+                        background-color: mix($color-step800, $color-black, 10)
+                &:active
+                    background-color: mix($color-step800, $color-black, 20)
+                &:disabled
+                    border: 1px solid mix($color-black, $color-step800, 50)
+                    background-color: $color-black
+                    color: mix($color-black, $color-step800, 50)
+
+    &.dark
+        &.default
+            background-color: $color-step500
+            color: $color-step1000
+            @media (hover: hover)
+                &:hover
+                    background-color: mix($color-black, $color-step500, 10)
+            &:active
+                background-color: mix($color-black, $color-step500, 20)
+            &:disabled
+                background-color: mix($color-white, $color-step500, 50)
+                color: $color-white
+        &.textual
+            background-color: $color-white
+            color: $color-step0
+            @media (hover: hover)
+                &:hover
+                    background-color: mix($color-step0, $color-white, 10)
+            &:active
+                background-color: mix($color-step0, $color-white, 20)
+            &:disabled
+                background-color: $color-white
+                color: mix($color-white, $color-step0, 50)
+        &.outline
+            border: 1px solid $color-step0
+            background-color: $color-white
+            color: $color-step0
+            @media (hover: hover)
+                &:hover
+                    background-color: mix($color-step0, $color-white, 10)
+            &:active
+                background-color: mix($color-step0, $color-white, 20)
+            &:disabled
+                border: 1px solid mix($color-white, $color-step0, 50)
+                background-color: $color-white
+                color: mix($color-white, $color-step0, 50)
+        &.darkmode
+            &.default
+                background-color: $color-step500
+                color: $color-step1000
+                @media (hover: hover)
+                    &:hover
+                        background-color: mix($color-white, $color-step500, 10)
+                &:active
+                    background-color: mix($color-white, $color-step500, 20)
+                &:disabled
+                    background-color: mix($color-black, $color-step500, 50)
+                    color: mix($color-black, $color-step1000, 50)
+            &.textual
+                background-color: $color-black
+                color: $color-step1000
+                @media (hover: hover)
+                    &:hover
+                        background-color: mix($color-step1000, $color-black, 10)
+                &:active
+                    background-color: mix($color-step1000, $color-black, 20)
+                &:disabled
+                    background-color: $color-black
+                    color: mix($color-black, $color-step1000, 50)
+            &.outline
+                border: 1px solid $color-step1000
+                background-color: $color-black
+                color: $color-step1000
+                @media (hover: hover)
+                    &:hover
+                        background-color: mix($color-step1000, $color-black, 10)
+                &:active
+                    background-color: mix($color-step1000, $color-black, 20)
+                &:disabled
+                    border: 1px solid mix($color-black, $color-step1000, 50)
+                    background-color: $color-black
+                    color: mix($color-black, $color-step1000, 50)

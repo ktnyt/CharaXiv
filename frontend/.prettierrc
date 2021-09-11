@@ -1,0 +1,16 @@
+{
+  "singleQuote": true,
+  "semi": false,
+  "trailingComma": "all",
+  "importOrder": [
+    "^react",
+    "^next",
+    "^[A-Za-z]",
+    "^@[^/]",
+    "^@/",
+    "^\\./(.*)[^(.sass)]$",
+    "^\\./(.*)(.sass)$",
+    "^\\.\\./"
+  ],
+  "importOrderSeparation": false
+}

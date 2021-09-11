@@ -1,0 +1,454 @@
+@import "index.module"
+
+.container
+    display: flex
+    flex-direction: column
+
+.editor
+    min-height: 122px
+    border-radius: 4px
+    padding: 0px 8px
+    background-color: $color-white
+    font-size: 1.4rem
+    cursor: text
+    transition: background-color 0.2s
+
+    &.disabled
+        @media (hover: hover)
+            &:hover
+                background-color: $color-white
+            &.darkmode
+                &:hover
+                    background-color: $color-black
+
+    @media (hover: hover)
+        &:hover
+            background-color: $color-step950
+
+    :global(.DraftEditor-editorContainer)
+        &::before
+            display: table
+            content: ''
+
+        &::after
+            display: table
+            clear: both
+            content: ''
+
+        & > div > div> *:first-child
+            margin-top: 8px !important
+            padding-top: 0 !important
+
+        & > div > div> *:last-child
+            margin-bottom: 8px !important
+            padding-bottom: 0 !important
+
+        & > *:not([href])
+            color: inherit
+            text-decoration: none
+
+        & a
+            color: $color-primary-base
+
+        & p, blockquote, ul, ol, dl, table, pre, details
+            margin-top: 0
+            margin-bottom: 16px
+
+        & hr
+            height: 0.25em
+            padding: 0
+            margin: 24px 0
+            background-color: $color-step300
+
+        & blockquote
+            padding: 0 1em
+            margin: 0
+            color: $color-step100
+            border-left: 0.25em solid $color-step800
+
+            & > :first-child
+                margin-top: 0
+
+            & > :last-child
+                margin-bottom: 0
+
+        & h1, h2, h3, h4, h5, h6
+            margin-top: 24px
+            margin-bottom: 16px
+            font-weight: 600
+            line-height: 1.25
+
+            & tt, code
+                padding: 0 0.2em
+                font-size: inherit
+
+        & h1
+            padding-bottom: 0.3me
+            font-size: 2em
+            border-bottom: 1px solid $color-step800
+
+        & h2
+            padding-bottom: 0.3em
+            font-size: 1.5em
+            border-bottom: 1px solid $color-step800
+
+        & h3
+            font-size: 1.25em
+
+        & h4
+            font-size: 1em
+
+        & h5
+            font-size: 0.875em
+
+        & h6
+            font-size: 0.85em
+            color: $color-step900
+
+        & ul, ol
+            display: block
+            padding-left: 0.5em
+
+        & ol[type='1']
+            list-style-type: decimal
+
+        & ol[type='a']
+            list-style-type: lower-alpha
+
+        & ol[type='i']
+            list-style-type: lower-roman
+
+        & div > ol:not([type])
+            list-style-type: decimal
+
+        & ul ol, ol ol
+            list-style-type: lower-roman
+
+        & ul ul ol, ul ol ol, ol ul ol, ol ol ol
+            list-style-type: lower-alpha
+
+        & ul ul, ul ol, ol ul, ol ol
+            margin-top: 0
+            margin-bottom: 0
+
+        & li > p
+            margin-top: 16px
+
+        & li + li
+            margin-top: 0.25em
+
+        & dl
+            padding: 0
+
+            & dt
+                padding: 0
+                margin-top: 16px
+                font-size: 1em
+                font-style: italic
+                font-weight: 600
+
+            & dd
+                padding: 0 16px
+                margin-bottom: 16px
+
+        & table
+            display: block
+            width: max-content
+            max-width: 100%
+            overflow: auto
+
+            & th, td
+                padding: 6px 13px
+                border: 1px solid $color-white
+
+            & tr
+                background-color: $color-white
+                border-top: 1px solid $color-step900
+
+            & tr:nth-child(2n)
+                background-color: $color-step100
+
+            & img
+                max-width: 100%
+                box-sizing: content-box
+                background-color: $color-white
+
+            & img[align='right']
+                padding-left: 20px
+
+            & img[align='left']
+                padding-right: 20px
+
+        & .emoji
+            max-width: none
+            vertical-align: text-top
+            background-color: transparent
+
+        & code, tt
+            padding: 0.2em 0.4em
+            margin: 0
+            font-size: 85%
+            background-color: $color-step100
+
+            & br
+                display: none
+
+        & del code
+            text-decoration: inherit
+
+        & pre
+            word-wrap: normal
+
+            & code
+                font-size: 100%
+
+            & > code
+                padding: 0
+                margin: 0
+                word-break: normal
+                white-space: pre
+                background: transparent
+                border: 0
+
+            &code, tt
+                display: inline
+                max-width: auto
+                padding: 0
+                margin: 0
+                overflow: visible
+                line-height: inherit
+                word-wrap: normal
+                background-color: transparent
+                border: 0
+
+    &.darkmode
+        background-color: $color-black
+
+        @media (hover: hover)
+            &:hover
+                background-color: $color-step50
+
+        :global(.DraftEditor-editorContainer)
+            &::before
+                display: table
+                content: ''
+
+            &::after
+                display: table
+                clear: both
+                content: ''
+
+            & > *:first-child
+                margin-top: 0 !important
+
+            & > *:last-child
+                margin-bottom: 0 !important
+
+            & > *:not([href])
+                color: inherit
+                text-decoration: none
+
+            & a
+                color: $color-primary-base
+
+            & p, blockquote, ul, ol, dl, table, pre, details
+                margin-top: 0
+                margin-bottom: 16px
+
+            & hr
+                height: 0.25em
+                padding: 0
+                margin: 24px 0
+                background-color: $color-step700
+
+            & blockquote
+                padding: 0 1em
+                margin: 0
+                color: $color-step900
+                border-left: 0.25em solid $color-step200
+
+                & > :first-child
+                    margin-top: 0
+
+                & > :last-child
+                    margin-bottom: 0
+
+            & h1, h2, h3, h4, h5, h6
+                margin-top: 24px
+                margin-bottom: 16px
+                font-weight: 600
+                line-height: 1.25
+
+                & tt, code
+                    padding: 0 0.2em
+                    font-size: inherit
+
+            & h1
+                padding-bottom: 0.3me
+                font-size: 2em
+                border-bottom: 1px solid $color-step800
+
+            & h2
+                padding-bottom: 0.3em
+                font-size: 1.5em
+                border-bottom: 1px solid $color-step800
+
+            & h3
+                font-size: 1.25em
+
+            & h4
+                font-size: 1em
+
+            & h5
+                font-size: 0.875em
+
+            & h6
+                font-size: 0.85em
+                color: $color-step100
+
+            & ul, ol
+                display: block
+                padding-left: 0.5em
+
+            & ol[type='1']
+                list-style-type: decimal
+
+            & ol[type='a']
+                list-style-type: lower-alpha
+
+            & ol[type='i']
+                list-style-type: lower-roman
+
+            & div > ol:not([type])
+                list-style-type: decimal
+
+            & ul ol, ol ol
+                list-style-type: lower-roman
+
+            & ul ul ol, ul ol ol, ol ul ol, ol ol ol
+                list-style-type: lower-alpha
+
+            & ul ul, ul ol, ol ul, ol ol
+                margin-top: 0
+                margin-bottom: 0
+
+            & li > p
+                margin-top: 16px
+
+            & li + li
+                margin-top: 0.25em
+
+            & dl
+                padding: 0
+
+                & dt
+                    padding: 0
+                    margin-top: 16px
+                    font-size: 1em
+                    font-style: italic
+                    font-weight: 600
+
+                & dd
+                    padding: 0 16px
+                    margin-bottom: 16px
+
+            & table
+                display: block
+                width: max-content
+                max-width: 100%
+                overflow: auto
+
+                & th, td
+                    padding: 6px 13px
+                    border: 1px solid $color-black
+
+                & tr
+                    background-color: $color-black
+                    border-top: 1px solid $color-step100
+
+                & tr:nth-child(2n)
+                    background-color: $color-step900
+
+                & img
+                    max-width: 100%
+                    box-sizing: content-box
+                    background-color: $color-black
+
+                & img[align='right']
+                    padding-left: 20px
+
+                & img[align='left']
+                    padding-right: 20px
+
+            & .emoji
+                max-width: none
+                vertical-align: text-top
+                background-color: transparent
+
+            & code, tt
+                padding: 0.2em 0.4em
+                margin: 0
+                font-size: 85%
+                background-color: $color-step900
+
+                & br
+                    display: none
+
+            & del code
+                text-decoration: inherit
+
+            & pre
+                word-wrap: normal
+
+                & code
+                    font-size: 100%
+
+                & > code
+                    padding: 0
+                    margin: 0
+                    word-break: normal
+                    white-space: pre
+                    background: transparent
+                    border: 0
+
+                &code, tt
+                    display: inline
+                    max-width: auto
+                    padding: 0
+                    margin: 0
+                    overflow: visible
+                    line-height: inherit
+                    word-wrap: normal
+                    background-color: transparent
+                    border: 0
+
+.controls
+    margin-bottom: 8px
+
+.markdown
+    display: flex
+    flex-direction: column
+    min-width: 300px
+    width: calc(80vw)
+    height: calc(80vh)
+    border-radius: 2px
+    padding: 8px
+    background-color: $color-white
+    box-shadow: 0 0 5px 0 transparentize(lighten($color-black, 10), 0.2)
+
+    & textarea
+        width: 100%
+        height: 100%
+        resize: none
+
+    &.darkmode
+        background-color: $color-black
+        box-shadow: 0 0 5px 0 transparentize(darken($color-black, 10), 0.2)
+
+    & > :first-child
+        flex-grow: 1
+        margin-bottom: 8px
+
+    & > :last-child
+        display: flex
+        justify-content: flex-end

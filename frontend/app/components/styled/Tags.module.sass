@@ -1,0 +1,49 @@
+@import "index.module"
+
+.container
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    width: 100%
+    min-height: 34px
+    border: 1px solid $color-step800
+    border-radius: 4px
+    padding-top: 4px
+    background-color: $color-white
+    color: $color-black
+    cursor: text
+    @include default-transition()
+
+    &.disabled
+        cursor: auto
+
+    &.darkmode
+        border-color: $color-step200
+        background-color: $color-black
+        color: $color-white
+
+.item
+    display: flex
+    height: 24px
+    margin-left: 4px
+    margin-bottom: 4px
+
+.input
+    display: inline-block
+    max-width: 100%
+    height: 24px
+    margin: 0px 4px
+    border: none
+    padding: 0
+    background-color: transparent
+    color: $color-black
+    font-size: 16px
+
+    &:active
+        outline: none
+
+    &:focus
+        outline: none
+
+    &.darkmode
+        color: $color-white

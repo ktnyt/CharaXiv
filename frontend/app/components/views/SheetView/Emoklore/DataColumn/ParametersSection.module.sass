@@ -1,0 +1,22 @@
+@import "index.module"
+
+.container
+    display: flex
+    flex-direction: column
+    margin-bottom: 8px
+    padding: 8px
+
+.header
+    margin-left: 8px
+
+.grid
+    align-self: center
+    display: grid
+    grid-template-columns: 1em 50px 200px
+    grid-auto-rows: 32px
+    grid-gap: 8px
+    place-items: center
+    padding: 8px
+
+    & :global(.body1)
+        font-weight: 600

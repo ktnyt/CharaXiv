@@ -19,7 +19,7 @@ func GrantAccess(ctx context.Context, username string, passcode int32) (string, 
 	secret, err := actions.UserSecret(ctx, username)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to get user secret")
-		return "", app.ErrToCode(err)
+		return "", ErrToCode(err)
 	}
 
 	logger.Debug().Msg("verify passcode")
@@ -32,7 +32,7 @@ func GrantAccess(ctx context.Context, username string, passcode int32) (string, 
 	accessToken, err := actions.CreateIdentity(ctx, username)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to create new identity")
-		return "", app.ErrToCode(err)
+		return "", ErrToCode(err)
 	}
 
 	logger.Debug().Msg("success")
@@ -50,7 +50,7 @@ func RevokeAccess(ctx context.Context) int {
 	logger.Debug().Msg("delete identity")
 	if err := actions.DeleteIdentity(ctx, accessToken); err != nil {
 		logger.Error().Err(err).Msg("failed to delete identity")
-		return app.ErrToCode(err)
+		return ErrToCode(err)
 	}
 
 	logger.Debug().Msg("success")

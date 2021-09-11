@@ -1,0 +1,87 @@
+@import "index.module"
+
+.container
+    overflow: visible
+    user-select: none
+
+.control
+    display: flex
+    align-items: center
+    height: 32px
+    border: 1px solid $color-step800
+    border-radius: 4px
+    cursor: pointer
+    transition: border 0.2s
+
+    &.darkmode
+        border: 1px solid $color-step200
+
+.label
+    padding: 0 8px
+    width: 128px
+    color: $color-black
+    transition: color 0.2s
+
+    &.darkmode
+        color: $color-white
+
+.divider
+    display: inline-block
+    width: 1px
+    height: 16px
+    background-color: $color-step800
+    transition: background-color 0.2s
+
+    &.darkmode
+        background-color: $color-step200
+
+.switch
+    display: flex
+    width: 32px
+    height: 32px
+    justify-content: center
+    align-items: center
+    color: $color-step0
+    transition: color 0.2s
+
+    @media (hover: hover)
+    &:hover
+        color: $color-step100
+
+    &.darkmode
+        color: $color-step1000
+        @media (hover: hover)
+        &:hover
+            color: $color-step900
+
+.options
+    display: flex
+    flex-direction: column
+    position: relative
+    z-index: 1
+    margin-top: 8px
+    border-radius: 4px
+    padding: 4px 0px
+    background-color: $color-white
+    box-shadow: 0 0 5px 0 transparentize(lighten($color-black, 10), 0.2)
+    transition: background-color 0.2s
+
+    &.darkmode
+        background-color: $color-black
+        box-shadow: 0 0 5px 0 transparentize(darken($color-black, 10), 0.2)
+
+.option
+    display: flex
+    align-items: center
+    height: 32px
+    padding: 0px 8px
+    transition: color 0.2s
+
+    @media (hover: hove)
+    &:hover
+        background-color: $color-step900
+
+    &.darkmode
+        @media (hover: hove)
+        &:hover
+            background-color: $color-step100

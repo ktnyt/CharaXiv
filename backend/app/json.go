@@ -47,3 +47,20 @@ func JsonResponse(w http.ResponseWriter, r *http.Request, p interface{}) {
 		logger.Error().Err(err).Msg("failed to encode JSON response")
 	}
 }
+
+func JsonError(w http.ResponseWriter, r *http.Request, code int) {
+	logger := zerolog.Ctx(r.Context())
+	buf := &bytes.Buffer{}
+	enc := json.NewEncoder(buf)
+	enc.SetEscapeHTML(false)
+
+	switch err := enc.Encode(http.StatusText(code)); err {
+	case nil:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(code)
+		w.Write(buf.Bytes())
+
+	default:
+		logger.Error().Err(err).Msg("failed to encode JSON response")
+	}
+}

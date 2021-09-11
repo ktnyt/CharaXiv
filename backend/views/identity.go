@@ -13,7 +13,7 @@ func LoginView(w http.ResponseWriter, r *http.Request) {
 	case http.StatusOK:
 		app.JsonResponse(w, r, accessToken)
 	default:
-		http.Error(w, http.StatusText(code), code)
+		app.JsonError(w, r, code)
 	}
 }
 
@@ -23,6 +23,6 @@ func LogoutView(w http.ResponseWriter, r *http.Request) {
 	case http.StatusOK:
 		app.JsonResponse(w, r, true)
 	default:
-		http.Error(w, http.StatusText(code), code)
+		app.JsonError(w, r, code)
 	}
 }

@@ -1,0 +1,13 @@
+.container
+    display: grid
+    grid-template-columns: 100px 1fr 32px 32px
+    gap: 8px
+    place-items: center
+    height: 32px
+
+    & > :first-child
+        justify-self: start
+
+    & > span:global(.bold)
+        line-height: 1em
+        font-weight: 600

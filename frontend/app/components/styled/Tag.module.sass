@@ -1,0 +1,67 @@
+@import "index.module"
+
+.container
+    display: flex
+    align-items: center
+    height: 24px
+    border-radius: 2px
+    background-color: $color-step900
+    @include default-transition()
+
+    &.darkmode
+        background-color: $color-step100
+
+.label
+    display: flex
+    justify-content: center
+    align-items: center
+    height: 24px
+    padding-left: 4px
+    padding-right: 2px
+    color: $color-black
+    font-size: 16px
+    @include default-transition()
+
+    &.darkmode
+        color: $color-white
+
+    &.disabled
+        padding-right: 4px
+
+.button-wrapper
+    display: flex
+    justify-content: center
+    align-items: center
+
+.button
+    display: inline-block
+    width: 24px
+    height: 24px
+    border: none
+    border-radius: 2px
+    padding: 0
+    background-color: $color-step900
+    color: $color-black
+    font-size: 14px
+    line-height: 14px
+    cursor: pointer
+    @include default-transition()
+
+    @media (hover: hover)
+        &:hover
+            background-color: $color-step800
+
+    &:active
+        background-color: $color-step700
+        outline: none
+
+    &:focus
+        outline: none
+
+    &.darkmode
+        background-color: $color-step100
+        color: $color-white
+
+        @media (hover: hover)
+            &:hover
+                background-color: $color-step200

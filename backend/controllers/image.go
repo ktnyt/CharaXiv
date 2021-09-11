@@ -29,7 +29,7 @@ func AddImage(ctx context.Context, sheetId string, f multipart.File) (string, in
 	sheet, err := actions.GetSheet(ctx, sheetId)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to get sheet")
-		return "", app.ErrToCode(err)
+		return "", ErrToCode(err)
 	}
 
 	if username != sheet.Owner {
@@ -49,14 +49,14 @@ func AddImage(ctx context.Context, sheetId string, f multipart.File) (string, in
 	logger.Debug().Msg("save image")
 	if err := actions.SaveImage(ctx, path, img); err != nil {
 		logger.Error().Err(err).Msg("failed to save image")
-		return "", app.ErrToCode(err)
+		return "", ErrToCode(err)
 	}
 
 	logger.Debug().Msg("update sheet")
 	patcher := models.SheetImagePatcher(append(sheet.Images, path))
 	if err := actions.UpdateSheet(ctx, sheetId, patcher); err != nil {
 		logger.Error().Err(err).Msg("failed to update sheet")
-		return "", app.ErrToCode(err)
+		return "", ErrToCode(err)
 	}
 
 	logger.Debug().Msg("success")
@@ -78,7 +78,7 @@ func RemoveImage(ctx context.Context, sheetId, path string) int {
 	sheet, err := actions.GetSheet(ctx, sheetId)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to get sheet")
-		return app.ErrToCode(err)
+		return ErrToCode(err)
 	}
 
 	if username != sheet.Owner {
@@ -96,7 +96,7 @@ func RemoveImage(ctx context.Context, sheetId, path string) int {
 	patcher := models.SheetImagePatcher(append(sheet.Images[:i], sheet.Images[i+1:]...))
 	if err := actions.UpdateSheet(ctx, sheetId, patcher); err != nil {
 		logger.Error().Err(err).Msg("failed to update sheet")
-		return app.ErrToCode(err)
+		return ErrToCode(err)
 	}
 
 	logger.Debug().Msg("delete image")

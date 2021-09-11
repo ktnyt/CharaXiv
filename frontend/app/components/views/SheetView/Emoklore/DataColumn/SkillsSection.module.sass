@@ -1,0 +1,74 @@
+@import "index.module"
+
+.container
+    display: flex
+    flex-direction: column
+    margin-bottom: 8px
+    padding: 8px
+
+.header
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    align-items: center
+    margin-left: 8px
+
+    & > :first-child
+        display: flex
+        flex-direction: row
+        justify-content: space-between
+        align-items: center
+        width: 210px
+
+.category
+    display: flex
+    flex-direction: column
+    align-items: center
+    padding: 8px
+
+    & > h2
+        align-self: flex-start
+
+.group
+    display: flex
+    flex-direction: column
+    width: 100%
+    padding: 8px 0px
+
+    & > :not(:first-child)
+        margin-top: 8px
+
+.grid
+    display: grid
+    grid-template-columns: 1fr 1fr
+
+    & > :nth-child(2n)
+        justify-self: end
+
+.palette
+    display: flex
+    flex-direction: column
+    min-width: 300px
+    width: calc(80vw)
+    height: calc(80vh)
+    border-radius: 2px
+    padding: 8px
+    background-color: $color-white
+    box-shadow: 0 0 5px 0 transparentize(lighten($color-black, 10), 0.2)
+
+    & textarea
+        width: 100%
+        height: 100%
+        resize: none
+
+    &.darkmode
+        background-color: $color-black
+        box-shadow: 0 0 5px 0 transparentize(darken($color-black, 10), 0.2)
+
+    & > :first-child
+        flex-grow: 1
+        margin-bottom: 8px
+
+    & > :last-child
+        display: flex
+        justify-content: flex-end

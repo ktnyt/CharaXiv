@@ -13,7 +13,7 @@ func RegisterView(w http.ResponseWriter, r *http.Request) {
 	case http.StatusOK:
 		app.JsonResponse(w, r, uri.String())
 	default:
-		http.Error(w, http.StatusText(code), code)
+		app.JsonError(w, r, code)
 	}
 }
 
@@ -23,6 +23,6 @@ func VerifyView(w http.ResponseWriter, r *http.Request) {
 	case http.StatusOK:
 		app.JsonResponse(w, r, accessToken)
 	default:
-		http.Error(w, http.StatusText(code), code)
+		app.JsonError(w, r, code)
 	}
 }

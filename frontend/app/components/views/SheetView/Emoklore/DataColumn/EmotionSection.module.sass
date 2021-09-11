@@ -1,0 +1,40 @@
+@import "index.module"
+
+.container
+    display: flex
+    flex-direction: column
+    justify-content: center
+    padding: 8px
+    margin-bottom: 8px
+
+    & > h1
+        padding: 0px 8px
+
+.buttons
+    align-self: center
+    display: grid
+    grid-template-columns: 1fr
+    gap: 8px
+    margin: 8px
+    width: 100%
+    max-width: 320px
+
+.picker
+    min-width: 320px
+    border-radius: 4px
+    padding: 8px
+    background-color: $color-white
+    box-shadow: 0 0 5px 0 transparentize(lighten($color-black, 10), 0.2)
+
+    &.darkmode
+        background-color: $color-black
+        box-shadow: 0 0 5px 0 transparentize(darken($color-black, 10), 0.2)
+
+    & > h2
+        margin-top: 8px
+        margin-bottom: 16px
+
+    & > .grid
+        display: grid
+        grid-template-columns: 1fr 1fr 1fr 1fr
+        gap: 4px

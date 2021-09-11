@@ -1,0 +1,137 @@
+@import "index.module"
+
+@mixin input-scheme($light-normal, $light-hover, $dark-normal, $dark-hover)
+    background-color: $light-normal
+    color: $color-black
+
+    @media (hover: hover)
+        &:hover
+            background-color: $light-hover
+
+    &::placeholder
+        color: $color-step300
+
+    &:disabled
+        background-color: $light-normal
+        color: $color-black
+        -webkit-text-fill-color: $color-black
+        opacity: 1
+
+    &.darkmode
+        background-color: $dark-normal
+        color: $color-white
+
+        @media (hover: hover)
+            &:hover
+                background-color: $dark-hover
+
+        &::placeholder
+            color: $color-step700
+
+        &:disabled
+            background-color: $dark-normal
+            color: $color-white
+            -webkit-text-fill-color: $color-white
+            opacity: 1
+
+@mixin border-scheme($light-color, $dark-color)
+    height: 30px
+    padding-left: 5px
+    border: 1px solid $light-color
+    transition: border 0.2s
+    &.darkmode
+        border: 1px solid $dark-color
+
+.container
+    width: 100%
+    border-radius: 4px
+    padding-left: 6px
+    font-size: 1.6rem
+    line-height: 1.6rem
+    cursor: text
+    user-select: none
+    @include default-transition()
+
+    &.light
+        @include input-scheme($color-white, $color-step900, $color-black, $color-step100)
+
+    &.medium
+        @include input-scheme($color-step950, $color-step850, $color-step50, $color-step150)
+
+    &.dark
+        @include input-scheme($color-step900, $color-step800, $color-step100, $color-step200)
+
+    &.border-light
+        @include border-scheme($color-step900, $color-step100)
+
+    &.border-medium
+        @include border-scheme($color-step800, $color-step200)
+
+    &.border-dark
+        @include border-scheme($color-step700, $color-step300)
+
+    &.border-primary
+        @include border-scheme(lighten($color-primary-base, 20), darken($color-primary-base, 20))
+
+    &.border-secondary
+        @include border-scheme(lighten($color-secondary-base, 20), darken($color-secondary-base, 20))
+
+    &.border-tertiary
+        @include border-scheme(lighten($color-tertiary-base, 20), darken($color-tertiary-base, 20))
+
+    &.border-success
+        @include border-scheme(lighten($color-success-base, 20), darken($color-success-base, 20))
+
+    &.border-warning
+        @include border-scheme(lighten($color-warning-base, 20), darken($color-warning-base, 20))
+
+    &.border-danger
+        @include border-scheme(lighten($color-danger-base, 20), darken($color-danger-base, 20))
+
+    &.h1
+        height: 44px
+        font-size: 2.8rem
+
+    &.h2
+        height: 40px
+        font-size: 2.4rem
+
+    &.h3
+        height: 36px
+        font-size: 2.0rem
+
+    &.h4
+        height: 32px
+        font-size: 1.6rem
+
+    &.h5
+        height: 30px
+        font-size: 1.4rem
+
+    &.h6
+        height: 28px
+        font-size: 1.2rem
+
+    &.body1
+        height: 32px
+        font-size: 1.6rem
+
+    &.body2
+        height: 30px
+        font-size: 1.4rem
+
+.input
+    flex-grow: 1
+    height: 100%
+    padding: 0px 6px 0px 0px
+    line-height: 100%
+    border: none
+    background-color: transparent
+    color: inherit
+    font-size: inherit
+
+    &:active
+        outline: none
+
+    &:focus
+        outline: none

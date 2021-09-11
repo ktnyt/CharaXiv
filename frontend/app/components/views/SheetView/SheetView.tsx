@@ -1,0 +1,47 @@
+import { Fragment } from 'react'
+import { useRouter } from 'next/dist/client/router'
+import Error from 'next/error'
+import Head from 'next/head'
+import { Sheet } from '@/api/sheet'
+import { useAppData } from '@/context/AppDataContext'
+import { imageUrl } from '@/helpers/image_url'
+import { Layout } from '@/layout/Layout'
+import { Emoklore } from './Emoklore'
+
+export interface SheetViewProps {
+  sheet: Sheet
+}
+
+export const SheetView = ({ sheet }: SheetViewProps) => {
+  const { asPath: url } = useRouter()
+  const title = sheet.name === '' ? '名無しさん' : sheet.name
+  const { systems } = useAppData()
+  const systemNames = Object.fromEntries(
+    systems.map(({ value, label }) => [value, label]),
+  )
+
+  switch (sheet.system) {
+    case 'emoklore':
+      return (
+        <Fragment>
+          <Head>
+            <title>
+              {title} | {systemNames[sheet.system]}
+            </title>
+            <meta property="og:site_name" content="CharaXiv" />
+            <meta property="og:type" content="article" />
+            <meta property="og:title" content={title} />
+            <meta property="og:url" content={url} />
+            <meta property="og:image" content={imageUrl(sheet.images[0])} />
+            <meta name="twitter:card" content="summary" />
+          </Head>
+          <Layout>
+            <Emoklore sheet={sheet} />
+          </Layout>
+        </Fragment>
+      )
+
+    default:
+      return <Error statusCode={404} />
+  }
+}

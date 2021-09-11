@@ -1,0 +1,14 @@
+@import "index.module"
+
+.container
+    display: flex
+    justify-content: center
+    align-items: center
+    background-color: $color-step800
+    color: $color-step200
+    user-select: none
+    @include default-transition()
+
+    &.darkmode
+        background-color: $color-step200
+        color: $color-step800

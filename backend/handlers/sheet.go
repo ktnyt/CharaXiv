@@ -52,12 +52,10 @@ type SheetCreateParams struct {
 
 func SheetCreateHandler(r *http.Request) (string, int) {
 	ctx := r.Context()
-
 	params := SheetCreateParams{}
 	if !app.JsonRequest(r, &params) {
 		return "", http.StatusBadRequest
 	}
-
 	return controllers.CreateSheet(ctx, params.System)
 }
 

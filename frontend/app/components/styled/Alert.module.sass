@@ -1,0 +1,33 @@
+@import "index.module"
+
+.container
+    display: flex
+    flex-direction: column
+    width: 300px
+    min-height: 150px
+    border-radius: 4px
+    padding: 16px 16px 8px 16px
+    background-color: $color-white
+    @include default-transition()
+
+    box-shadow: 0 0 5px 0 transparentize(lighten($color-black, 10), 0.2)
+    &.darkmode
+        box-shadow: 0 0 5px 0 transparentize(darken($color-black, 10), 0.2)
+
+    & > :first-child
+        display: flex
+        justify-content: center
+        flex-direction: column
+        flex-grow: 1
+        color: $color-black
+        font-size: 1.6rem
+
+        &.darkmode
+            color: $color-white
+
+    & > :last-child
+        display: flex
+        justify-content: flex-end
+
+    &.darkmode
+        background-color: $color-black

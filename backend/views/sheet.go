@@ -13,7 +13,7 @@ func SheetListView(w http.ResponseWriter, r *http.Request) {
 	case http.StatusOK:
 		app.JsonResponse(w, r, sheets)
 	default:
-		http.Error(w, http.StatusText(code), code)
+		app.JsonError(w, r, code)
 	}
 }
 
@@ -23,7 +23,7 @@ func SheetItemView(w http.ResponseWriter, r *http.Request) {
 	case http.StatusOK:
 		app.JsonResponse(w, r, sheet)
 	default:
-		http.Error(w, http.StatusText(code), code)
+		app.JsonError(w, r, code)
 	}
 }
 
@@ -33,7 +33,7 @@ func SheetCreateView(w http.ResponseWriter, r *http.Request) {
 	case http.StatusOK:
 		app.JsonResponse(w, r, sheetId)
 	default:
-		http.Error(w, http.StatusText(code), code)
+		app.JsonError(w, r, code)
 	}
 }
 
@@ -43,7 +43,7 @@ func SheetUpdateView(w http.ResponseWriter, r *http.Request) {
 	case http.StatusOK:
 		app.JsonResponse(w, r, true)
 	default:
-		http.Error(w, http.StatusText(code), code)
+		app.JsonError(w, r, code)
 	}
 }
 
@@ -53,6 +53,6 @@ func SheetDeleteView(w http.ResponseWriter, r *http.Request) {
 	case http.StatusOK:
 		app.JsonResponse(w, r, true)
 	default:
-		http.Error(w, http.StatusText(code), code)
+		app.JsonError(w, r, code)
 	}
 }

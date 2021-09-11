@@ -10,6 +10,7 @@ services:
       - PORT=6641
     volumes:
       - ./firestore:/firestore
+  
   backend:
     platform: linux/amd64
     build: ./backend
@@ -24,4 +25,19 @@ services:
     ports:
       - 6640:6640
     command: air
+  
+  frontend:
+    platform: linux/amd64
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.development
+    environment:
+      - IMAGE_HOST=https://storage.googleapis.com/charaxiv-assets-local
+      - SERVERSIDE_HOST=backend:6640
+      - CLIENTSIDE_HOST=localhost:6640
+      - PORT=6650
+    volumes:
+      - ./frontend:/app
+    ports:
+      - 6650:6650
   

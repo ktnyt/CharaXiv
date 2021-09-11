@@ -22,6 +22,11 @@ func SetupRoutes(r chi.Router) {
 	r.Get("/login", views.LoginView)
 	r.Get("/logout", views.LogoutView)
 
+	r.Route("/system", func(r chi.Router) {
+		r.Get("/", views.SystemGetView)
+		r.Post("/", views.SystemSetView)
+	})
+
 	r.Route("/sheet", func(r chi.Router) {
 		r.Get("/", views.SheetListView)
 		r.Post("/", views.SheetCreateView)
