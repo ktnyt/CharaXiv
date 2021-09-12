@@ -4,9 +4,11 @@ steps:
   - 'build'
   - '--tag=gcr.io/$PROJECT_ID/frontend'
   - '--file=./Dockerfile.gcr'
+  - '--build-arg=NEXT_PUBLIC_IMAGE_HOST=${_NEXT_PUBLIC_IMAGE_HOST}'
   - '--build-arg=NEXT_PUBLIC_BACKEND_HOST=${_NEXT_PUBLIC_BACKEND_HOST}'
   - '.'
 images:
 - 'gcr.io/$PROJECT_ID/frontend'
 substitutions:
+  _NEXT_PUBLIC_IMAGE_HOST: ''
   _NEXT_PUBLIC_BACKEND_HOST: http://localhost:6640

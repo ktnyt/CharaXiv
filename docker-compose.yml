@@ -31,6 +31,7 @@ services:
     build: ./frontend
     environment:
       - IMAGE_HOST=https://storage.googleapis.com/charaxiv-assets-local
+      - NEXT_PUBLIC_IMAGE_HOST=https://storage.googleapis.com/charaxiv-assets-local
       - BACKEND_HOST=http://backend:6640
       - NEXT_PUBLIC_BACKEND_HOST=http://localhost:6640
       - PORT=6650

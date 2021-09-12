@@ -9,8 +9,10 @@ RUN npm ci --only=production
 
 FROM base AS build
 COPY . /app
-ARG NEXT_PUBLIC_BACKEND_HOST=http://localhost:6640
-ENV NEXT_PUBLIC_BACKEND_HOST=${NEXT_PUBLIC_BACKEND_HOST}}
+ARG NEXT_PUBLIC_IMAGE_HOST
+ARG NEXT_PUBLIC_BACKEND_HOST
+ENV NEXT_PUBLIC_IMAGE_HOST=${NEXT_PUBLIC_IMAGE_HOST}
+ENV NEXT_PUBLIC_BACKEND_HOST=${NEXT_PUBLIC_BACKEND_HOST}
 RUN npm ci && npm run build
 
 FROM gcr.io/distroless/nodejs:14
@@ -19,6 +21,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules /app/node_modules
 COPY --from=build /app/public /app/public
 COPY --from=build /app/.next /app/.next
+COPY --from=build /app/next.config.js /app/next.config.js
 
 EXPOSE 8080
 
