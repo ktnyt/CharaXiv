@@ -14,20 +14,21 @@ export interface SheetViewProps {
 
 export const SheetView = ({ sheet }: SheetViewProps) => {
   const { asPath: url } = useRouter()
-  const title = sheet.name === '' ? '名無しさん' : sheet.name
+
   const { systems } = useAppData()
   const systemNames = Object.fromEntries(
     systems.map(({ value, label }) => [value, label]),
   )
+
+  const name = sheet.name === '' ? '名無しさん' : sheet.name
+  const title = `${name} | ${systemNames[sheet.system]}`
 
   switch (sheet.system) {
     case 'emoklore':
       return (
         <Fragment>
           <Head>
-            <title>
-              {title} | {systemNames[sheet.system]}
-            </title>
+            <title>{title}</title>
             <meta property="og:site_name" content="CharaXiv" />
             <meta property="og:type" content="article" />
             <meta property="og:title" content={title} />
