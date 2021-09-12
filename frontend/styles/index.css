@@ -23,7 +23,9 @@ a:focus {
 
 html,
 body {
-  overflow: visible;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: visible;
   margin: 0;
 }
 
