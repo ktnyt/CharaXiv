@@ -15,7 +15,6 @@
         background-color: $light-normal
         color: $color-black
         -webkit-text-fill-color: $color-black
-        opacity: 1
 
     &.darkmode
         background-color: $dark-normal
@@ -31,8 +30,9 @@
         &:disabled
             background-color: $dark-normal
             color: $color-white
-            -webkit-text-fill-color: $color-white
             opacity: 1
+            -webkit-text-fill-color: $color-white
+            -webkit-opacity: 1
 
 @mixin border-scheme($light-color, $dark-color)
     height: 30px
@@ -43,6 +43,7 @@
         border: 1px solid $dark-color
 
 .container
+    display: inline-flex
     width: 100%
     border-radius: 4px
     padding-left: 6px
@@ -122,6 +123,7 @@
 
 .input
     flex-grow: 1
+    max-width: 100%
     height: 100%
     padding: 0px 6px 0px 0px
     line-height: 100%
@@ -129,9 +131,22 @@
     background-color: transparent
     color: inherit
     font-size: inherit
+    @include default-transition()
 
     &:active
         outline: none
 
     &:focus
         outline: none
+
+    &:disabled
+        opacity: 1
+
+    &.light
+        @include input-scheme($color-white, $color-step900, $color-black, $color-step100)
+
+    &.medium
+        @include input-scheme($color-step950, $color-step850, $color-step50, $color-step150)
+
+    &.dark
+        @include input-scheme($color-step900, $color-step800, $color-step100, $color-step200)

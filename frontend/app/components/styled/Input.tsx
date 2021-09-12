@@ -43,7 +43,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       >
         <BaseInput
           ref={ref}
-          className={clsx(className, classes.input)}
+          className={clsx(className, classes.input, classes[color])}
           {...props}
         />
         {suffix && <div>{suffix}</div>}
