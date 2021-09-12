@@ -51,7 +51,7 @@ const addAuthorization = (headers: Record<string, string>, token?: string) =>
 
 export const createJsonClient = (token?: string) =>
   axios.create({
-    baseURL: `http://${getHostname()}`,
+    baseURL: getHostname(),
     headers: addAuthorization(
       {
         'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export const createJsonClient = (token?: string) =>
 
 export const createFormClient = (token?: string) =>
   axios.create({
-    baseURL: `http://${getHostname()}`,
+    baseURL: getHostname(),
     headers: addAuthorization(
       {
         'Content-Type': 'multipart/form-data',
