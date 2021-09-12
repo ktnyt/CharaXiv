@@ -5,8 +5,7 @@ module.exports = {
   reactStrictMode: true,
   env: {
     IMAGE_HOST: process.env.IMAGE_HOST,
-    SERVERSIDE_HOST: process.env.SERVERSIDE_HOST,
-    CLIENTSIDE_HOST: process.env.CLIENTSIDE_HOST,
+    SERVERSIDE_HOST: process.env.BACKEND_HOST,
   },
   images: {
     domains: ['storage.googleapis.com'],

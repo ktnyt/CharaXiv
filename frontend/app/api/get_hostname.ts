@@ -1,4 +1,4 @@
 export const getHostname = () =>
   typeof window === 'undefined'
-    ? process.env.SERVERSIDE_HOST
-    : process.env.CLIENTSIDE_HOST
+    ? process.env.BACKEND_HOST
+    : process.env.NEXT_PUBLIC_BACKEND_HOST
