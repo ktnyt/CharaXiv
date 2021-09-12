@@ -121,19 +121,21 @@ export const CustomSkillView = ({
         </div>
       ))}
 
-      <div className={classes.button}>
-        <Button
-          variant="outline"
-          color="primary"
-          onClick={() =>
-            setCustom(
-              appender({ name: '', base: '身体' as VariableKey, level: 0 }),
-            )
-          }
-        >
-          技能を追加
-        </Button>
-      </div>
+      {!disabled && (
+        <div className={classes.button}>
+          <Button
+            variant="outline"
+            color="primary"
+            onClick={() =>
+              setCustom(
+                appender({ name: '', base: '身体' as VariableKey, level: 0 }),
+              )
+            }
+          >
+            技能を追加
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
