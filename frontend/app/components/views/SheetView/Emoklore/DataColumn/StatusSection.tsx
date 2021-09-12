@@ -40,8 +40,8 @@ export const StatusSection = ({
     <Fragment>
       <VariablesSection
         status={status}
-        onChange={setStatus}
         disabled={disabled}
+        onChange={setStatus}
       />
 
       <ParametersSection status={status} />
