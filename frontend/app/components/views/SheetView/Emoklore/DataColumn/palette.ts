@@ -14,7 +14,7 @@ export const formatPalette = (skills: Skills, status: Status) => {
   const formatSingleSkill = (group: string, skill: SingleSkill) =>
     `${skill.level}DM<=${
       skill.level + maxVariable(status, skill.base)
-    } 《${group}・ ${skill.name}》`
+    } 《${group}・${skill.name}》`
 
   const formatMultiSkill = (group: string, skill: MultiSkill) =>
     skill.genres
@@ -38,8 +38,10 @@ export const formatPalette = (skills: Skills, status: Status) => {
 
   const filterSkills = (skills: (SingleSkill | MultiSkill)[]) =>
     skills
-      .filter((skill) => isSingle(skill) && skill.level > 0)
       .map((skill) => (isSingle(skill) ? skill : filterMultiSkill(skill)))
+      .filter((skill) =>
+        isSingle(skill) ? skill.level > 0 : skill.genres.length > 0,
+      )
 
   const formatGroup = (group: SkillGroup) =>
     [
