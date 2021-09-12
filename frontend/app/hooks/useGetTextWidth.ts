@@ -10,7 +10,9 @@ const useClient = <T extends HTMLElement>(element: RefObject<T>, min = 0) => {
     if (!element.current || !context.current) {
       return min
     }
-    context.current.font = getComputedStyle(element.current).font
+    const styles = getComputedStyle(element.current)
+    const font = `${styles.fontSize} ${styles.fontFamily}`
+    context.current.font = font
     return Math.max(context.current.measureText(text).width, min)
   }
 }
