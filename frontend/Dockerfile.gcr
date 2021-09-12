@@ -9,6 +9,8 @@ RUN npm ci --only=production
 
 FROM base AS build
 COPY . /app
+ARG NEXT_PUBLIC_BACKEND_HOST=http://localhost:6640
+ENV NEXT_PUBLIC_BACKEND_HOST=${NEXT_PUBLIC_BACKEND_HOST}}
 RUN npm ci && npm run build
 
 FROM gcr.io/distroless/nodejs:14
