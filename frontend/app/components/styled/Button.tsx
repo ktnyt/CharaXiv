@@ -38,7 +38,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {...props}
       >
-        <div className={styles.center}>{children}</div>
+        <div>{children}</div>
       </button>
     )
   },

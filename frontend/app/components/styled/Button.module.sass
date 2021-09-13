@@ -74,7 +74,9 @@
                 color: mix($color-black, $base, 50)
 
 .button
-    display: inline-block
+    display: inline-flex
+    justify-content: center
+    align-items: center
     height: 32px
     padding: 0 6px
     border-radius: 4px
@@ -87,11 +89,6 @@
 
     & *
         transition: none
-
-    & > .center
-        display: flex
-        justify-content: center
-        align-items: center
 
     &.full-width
         width: 100%
