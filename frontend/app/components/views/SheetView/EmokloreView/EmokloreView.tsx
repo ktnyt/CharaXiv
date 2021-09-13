@@ -73,7 +73,7 @@ const formatCcfolia = (sheet: EmokloreSheet, link: string) =>
           value:
             sheet.data.status.variables['精神'] +
             sheet.data.status.variables['知力'],
-          mix:
+          max:
             sheet.data.status.variables['精神'] +
             sheet.data.status.variables['知力'],
         },
