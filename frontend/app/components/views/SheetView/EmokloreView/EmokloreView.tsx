@@ -87,16 +87,13 @@ const formatCcfolia = (sheet: EmokloreSheet, link: string) =>
     },
   })
 
-export const EmokloreView = ({ sheet: init }: EmokloreViewProps) => {
-  const [sheet, setSheet] = useState(asEmoklore(init))
-
+export const EmokloreView = ({ sheet }: EmokloreViewProps) => {
   const link = useHref()
 
   const refresh = async (callback: (sheet: EmokloreSheet) => void) => {
     const res = await getSheet(sheet.id)
     if (typeof res !== 'number') {
       callback(res)
-      setSheet(res)
     }
   }
 
