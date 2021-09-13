@@ -23,10 +23,8 @@ export const insert = <T extends unknown>(
   index: number = 0,
 ) => [...head(array, index), value, ...tail(array, index)]
 
-export const remove = <T extends unknown>(array: T[], index: number) => [
-  ...head(array, index),
-  ...tail(array, index + 1),
-]
+export const remove = <T extends unknown>(array: T[], ...indices: number[]) =>
+  array.filter((_, index) => !indices.includes(index))
 
 export const replace = <T extends unknown>(
   array: T[],
@@ -51,9 +49,9 @@ export const inserter =
     insert(array, value, index)
 
 export const remover =
-  <T extends unknown>(index: number) =>
+  <T extends unknown>(...indices: number[]) =>
   (array: T[]) =>
-    remove(array, index)
+    remove(array, ...indices)
 
 export const replacer =
   <T extends unknown>(value: T, index: number) =>

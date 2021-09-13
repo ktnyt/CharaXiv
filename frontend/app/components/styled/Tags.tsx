@@ -1,6 +1,6 @@
-import { KeyboardEvent, useEffect, useRef, useState } from 'react'
+import { KeyboardEventHandler, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
-import { appender, pop, remover } from '@/helpers/array'
+import { append, appender, remove, remover } from '@/helpers/array'
 import { useGetTextWidth } from '@/hooks/useGetTextWidth'
 import { useInput } from '@/hooks/useInput'
 import { useStyles } from '@/hooks/useStyles'
@@ -24,10 +24,19 @@ export const Tags = ({
     if (onChangeValues) onChangeValues(values)
   }, [values, onChangeValues])
 
+  const [selected, setSelected] = useState<number[]>([])
+  const toggleSelect = (index: number) =>
+    setSelected((prev) =>
+      prev.includes(index)
+        ? remove(prev, prev.indexOf(index))
+        : append(prev, index),
+    )
+
   const [composing, setComposing] = useState(false)
+  const [deletable, setDeletable] = useState(true)
 
   const [inputValue, onChangeInputValue, setValue] = useInput('')
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown: KeyboardEventHandler = (event) => {
     if (
       !composing &&
       inputValue !== '' &&
@@ -40,9 +49,18 @@ export const Tags = ({
     }
 
     if (inputValue === '' && event.key === 'Backspace') {
-      setValues(pop)
+      if (selected.length > 0 && deletable) {
+        setSelected([])
+        setValues(remover(...selected))
+      } else {
+        setSelected(appender(values.length - 1))
+      }
+      setDeletable(false)
+    } else {
+      setSelected([])
     }
   }
+  const handleKeyUp = () => setDeletable(true)
 
   const handleRemoveButton = (index: number) => setValues(remover(index))
 
@@ -60,7 +78,9 @@ export const Tags = ({
         <div key={index} className={classes.item}>
           <Tag
             value={value}
+            selected={selected.includes(index)}
             disabled={disabled}
+            onClick={() => toggleSelect(index)}
             onRemove={() => handleRemoveButton(index)}
           />
         </div>
@@ -74,6 +94,7 @@ export const Tags = ({
             value={inputValue}
             onChange={onChangeInputValue}
             onKeyDown={handleKeyDown}
+            onKeyUp={handleKeyUp}
             onCompositionStart={() => setComposing(true)}
             onCompositionEnd={() => setComposing(false)}
             disabled={disabled}

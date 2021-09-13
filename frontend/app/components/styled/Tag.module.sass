@@ -5,11 +5,17 @@
     align-items: center
     height: 24px
     border-radius: 2px
-    background-color: $color-step900
+    cursor: pointer
     @include default-transition()
+
+    background-color: $color-step900
+    &.selected
+        background-color: $color-step750
 
     &.darkmode
         background-color: $color-step100
+        &.selected
+            background-color: $color-step250
 
 .label
     display: flex
@@ -40,16 +46,21 @@
     border: none
     border-radius: 2px
     padding: 0
-    background-color: $color-step900
     color: $color-black
     font-size: 14px
     line-height: 14px
     cursor: pointer
     @include default-transition()
 
+    background-color: $color-step900
+    &.selected
+        background-color: $color-step750
+
     @media (hover: hover)
         &:hover
             background-color: $color-step800
+            &.selected
+                background-color: $color-step650
 
     &:active
         background-color: $color-step700
@@ -59,9 +70,13 @@
         outline: none
 
     &.darkmode
-        background-color: $color-step100
         color: $color-white
+        background-color: $color-step100
+        &.selected
+            background-color: $color-step250
 
         @media (hover: hover)
             &:hover
                 background-color: $color-step200
+                &.selected
+                    background-color: $color-step350
