@@ -1,25 +1,6 @@
-import {
-  CustomSkill,
-  isSingle,
-  MultiSkill,
-  SingleSkill,
-  Skills,
-  Status,
-} from './types'
 import { useEffect, useReducer, useRef, useState } from 'react'
-import CopyToClipboard from 'react-copy-to-clipboard'
-import toast from 'react-hot-toast'
-import {
-  faCopy,
-  faEye,
-  faEyeSlash,
-  faPalette,
-  faWindowClose,
-} from '@fortawesome/free-solid-svg-icons'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { IconButton } from '@/components/styled/IconButton'
-import { InputGroup } from '@/components/styled/InputGroup'
-import { Modal } from '@/components/styled/Modal'
-import { TextArea } from '@/components/styled/TextArea'
 import { Typography } from '@/components/styled/Typography'
 import { replace, swap } from '@/helpers/array'
 import { sum } from '@/helpers/math'
@@ -29,8 +10,15 @@ import { CustomSkillView } from './CustomSkillView'
 import { MultiSkillView } from './MultiSkillView'
 import { SingleSkillView } from './SingleSkillView'
 import { ValueMonitor } from './ValueMonitor'
-import { formatPalette } from './palette'
 import styles from './SkillsSection.module.sass'
+import {
+  CustomSkill,
+  isSingle,
+  MultiSkill,
+  SingleSkill,
+  Skills,
+  Status,
+} from '../types'
 
 type Action =
   | {
@@ -122,9 +110,7 @@ export const SkillsSection = ({
       ),
     ) + sum(skills.custom.map(({ level }) => points[level]))
 
-  const [openPalette, setOpenPallete] = useState(false)
   const [hideInit, setHideInit] = useState(disabled)
-  const palette = formatPalette(skills, status)
 
   const classes = useStyles(styles)
 
@@ -143,55 +129,12 @@ export const SkillsSection = ({
         </div>
 
         <div>
-          <InputGroup>
-            <IconButton
-              variant="outline"
-              color="primary"
-              icon={faPalette}
-              onClick={() => setOpenPallete(true)}
-            />
-
-            <IconButton
-              variant="outline"
-              color="light"
-              icon={hideInit ? faEye : faEyeSlash}
-              onClick={() => setHideInit((prev) => !prev)}
-            />
-          </InputGroup>
-
-          <Modal open={openPalette} handleClose={() => setOpenPallete(false)}>
-            <div className={classes.palette}>
-              <div>
-                <TextArea
-                  value={palette}
-                  readOnly
-                  onFocus={(event) => event.target.select()}
-                />
-              </div>
-
-              <div>
-                <InputGroup>
-                  <CopyToClipboard
-                    text={palette}
-                    onCopy={() => toast('コピーしました。')}
-                  >
-                    <IconButton
-                      variant="outline"
-                      color="primary"
-                      icon={faCopy}
-                    />
-                  </CopyToClipboard>
-
-                  <IconButton
-                    variant="textual"
-                    color="danger"
-                    icon={faWindowClose}
-                    onClick={() => setOpenPallete(false)}
-                  />
-                </InputGroup>
-              </div>
-            </div>
-          </Modal>
+          <IconButton
+            variant="outline"
+            color="light"
+            icon={hideInit ? faEye : faEyeSlash}
+            onClick={() => setHideInit((prev) => !prev)}
+          />
         </div>
       </div>
 

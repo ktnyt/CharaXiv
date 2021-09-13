@@ -1,8 +1,8 @@
-import { Status, VariableEmoji, VariableKey } from './types'
 import { Twemoji } from '@/components/atoms/Twemoji'
 import { Typography } from '@/components/styled/Typography'
 import { useStyles } from '@/hooks/useStyles'
 import styles from './BaseSkillView.module.sass'
+import { Status, VariableEmoji, VariableKey } from '../types'
 
 export interface BaseSkillViewProps {
   name: string

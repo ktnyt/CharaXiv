@@ -1,4 +1,3 @@
-import { Status, VariableEmoji, VariableKeys, Variables } from './types'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { Twemoji } from '@/components/atoms/Twemoji'
 import { Button } from '@/components/styled/Button'
@@ -11,6 +10,7 @@ import { randomElement } from '@/helpers/random'
 import { useStyles } from '@/hooks/useStyles'
 import { ValueMonitor } from './ValueMonitor'
 import styles from './VariablesSection.module.sass'
+import { Status, VariableEmoji, VariableKeys, Variables } from '../types'
 
 export interface VariablesSectionProps {
   status: Status

@@ -1,3 +1,5 @@
+import { Sheet } from '@/api/sheet'
+
 // prettier-ignore
 export type EmotionType =
   | '自己顕示' | '所有' | '本能' | '破壊' | '優越感' | '怠惰' | '逃避' | '好奇心'
@@ -40,6 +42,12 @@ export const EmotionCategories: Record<EmotionType, EmotionCategory> = {
 
 export const getEmotionCategory = (emotion: EmotionType) =>
   EmotionCategories[emotion]
+
+export interface Emotions {
+  outer?: EmotionType
+  inner?: EmotionType
+  roots?: EmotionType
+}
 
 export interface Reverb {
   scenario: string
@@ -131,4 +139,13 @@ export interface Skills {
   presets: SkillCategory[]
   custom: CustomSkill[]
   extra: number
+}
+
+export type EmokloreSheet = Omit<Sheet, 'data'> & {
+  data: {
+    emotions: Emotions
+    reverbs: Reverb[]
+    status: Status
+    skills: Skills
+  }
 }

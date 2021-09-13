@@ -1,4 +1,4 @@
-import { Status, VariableKey } from './types'
+import { Status, VariableKey } from '../types'
 
 export const convertToNumber = (value: string): number =>
   value.match(/^\d+$/) ? Number(value) : 0

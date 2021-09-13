@@ -1,3 +1,4 @@
+import { maxVariable } from './DataColumn/utils'
 import {
   CustomSkill,
   isSingle,
@@ -8,7 +9,6 @@ import {
   Skills,
   Status,
 } from './types'
-import { maxVariable } from './utils'
 
 export const formatPalette = (skills: Skills, status: Status) => {
   const formatSingleSkill = (group: string, skill: SingleSkill) =>
@@ -63,8 +63,8 @@ export const formatPalette = (skills: Skills, status: Status) => {
   return [
     '【共鳴】',
     '{共鳴}DM<= 《共鳴判定》',
-    '{共鳴}+1DM<= 《共鳴判定・属性一致》',
-    '{共鳴}*2DM<= 《共鳴判定・完全一致》',
+    '({共鳴}+1)DM<= 《共鳴判定・属性一致》',
+    '({共鳴}*2)DM<= 《共鳴判定・完全一致》',
     ...skills.presets.map(formatCategory),
     '【その他】',
     ...filterCustomSkills(skills.custom).map(formatCustomSkill),

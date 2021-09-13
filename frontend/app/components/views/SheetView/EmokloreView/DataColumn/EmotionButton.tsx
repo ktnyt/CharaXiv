@@ -1,8 +1,8 @@
-import { EmotionType, getEmotionCategory } from './types'
 import { ComponentPropsWithRef, forwardRef } from 'react'
 import clsx from 'clsx'
 import { useStyles } from '@/hooks/useStyles'
 import styles from './EmotionButton.module.sass'
+import { EmotionType, getEmotionCategory } from '../types'
 
 export type EmotionButtonProps = Omit<
   ComponentPropsWithRef<'button'>,

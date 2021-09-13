@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react'
-import CopyToClipboard from 'react-copy-to-clipboard'
 import toast from 'react-hot-toast'
+import copy from 'copy-to-clipboard'
 import QRCode from 'qrcode.react'
 import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import { Square } from '@/components/atoms/Square'
@@ -20,6 +20,11 @@ export interface QRCodeStepProps {
 
 export const QRCodeStep = ({ url, onNext, onBack }: QRCodeStepProps) => {
   const [openModal, setOpenModal] = useState(false)
+
+  const copyUrl = () => {
+    copy(url, { format: 'text/plain' })
+    toast.success('認証コードをコピーしました。')
+  }
 
   const classes = useStyles(styles)
 
@@ -47,14 +52,9 @@ export const QRCodeStep = ({ url, onNext, onBack }: QRCodeStepProps) => {
           readOnly
           onFocus={(event) => event.target.select()}
           suffix={
-            <CopyToClipboard
-              text={url}
-              onCopy={() => toast('コピーしました。')}
-            >
-              <div className={classes.copyButton}>
-                <Icon icon={faCopy} />
-              </div>
-            </CopyToClipboard>
+            <div className={classes.copyButton} onClick={copyUrl}>
+              <Icon icon={faCopy} />
+            </div>
           }
         />
       </Alert>

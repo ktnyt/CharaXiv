@@ -1,10 +1,3 @@
-import {
-  CustomSkill,
-  Status,
-  VariableEmoji,
-  VariableKey,
-  VariableKeys,
-} from './types'
 import { useEffect, useRef, useState } from 'react'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { Twemoji } from '@/components/atoms/Twemoji'
@@ -17,6 +10,13 @@ import { appender, range, remover, replacer, swapper } from '@/helpers/array'
 import { useStyles } from '@/hooks/useStyles'
 import { useUpdateEffect } from '@/hooks/useUpdateEffect'
 import styles from './CustomSkillView.module.sass'
+import {
+  CustomSkill,
+  Status,
+  VariableEmoji,
+  VariableKey,
+  VariableKeys,
+} from '../types'
 
 export interface CustomSkillViewProps {
   custom: CustomSkill[]

@@ -5,10 +5,7 @@ import Head from 'next/head'
 import { Sheet } from '@/api/sheet'
 import { useAppData } from '@/context/AppDataContext'
 import { imageUrl } from '@/helpers/image_url'
-import { Header } from '@/layout/Header'
-import { Layout } from '@/layout/Layout'
-import { Main } from '@/layout/Main'
-import { Emoklore } from './Emoklore'
+import { EmokloreView } from './EmokloreView'
 
 export interface SheetViewProps {
   sheet: Sheet
@@ -39,13 +36,7 @@ export const SheetView = ({ sheet }: SheetViewProps) => {
             <meta name="twitter:card" content="summary" />
           </Head>
 
-          <Layout>
-            <Header></Header>
-
-            <Main>
-              <Emoklore sheet={sheet} />
-            </Main>
-          </Layout>
+          <EmokloreView sheet={sheet} />
         </Fragment>
       )
 

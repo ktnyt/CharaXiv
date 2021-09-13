@@ -1,4 +1,3 @@
-import { SingleSkill, Status, VariableEmoji } from './types'
 import { maxVariableKey } from './utils'
 import { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
@@ -8,6 +7,7 @@ import { Typography } from '@/components/styled/Typography'
 import { range } from '@/helpers/array'
 import { useStyles } from '@/hooks/useStyles'
 import styles from './SingleSkillView.module.sass'
+import { SingleSkill, Status, VariableEmoji } from '../types'
 
 export interface SingleSkillViewProps {
   skill: SingleSkill

@@ -1,4 +1,3 @@
-import { MultiSkill, SkillGenre, Status } from './types'
 import { maxVariable, maxVariableKey } from './utils'
 import { useEffect, useRef, useState } from 'react'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
@@ -11,6 +10,7 @@ import { appender, range, remover, swapper } from '@/helpers/array'
 import { useStyles } from '@/hooks/useStyles'
 import { BaseSkillView } from './BaseSkillView'
 import styles from './MultiSkillView.module.sass'
+import { MultiSkill, SkillGenre, Status } from '../types'
 
 export interface MultiSkillViewProps {
   skill: MultiSkill

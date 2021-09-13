@@ -5,9 +5,9 @@ import {
   useRef,
   useState,
 } from 'react'
-import CopyToClipboard from 'react-copy-to-clipboard'
 import toast from 'react-hot-toast'
 import clsx from 'clsx'
+import copy from 'copy-to-clipboard'
 import {
   convertFromRaw,
   convertToRaw,
@@ -216,6 +216,10 @@ export const Editor = ({
   const debounceMarkdown = useDebounce(markdown, { delay: 500 })
   const debounceOpenMarkdown = useDebounce(openMarkdown, { delay: 500 })
   const debounceOpenMarkdownRef = useRef(openMarkdown)
+  const copyMarkdown = () => {
+    copy(markdown, { format: 'text/plain' })
+    toast.success('マークダウンテキストをコピーしました。')
+  }
 
   useEffect(() => {
     debounceOpenMarkdownRef.current = debounceOpenMarkdown
@@ -313,12 +317,12 @@ export const Editor = ({
 
           <div>
             <InputGroup>
-              <CopyToClipboard
-                text={markdown}
-                onCopy={() => toast('コピーしました。')}
-              >
-                <IconButton variant="outline" color="primary" icon={faCopy} />
-              </CopyToClipboard>
+              <IconButton
+                variant="outline"
+                color="primary"
+                icon={faCopy}
+                onClick={copyMarkdown}
+              />
 
               <IconButton
                 variant="textual"

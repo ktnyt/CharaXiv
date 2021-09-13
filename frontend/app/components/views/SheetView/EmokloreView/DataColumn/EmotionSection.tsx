@@ -1,5 +1,3 @@
-import { EmotionType } from './types'
-import { EmotionTypes } from './types'
 import { useState } from 'react'
 import { updateSheet } from '@/api/sheet'
 import { Modal } from '@/components/styled/Modal'
@@ -9,12 +7,8 @@ import { useStyles } from '@/hooks/useStyles'
 import { useUpdateEffect } from '@/hooks/useUpdateEffect'
 import { EmotionButton } from './EmotionButton'
 import styles from './EmotionSection.module.sass'
-
-export interface Emotions {
-  outer?: EmotionType
-  inner?: EmotionType
-  roots?: EmotionType
-}
+import { Emotions } from '../types'
+import { EmotionTypes } from '../types'
 
 export interface EmotionSectionProps {
   sheetId: string

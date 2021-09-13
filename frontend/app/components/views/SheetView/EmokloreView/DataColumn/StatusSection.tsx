@@ -1,4 +1,3 @@
-import { Skills, Status } from './types'
 import { Fragment, useState } from 'react'
 import { updateSheet } from '@/api/sheet'
 import { useCookie } from '@/context/CookiesContext'
@@ -6,6 +5,7 @@ import { useUpdateEffect } from '@/hooks/useUpdateEffect'
 import { ParametersSection } from './ParametersSection'
 import { SkillsSection } from './SkillsSection'
 import { VariablesSection } from './VariablesSection'
+import { Skills, Status } from '../types'
 
 export interface StatusSectionProps {
   sheetId: string

@@ -1,4 +1,3 @@
-import { Status } from './types'
 import { Fragment } from 'react'
 import { Twemoji } from '@/components/atoms/Twemoji'
 import { SlideSelector } from '@/components/styled/SlideSelector'
@@ -6,6 +5,7 @@ import { Typography } from '@/components/styled/Typography'
 import { range } from '@/helpers/array'
 import { useStyles } from '@/hooks/useStyles'
 import styles from './ParametersSection.module.sass'
+import { Status } from '../types'
 
 export interface ParametersSectionProps {
   status: Status

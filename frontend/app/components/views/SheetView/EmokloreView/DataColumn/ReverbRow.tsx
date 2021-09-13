@@ -1,4 +1,3 @@
-import { Reverb } from './types'
 import { useEffect, useRef, useState } from 'react'
 import { faCheckSquare, faSquare } from '@fortawesome/free-regular-svg-icons'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
@@ -6,6 +5,7 @@ import { IconButton } from '@/components/styled/IconButton'
 import { Input } from '@/components/styled/Input'
 import { useStyles } from '@/hooks/useStyles'
 import styles from './ReverbRow.module.sass'
+import { Reverb } from '../types'
 
 export interface ReverbProps {
   reverb: Reverb

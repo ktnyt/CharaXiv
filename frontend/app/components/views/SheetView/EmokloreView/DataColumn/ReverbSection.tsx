@@ -1,4 +1,3 @@
-import { Reverb } from './types'
 import { Fragment, useState } from 'react'
 import { updateSheet } from '@/api/sheet'
 import { Button } from '@/components/styled/Button'
@@ -11,6 +10,7 @@ import { useStyles } from '@/hooks/useStyles'
 import { useUpdateEffect } from '@/hooks/useUpdateEffect'
 import { ReverbRow } from './ReverbRow'
 import styles from './ReverbSection.module.sass'
+import { Reverb } from '../types'
 
 export interface ReverbSectionProps {
   sheetId: string
