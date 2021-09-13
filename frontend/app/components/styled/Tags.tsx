@@ -64,7 +64,7 @@ export const Tags = ({
 
   const handleRemoveButton = (index: number) => setValues(remover(index))
 
-  const inputRef = useRef<HTMLInputElement>(null!)
+  const inputRef = useRef<HTMLInputElement>(null)
   const getWidth = useGetTextWidth(inputRef, 8)
 
   const classes = useStyles(styles)
@@ -72,7 +72,11 @@ export const Tags = ({
   return (
     <div
       className={clsx(classes.container, disabled && classes.disabled)}
-      onClick={() => inputRef.current.focus()}
+      onClick={() => {
+        if (inputRef.current) {
+          inputRef.current.focus()
+        }
+      }}
     >
       {values.map((value, index) => (
         <div key={index} className={classes.item}>
