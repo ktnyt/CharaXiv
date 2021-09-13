@@ -24,8 +24,14 @@ export const Header = ({ children }: HeaderProps) => {
       <div>
         <Link href="/">
           <a className={classes.title}>
-            <Icon icon={faLayerGroup} color="default" />
-            <Typography variant="h2" color="default">
+            <span className={classes.titleIcon}>
+              <Icon icon={faLayerGroup} color="default" />
+            </span>
+            <Typography
+              variant="h2"
+              color="default"
+              className={classes.titleLabel}
+            >
               CharaXiv
             </Typography>
           </a>
