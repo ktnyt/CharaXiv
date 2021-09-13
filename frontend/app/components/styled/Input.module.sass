@@ -1,6 +1,6 @@
 @import "index.module"
 
-@mixin input-scheme($light-normal, $light-hover, $dark-normal, $dark-hover)
+@mixin container-colors($light-normal, $light-hover, $dark-normal, $dark-hover)
     background-color: $light-normal
     color: $color-black
     cursor: text
@@ -11,14 +11,6 @@
 
     &::placeholder
         color: $color-step300
-
-    &:disabled
-        background-color: $light-normal
-        color: $color-black
-        -webkit-text-fill-color: $color-black
-        @media (hover: hover)
-            &:hover
-                background-color: $light-normal
 
     &.darkmode
         background-color: $dark-normal
@@ -41,7 +33,27 @@
                 &:hover
                     background-color: $dark-normal
 
-@mixin border-scheme($light-color, $dark-color)
+@mixin input-colors($light-normal, $dark-normal)
+    &:disabled
+        background-color: $light-normal
+        color: $color-black
+        -webkit-text-fill-color: $color-black
+        @media (hover: hover)
+            &:hover
+                background-color: $light-normal
+
+    &.darkmode
+        &:disabled
+            background-color: $dark-normal
+            color: $color-white
+            opacity: 1
+            -webkit-text-fill-color: $color-white
+            -webkit-opacity: 1
+            @media (hover: hover)
+                &:hover
+                    background-color: $dark-normal
+
+@mixin border-colors($light-color, $dark-color)
     height: 30px
     padding-left: 5px
     border: 1px solid $light-color
@@ -61,40 +73,40 @@
     @include default-transition()
 
     &.light
-        @include input-scheme($color-white, $color-step900, $color-black, $color-step100)
+        @include container-colors($color-white, $color-step900, $color-black, $color-step100)
 
     &.medium
-        @include input-scheme($color-step950, $color-step850, $color-step50, $color-step150)
+        @include container-colors($color-step950, $color-step850, $color-step50, $color-step150)
 
     &.dark
-        @include input-scheme($color-step900, $color-step800, $color-step100, $color-step200)
+        @include container-colors($color-step900, $color-step800, $color-step100, $color-step200)
 
     &.border-light
-        @include border-scheme($color-step900, $color-step100)
+        @include border-colors($color-step900, $color-step100)
 
     &.border-medium
-        @include border-scheme($color-step800, $color-step200)
+        @include border-colors($color-step800, $color-step200)
 
     &.border-dark
-        @include border-scheme($color-step700, $color-step300)
+        @include border-colors($color-step700, $color-step300)
 
     &.border-primary
-        @include border-scheme(lighten($color-primary-base, 20), darken($color-primary-base, 20))
+        @include border-colors(lighten($color-primary-base, 20), darken($color-primary-base, 20))
 
     &.border-secondary
-        @include border-scheme(lighten($color-secondary-base, 20), darken($color-secondary-base, 20))
+        @include border-colors(lighten($color-secondary-base, 20), darken($color-secondary-base, 20))
 
     &.border-tertiary
-        @include border-scheme(lighten($color-tertiary-base, 20), darken($color-tertiary-base, 20))
+        @include border-colors(lighten($color-tertiary-base, 20), darken($color-tertiary-base, 20))
 
     &.border-success
-        @include border-scheme(lighten($color-success-base, 20), darken($color-success-base, 20))
+        @include border-colors(lighten($color-success-base, 20), darken($color-success-base, 20))
 
     &.border-warning
-        @include border-scheme(lighten($color-warning-base, 20), darken($color-warning-base, 20))
+        @include border-colors(lighten($color-warning-base, 20), darken($color-warning-base, 20))
 
     &.border-danger
-        @include border-scheme(lighten($color-danger-base, 20), darken($color-danger-base, 20))
+        @include border-colors(lighten($color-danger-base, 20), darken($color-danger-base, 20))
 
     &.h1
         height: 44px
@@ -139,6 +151,7 @@
     color: inherit
     font-size: inherit
     @include default-transition()
+    cursor: text
 
     &:active
         outline: none
@@ -150,10 +163,10 @@
         opacity: 1
 
     &.light
-        @include input-scheme($color-white, $color-step900, $color-black, $color-step100)
+        @include input-colors($color-white, $color-black)
 
     &.medium
-        @include input-scheme($color-step950, $color-step850, $color-step50, $color-step150)
+        @include input-colors($color-step950, $color-step50)
 
     &.dark
-        @include input-scheme($color-step900, $color-step800, $color-step100, $color-step200)
+        @include input-colors($color-step900, $color-step100)
