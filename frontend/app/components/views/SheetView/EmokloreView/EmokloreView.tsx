@@ -35,6 +35,8 @@ const asEmoklore = (sheet: Sheet): EmokloreSheet => {
   const status: Status =
     'status' in sheet.data ? sheet.data.status : defaultStatus
 
+  console.log(status)
+
   const skills: Skills =
     'skills' in sheet.data ? sheet.data.skills : defaultSkills
 
@@ -86,7 +88,8 @@ const formatCcfolia = (sheet: EmokloreSheet, link: string) =>
     },
   })
 
-export const EmokloreView = ({ sheet }: EmokloreViewProps) => {
+export const EmokloreView = ({ sheet: init }: EmokloreViewProps) => {
+  const sheet = asEmoklore(init)
   const link = useHref()
 
   const refresh = async (callback: (sheet: EmokloreSheet) => void) => {
