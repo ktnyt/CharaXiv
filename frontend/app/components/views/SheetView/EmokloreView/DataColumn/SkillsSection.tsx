@@ -5,6 +5,7 @@ import { Typography } from '@/components/styled/Typography'
 import { replace, swap } from '@/helpers/array'
 import { sum } from '@/helpers/math'
 import { useStyles } from '@/hooks/useStyles'
+import { useUpdateEffect } from '@/hooks/useUpdateEffect'
 import { BaseSkillView } from './BaseSkillView'
 import { CustomSkillView } from './CustomSkillView'
 import { MultiSkillView } from './MultiSkillView'
@@ -99,7 +100,7 @@ export const SkillsSection = ({
 
   const [skills, dispatch] = useReducer(reducer, init)
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     onChangeRef.current(skills)
   }, [skills])
 

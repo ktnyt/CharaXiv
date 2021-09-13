@@ -10,6 +10,7 @@ import { clamp } from '@/helpers/math'
 import { useSize } from '@/hooks/useSize'
 import { useStyles } from '@/hooks/useStyles'
 import { useThrottle } from '@/hooks/useThrottle'
+import { useUpdateEffect } from '@/hooks/useUpdateEffect'
 import styles from './SlideSelector.module.sass'
 import { Click } from '../atoms/Click'
 import { Drag } from '../atoms/Drag'
@@ -35,8 +36,8 @@ export const SlideSelector = ({
     onCommitRef.current = onCommit
   }, [onCommit])
 
-  const [index, setIndex] = useState(defaultIndex || 0)
-  useEffect(() => {
+  const [index, setIndex] = useState(given || defaultIndex || 0)
+  useUpdateEffect(() => {
     if (onCommitRef.current) {
       onCommitRef.current(index)
     }

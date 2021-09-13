@@ -8,6 +8,7 @@ import { range } from '@/helpers/array'
 import { sum } from '@/helpers/math'
 import { randomElement } from '@/helpers/random'
 import { useStyles } from '@/hooks/useStyles'
+import { useUpdateEffect } from '@/hooks/useUpdateEffect'
 import { ValueMonitor } from './ValueMonitor'
 import styles from './VariablesSection.module.sass'
 import { Status, VariableEmoji, VariableKeys, Variables } from '../types'
@@ -31,7 +32,7 @@ export const VariablesSection = ({
 
   const [status, setStatus] = useState(init)
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     onChangeRef.current(status)
   }, [status])
 
@@ -73,7 +74,7 @@ export const VariablesSection = ({
     }))
   }
 
-  const randomizeLuck = () =>
+  const randomizeLuck = () => {
     setStatus(({ variables, ...prev }) => ({
       ...prev,
       variables: {
@@ -81,6 +82,7 @@ export const VariablesSection = ({
         運勢: Math.floor(Math.random() * 6) + 1,
       },
     }))
+  }
 
   const value = sum(Object.values(status.variables)) - status.variables['運勢']
 

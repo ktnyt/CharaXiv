@@ -41,7 +41,7 @@ export const StatusSection = ({
       <VariablesSection
         status={status}
         disabled={disabled}
-        onChange={setStatus}
+        onChange={(nextStatus) => setStatus(nextStatus)}
       />
 
       <ParametersSection status={status} />
@@ -50,7 +50,7 @@ export const StatusSection = ({
         skills={skills}
         status={status}
         disabled={disabled}
-        onChange={setSkills}
+        onChange={(nextSkills) => setSkills(nextSkills)}
       />
     </Fragment>
   )
