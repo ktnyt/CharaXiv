@@ -24,7 +24,7 @@ func main() {
 	corsOpts := cors.Options{
 		AllowedOrigins:   []string{os.Getenv("FRONTEND_HOST")},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"X-PINGOTHER", "Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		AllowedHeaders:   []string{"X-PINGOTHER", "Accept", "Authorization", "Content-Type", "X-CSRF-Token", "X-Caller"},
 		AllowCredentials: true,
 	}
 

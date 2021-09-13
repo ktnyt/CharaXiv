@@ -49,12 +49,13 @@ export const transformKeys = (
 const addAuthorization = (headers: Record<string, string>, token?: string) =>
   token ? { ...headers, Authorization: `Bearer ${token}` } : headers
 
-export const createJsonClient = (token?: string) =>
-  axios.create({
+export const createJsonClient = (token?: string) => {
+  return axios.create({
     baseURL: getHostname(),
     headers: addAuthorization(
       {
         'Content-Type': 'application/json',
+        'X-Caller': typeof window === 'undefined' ? 'nextjs' : 'browser',
       },
       token,
     ),
@@ -62,6 +63,7 @@ export const createJsonClient = (token?: string) =>
       JSON.stringify(transformKeys(data, camel.toSnake)),
     transformResponse: (data) => transformKeys(JSON.parse(data), snake.toCamel),
   })
+}
 
 export const createFormClient = (token?: string) =>
   axios.create({
@@ -69,6 +71,7 @@ export const createFormClient = (token?: string) =>
     headers: addAuthorization(
       {
         'Content-Type': 'multipart/form-data',
+        'X-Caller': typeof window === 'undefined' ? 'nextjs' : 'browser',
       },
       token,
     ),

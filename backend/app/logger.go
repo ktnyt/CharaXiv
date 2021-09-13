@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/go-chi/chi/v5/middleware"
@@ -16,6 +17,9 @@ func Logger(logger zerolog.Logger) func(http.Handler) http.Handler {
 			c = c.Str("protocol", r.Proto)
 			c = c.Str("method", r.Method)
 			c = c.Str("url", r.URL.String())
+			if value, ok := r.Header["X-Caller"]; ok {
+				c = c.Str("caller", strings.Join(value, ";"))
+			}
 
 			logger = c.Logger()
 
