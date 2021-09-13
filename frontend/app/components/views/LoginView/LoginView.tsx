@@ -8,7 +8,9 @@ import { Icon } from '@/components/styled/Icon'
 import { Input } from '@/components/styled/Input'
 import { Typography } from '@/components/styled/Typography'
 import { useStyles } from '@/hooks/useStyles'
+import { Header } from '@/layout/Header'
 import { Layout } from '@/layout/Layout'
+import { Main } from '@/layout/Main'
 import styles from './LoginView.module.sass'
 
 type Status = 'default' | 'validating' | 'error'
@@ -48,64 +50,68 @@ export const LoginView = () => {
 
   return (
     <Layout>
-      <div className={classes.container}>
-        <div className={classes.content}>
-          <Typography variant="h1">ログイン</Typography>
+      <Header />
 
-          <Input
-            color="medium"
-            placeholder="ユーザ名"
-            value={username}
-            border={status === 'error' ? 'danger' : 'none'}
-            onChange={(event) => {
-              setStatus('default')
-              setUsername(event.target.value)
-            }}
-            suffix={
-              status === 'validating' && (
-                <div className={classes.status}>
-                  <Icon icon={faSpinner} pulse />
-                </div>
-              )
-            }
-          />
+      <Main>
+        <div className={classes.container}>
+          <div className={classes.content}>
+            <Typography variant="h1">ログイン</Typography>
 
-          <Input
-            color="medium"
-            placeholder="パスコード"
-            value={passcode}
-            border={status === 'error' ? 'danger' : 'none'}
-            onChange={(event) => {
-              setStatus('default')
-              setPasscode(event.target.value)
-            }}
-            suffix={
-              status === 'validating' && (
-                <div className={classes.status}>
-                  <Icon icon={faSpinner} pulse />
-                </div>
-              )
-            }
-          />
+            <Input
+              color="medium"
+              placeholder="ユーザ名"
+              value={username}
+              border={status === 'error' ? 'danger' : 'none'}
+              onChange={(event) => {
+                setStatus('default')
+                setUsername(event.target.value)
+              }}
+              suffix={
+                status === 'validating' && (
+                  <div className={classes.status}>
+                    <Icon icon={faSpinner} pulse />
+                  </div>
+                )
+              }
+            />
 
-          {status === 'error' && (
-            <Typography variant="body2" color="danger">
-              ユーザ名またはパスコードが間違っています。
+            <Input
+              color="medium"
+              placeholder="パスコード"
+              value={passcode}
+              border={status === 'error' ? 'danger' : 'none'}
+              onChange={(event) => {
+                setStatus('default')
+                setPasscode(event.target.value)
+              }}
+              suffix={
+                status === 'validating' && (
+                  <div className={classes.status}>
+                    <Icon icon={faSpinner} pulse />
+                  </div>
+                )
+              }
+            />
+
+            {status === 'error' && (
+              <Typography variant="body2" color="danger">
+                ユーザ名またはパスコードが間違っています。
+              </Typography>
+            )}
+
+            <Typography variant="body2" color="caption">
+              初めての方はアカウントを
+              <Link href="/register">
+                <a>
+                  <Typography variant="body2" color="primary">
+                    新規作成
+                  </Typography>
+                </a>
+              </Link>
             </Typography>
-          )}
-
-          <Typography variant="body2" color="caption">
-            初めての方はアカウントを
-            <Link href="/register">
-              <a>
-                <Typography variant="body2" color="primary">
-                  新規作成
-                </Typography>
-              </a>
-            </Link>
-          </Typography>
+          </div>
         </div>
-      </div>
+      </Main>
     </Layout>
   )
 }

@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { Typography } from '@/components/styled/Typography'
 import { useStyles } from '@/hooks/useStyles'
+import { Header } from '@/layout/Header'
 import { Layout } from '@/layout/Layout'
+import { Main } from '@/layout/Main'
 import { PasscodeStep } from './PasscodeStep'
 import { QRCodeStep } from './QRCodeStep'
 import { UsernameStep } from './UsernameStep'
@@ -18,36 +20,40 @@ export const RegisterView = () => {
 
   return (
     <Layout>
-      <div className={classes.container}>
-        <div className={classes.content}>
-          <Typography variant="h1">新規登録</Typography>
+      <Header />
 
-          {step === 'username' && (
-            <UsernameStep
-              onNext={(username, url) => {
-                setUsername(username)
-                setUrl(url)
-                setStep('qrcode')
-              }}
-            />
-          )}
+      <Main>
+        <div className={classes.container}>
+          <div className={classes.content}>
+            <Typography variant="h1">新規登録</Typography>
 
-          {step === 'qrcode' && (
-            <QRCodeStep
-              url={url}
-              onBack={() => setStep('username')}
-              onNext={() => setStep('passcode')}
-            />
-          )}
+            {step === 'username' && (
+              <UsernameStep
+                onNext={(username, url) => {
+                  setUsername(username)
+                  setUrl(url)
+                  setStep('qrcode')
+                }}
+              />
+            )}
 
-          {step === 'passcode' && (
-            <PasscodeStep
-              username={username}
-              onBack={() => setStep('qrcode')}
-            />
-          )}
+            {step === 'qrcode' && (
+              <QRCodeStep
+                url={url}
+                onBack={() => setStep('username')}
+                onNext={() => setStep('passcode')}
+              />
+            )}
+
+            {step === 'passcode' && (
+              <PasscodeStep
+                username={username}
+                onBack={() => setStep('qrcode')}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      </Main>
     </Layout>
   )
 }
