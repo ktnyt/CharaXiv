@@ -25,6 +25,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       border = 'none',
       suffix,
       className,
+      disabled,
       ...props
     },
     ref,
@@ -38,12 +39,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           classes.container,
           classes[variant],
           classes[color],
+          disabled && classes.disabled,
           border && classes[kebab.toCamel(`border-${border}`)],
         )}
       >
         <BaseInput
           ref={ref}
           className={clsx(className, classes.input, classes[color])}
+          disabled={disabled}
           {...props}
         />
         {suffix && <div>{suffix}</div>}

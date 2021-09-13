@@ -3,9 +3,10 @@
 @mixin input-scheme($light-normal, $light-hover, $dark-normal, $dark-hover)
     background-color: $light-normal
     color: $color-black
+    cursor: text
 
     @media (hover: hover)
-        &:hover
+        &:not(.disabled):hover
             background-color: $light-hover
 
     &::placeholder
@@ -15,13 +16,16 @@
         background-color: $light-normal
         color: $color-black
         -webkit-text-fill-color: $color-black
+        @media (hover: hover)
+            &:hover
+                background-color: $light-normal
 
     &.darkmode
         background-color: $dark-normal
         color: $color-white
 
         @media (hover: hover)
-            &:hover
+            &:not(.disabled):hover
                 background-color: $dark-hover
 
         &::placeholder
@@ -33,6 +37,9 @@
             opacity: 1
             -webkit-text-fill-color: $color-white
             -webkit-opacity: 1
+            @media (hover: hover)
+                &:hover
+                    background-color: $dark-normal
 
 @mixin border-scheme($light-color, $dark-color)
     height: 30px
