@@ -1,2 +1,2 @@
 # CharaXiv
-TRPG Character Sheet Managment Service.
+TRPG Character Sheet Management Service.
