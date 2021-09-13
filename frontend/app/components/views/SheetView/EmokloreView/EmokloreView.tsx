@@ -7,7 +7,6 @@ import {
   Status,
   VariableKeys,
 } from './types'
-import { useState } from 'react'
 import toast from 'react-hot-toast'
 import copy from 'copy-to-clipboard'
 import { draftjsToMd } from 'draftjs-md-converter'
@@ -157,7 +156,7 @@ export const EmokloreView = ({ sheet }: EmokloreViewProps) => {
         <div className={classes.container}>
           <div className={classes.content}>
             <div className={classes.columnLeft}>
-              <ProfileColumn sheet={init} />
+              <ProfileColumn sheet={sheet} />
             </div>
 
             <div className={classes.columnRight}>
