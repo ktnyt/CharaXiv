@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import clsx from 'clsx'
 import { clamp } from '@/helpers/math'
 import { useSize } from '@/hooks/useSize'
 import { useStyles } from '@/hooks/useStyles'
@@ -23,6 +24,7 @@ export interface SlideSelectorProps {
   defaultIndex?: number
   disabled?: boolean
   flat?: boolean
+  className?: string
   onCommit?: (value: number) => void
   children?: ReactNode
 }
@@ -32,6 +34,7 @@ export const SlideSelector = ({
   defaultIndex,
   disabled,
   flat,
+  className,
   onCommit,
   children,
 }: SlideSelectorProps) => {
@@ -82,7 +85,7 @@ export const SlideSelector = ({
   const classes = useStyles(styles)
 
   return (
-    <div className={classes.container}>
+    <div className={clsx(className, classes.container)}>
       <div ref={viewport} className={classes.viewport}>
         <Drag
           disabled={disabled}

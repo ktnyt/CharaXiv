@@ -67,41 +67,39 @@ export const CustomSkillView = ({
             }
           />
 
-          <div className="base">
-            <SlideSelector
-              defaultIndex={VariableKeys.indexOf(skill.base)}
-              disabled={disabled}
-              onCommit={(value) =>
-                setCustom(
-                  swapper(
-                    (prev) => ({
-                      ...prev,
-                      base: VariableKeys[value],
-                    }),
-                    index,
-                  ),
-                )
-              }
-            >
-              {VariableKeys.map((key, index) => (
-                <Twemoji key={index} emoji={VariableEmoji[key]} />
-              ))}
-            </SlideSelector>
-          </div>
+          <SlideSelector
+            className="base"
+            defaultIndex={VariableKeys.indexOf(skill.base)}
+            disabled={disabled}
+            onCommit={(value) =>
+              setCustom(
+                swapper(
+                  (prev) => ({
+                    ...prev,
+                    base: VariableKeys[value],
+                  }),
+                  index,
+                ),
+              )
+            }
+          >
+            {VariableKeys.map((key, index) => (
+              <Twemoji key={index} emoji={VariableEmoji[key]} />
+            ))}
+          </SlideSelector>
 
-          <div className="level">
-            <SlideSelector
-              defaultIndex={skill.level}
-              disabled={disabled}
-              onCommit={(level) =>
-                setCustom(swapper((prev) => ({ ...prev, level }), index))
-              }
-            >
-              {range(0, 3).map((value, index) => (
-                <span key={index}>{value}</span>
-              ))}
-            </SlideSelector>
-          </div>
+          <SlideSelector
+            className="level"
+            defaultIndex={skill.level}
+            disabled={disabled}
+            onCommit={(level) =>
+              setCustom(swapper((prev) => ({ ...prev, level }), index))
+            }
+          >
+            {range(0, 3).map((value, index) => (
+              <span key={index}>{value}</span>
+            ))}
+          </SlideSelector>
 
           <Typography variant="body1" className="value">
             {status.variables[skill.base] + skill.level}
