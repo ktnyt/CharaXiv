@@ -46,11 +46,13 @@ export const ParametersSection = ({ status }: ParametersSectionProps) => {
 
             <Typography variant="h4">{label}</Typography>
 
-            <SlideSelector index={value - min} disabled>
-              {range(min, max).map((value, index) => (
-                <span key={index}>{value}</span>
-              ))}
-            </SlideSelector>
+            <div>
+              <SlideSelector index={value - min} disabled>
+                {range(min, max).map((value, index) => (
+                  <span key={index}>{value}</span>
+                ))}
+              </SlideSelector>
+            </div>
           </Fragment>
         ))}
       </div>

@@ -1,7 +1,7 @@
 import {
   Children,
+  Fragment,
   ReactNode,
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -16,10 +16,14 @@ import { Click } from '../atoms/Click'
 import { Drag } from '../atoms/Drag'
 import { Stack } from '../atoms/Stack'
 
+const ITEM_WIDTH = 32
+const HALF_WIDTH = ITEM_WIDTH / 2
+
 export interface SlideSelectorProps {
   index?: number
   defaultIndex?: number
   disabled?: boolean
+  flat?: boolean
   onCommit?: (value: number) => void
   children?: ReactNode
 }
@@ -28,6 +32,7 @@ export const SlideSelector = ({
   index: given,
   defaultIndex,
   disabled,
+  flat,
   onCommit,
   children,
 }: SlideSelectorProps) => {
@@ -44,7 +49,7 @@ export const SlideSelector = ({
   }, [index])
 
   useEffect(() => {
-    if (given) {
+    if (typeof given === 'number') {
       setIndex(given)
     }
   }, [given])
@@ -56,9 +61,22 @@ export const SlideSelector = ({
   const viewport = useRef<HTMLDivElement>(null!)
   const size = useSize(viewport)
 
-  const computeOffset = useCallback(() => {
-    return -40 * index + size.width / 2 - 20 - delta
-  }, [size, index, delta])
+  const computeOffset = () => {
+    const rawOffset = -ITEM_WIDTH * index + size.width / 2 - HALF_WIDTH - delta
+    const left = rawOffset - (size.width / 2 - HALF_WIDTH)
+    if (left > 0) {
+      return rawOffset - (left - Math.sqrt(left))
+    }
+    const right =
+      size.width / 2 +
+      HALF_WIDTH -
+      rawOffset -
+      ITEM_WIDTH * Children.count(children)
+    if (right > 0) {
+      return rawOffset + (right - Math.sqrt(right))
+    }
+    return rawOffset
+  }
 
   const offset = computeOffset()
 
@@ -73,7 +91,7 @@ export const SlideSelector = ({
           onCommit={() => {
             setIndex((prev) =>
               clamp(
-                prev + Math.floor(delta / 40 + 0.5),
+                prev + Math.floor(delta / ITEM_WIDTH + 0.5),
                 0,
                 Children.count(children) - 1,
               ),
@@ -107,8 +125,12 @@ export const SlideSelector = ({
           )}
         />
       </div>
-      <div className={classes.overlayWhite}></div>
-      <div className={classes.overlayBlack}></div>
+      {!flat && (
+        <Fragment>
+          <div className={classes.overlayWhite}></div>
+          <div className={classes.overlayBlack}></div>
+        </Fragment>
+      )}
     </Stack>
   )
 }
