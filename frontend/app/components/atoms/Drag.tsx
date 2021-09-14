@@ -65,7 +65,6 @@ export const Drag = ({
 
   const onTouchStart: TouchEventHandler = (event) => {
     if (!disabled) {
-      event.preventDefault()
       if (event.touches.length === 1) {
         anchor.current = {
           x: event.touches[0].pageX,
