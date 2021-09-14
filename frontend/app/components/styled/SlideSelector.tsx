@@ -14,7 +14,6 @@ import { useUpdateEffect } from '@/hooks/useUpdateEffect'
 import styles from './SlideSelector.module.sass'
 import { Click } from '../atoms/Click'
 import { Drag } from '../atoms/Drag'
-import { Stack } from '../atoms/Stack'
 
 const ITEM_WIDTH = 32
 const HALF_WIDTH = ITEM_WIDTH / 2
@@ -83,7 +82,7 @@ export const SlideSelector = ({
   const classes = useStyles(styles)
 
   return (
-    <Stack>
+    <div className={classes.container}>
       <div ref={viewport} className={classes.viewport}>
         <Drag
           disabled={disabled}
@@ -102,7 +101,7 @@ export const SlideSelector = ({
           onChange={({ x }) => setDelta(x)}
           render={(props) => (
             <div
-              className={classes.container}
+              className={classes.slider}
               style={{
                 transform: `translateX(${offset}px)`,
                 transition: dragging ? 'none' : 'transform 0.3s',
@@ -131,6 +130,6 @@ export const SlideSelector = ({
           <div className={classes.overlayBlack}></div>
         </Fragment>
       )}
-    </Stack>
+    </div>
   )
 }

@@ -150,25 +150,23 @@ export const VariablesSection = ({
 
             <Typography variant="h4">{key}</Typography>
 
-            <div>
-              <SlideSelector
-                index={status.variables[key] - 1}
-                disabled={disabled}
-                onCommit={(value) => {
-                  setStatus((prev) => ({
-                    ...prev,
-                    variables: {
-                      ...prev.variables,
-                      [key]: value + 1,
-                    },
-                  }))
-                }}
-              >
-                {range(1, 6).map((value, index) => (
-                  <span key={index}>{value}</span>
-                ))}
-              </SlideSelector>
-            </div>
+            <SlideSelector
+              index={status.variables[key] - 1}
+              disabled={disabled}
+              onCommit={(value) => {
+                setStatus((prev) => ({
+                  ...prev,
+                  variables: {
+                    ...prev.variables,
+                    [key]: value + 1,
+                  },
+                }))
+              }}
+            >
+              {range(1, 6).map((value, index) => (
+                <span key={index}>{value}</span>
+              ))}
+            </SlideSelector>
           </Fragment>
         ))}
       </div>

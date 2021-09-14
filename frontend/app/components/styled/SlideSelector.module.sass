@@ -1,12 +1,17 @@
 @import "index.module"
 
+.container
+    position: relative
+    width: 100%
+    height: 32px
+
 .viewport
     overflow: hidden
     width: 100%
     height: 32px
     touch-action: none
 
-.container
+.slider
     display: inline-flex
     flex-direction: row
     height: 32px
@@ -31,6 +36,8 @@
     background: linear-gradient(90deg, $color, transparentize($color, 0.15), transparentize($color, 0.3), transparentize($color, 1), transparentize($color, 0.3), transparentize($color, 0.15), $color)
 
 .overlay-white
+    position: absolute
+    top: 0
     width: 100%
     height: 32px
     transform: rotate(0)
@@ -47,6 +54,8 @@
         opacity: 0
 
 .overlay-black
+    position: absolute
+    top: 0
     width: 100%
     height: 32px
     transform: rotate(0)
