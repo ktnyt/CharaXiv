@@ -27,14 +27,12 @@ import linkifyPlugin from '@draft-js-plugins/linkify'
 import { faMarkdown } from '@fortawesome/free-brands-svg-icons'
 import {
   faBold,
-  faCopy,
   faHeading,
   faItalic,
   faListOl,
   faListUl,
   faQuoteLeft,
   faUnderline,
-  faWindowClose,
 } from '@fortawesome/free-solid-svg-icons'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useStyles } from '@/hooks/useStyles'
@@ -42,7 +40,6 @@ import { useUpdateEffect } from '@/hooks/useUpdateEffect'
 import { IconButton } from './IconButton'
 import { InputGroup } from './InputGroup'
 import { InputSet } from './InputSet'
-import { Modal } from './Modal'
 import styles from './Editor.module.sass'
 
 type KeyBindingFunction = NonNullable<DraftEditor['props']['keyBindingFn']>
@@ -86,9 +83,9 @@ export const Editor = ({
   disabled = false,
   onChange,
 }: EditorProps) => {
-  const editorRef = useRef<PluginEditor>(null!)
+  const editorRef = useRef<PluginEditor>(null)
   const focusEditor = () => {
-    if (!disabled) {
+    if (editorRef.current) {
       editorRef.current.focus()
     }
   }
@@ -122,7 +119,7 @@ export const Editor = ({
     return block.getType()
   }
 
-  const toggleCurrentInlinStyle =
+  const toggleCurrentInlineStyle =
     (inlineStyle: string) =>
     (event: ReactMouseEvent<HTMLButtonElement, MouseEvent>) => {
       event.preventDefault()
@@ -245,7 +242,7 @@ export const Editor = ({
   const classes = useStyles(styles)
 
   return (
-    <div className={classes.container} onClick={focusEditor}>
+    <div className={classes.container}>
       {!disabled && (
         <div className={classes.controls}>
           <InputGroup>
@@ -284,7 +281,7 @@ export const Editor = ({
                   key={key}
                   icon={icon}
                   onMouseDown={(event) => event.preventDefault()}
-                  onClick={toggleCurrentInlinStyle(key)}
+                  onClick={toggleCurrentInlineStyle(key)}
                   variant="default"
                   color={
                     getCurrentInlineStyle().has(key) && focused
@@ -299,56 +296,38 @@ export const Editor = ({
             <IconButton
               icon={faMarkdown}
               variant="default"
-              color="light"
-              onClick={() => setOpenMarkdown(true)}
+              color={openMarkdown ? 'primary' : 'light'}
+              onClick={() => setOpenMarkdown((prev) => !prev)}
             />
           </InputGroup>
         </div>
       )}
 
-      <Modal open={openMarkdown} handleClose={() => setOpenMarkdown(false)}>
-        <div className={classes.markdown}>
-          <div>
-            <TextArea
-              defaultValue={markdown}
-              onChange={(event) => setMarkdown(event.target.value)}
-            />
-          </div>
-
-          <div>
-            <InputGroup>
-              <IconButton
-                variant="outline"
-                color="primary"
-                icon={faCopy}
-                onClick={copyMarkdown}
-              />
-
-              <IconButton
-                variant="textual"
-                color="danger"
-                icon={faWindowClose}
-                onClick={() => setOpenMarkdown(false)}
-              />
-            </InputGroup>
-          </div>
-        </div>
-      </Modal>
-
-      <div className={clsx(classes.editor, disabled && classes.disabled)}>
-        <PluginEditor
-          ref={editorRef}
-          placeholder={focused ? '' : placeholder}
-          editorState={currentState}
-          handleKeyCommand={handleKeyCommand}
-          keyBindingFn={keyBindingFunction}
-          onChange={setCurrentState}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          plugins={[linkifyPlugin()]}
-          readOnly={disabled}
+      {openMarkdown ? (
+        <TextArea
+          className={classes.markdown}
+          defaultValue={markdown}
+          onChange={(event) => setMarkdown(event.target.value)}
         />
-      </div>
+      ) : (
+        <div
+          className={clsx(classes.editor, disabled && classes.disabled)}
+          onClick={focusEditor}
+        >
+          <PluginEditor
+            ref={editorRef}
+            placeholder={focused ? '' : placeholder}
+            editorState={currentState}
+            handleKeyCommand={handleKeyCommand}
+            keyBindingFn={keyBindingFunction}
+            onChange={setCurrentState}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            plugins={[linkifyPlugin()]}
+            readOnly={disabled}
+          />
+        </div>
+      )}
     </div>
   )
 }
