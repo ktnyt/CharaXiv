@@ -139,17 +139,17 @@ export const EmokloreView = ({ sheet: init }: EmokloreViewProps) => {
         />
 
         <IconButton
-          icon={faCode}
+          icon={faPalette}
           color="primary"
           variant="outline"
-          onClick={copyCcfolia}
+          onClick={copyPalette}
         />
 
         <IconButton
-          icon={faPalette}
+          icon={faCode}
           color="primary"
           variant="default"
-          onClick={copyPalette}
+          onClick={copyCcfolia}
         />
       </Header>
 
