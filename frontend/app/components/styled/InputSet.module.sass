@@ -12,6 +12,9 @@
     & > *:not(:first-child):not(:last-child)
         border-radius: 0px
 
+    & > *:not(:first-child)
+        border-left: none !important
+
     & > *:first-child
         border-top-right-radius: 0px
         border-bottom-right-radius: 0px
@@ -28,6 +31,9 @@
         flex-direction: column
         width: 32px
         height: auto
+
+        & > *:not(:first-child)
+            border-top: none !important
 
         & > *:first-child
             border-top-right-radius: 4px

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { Dispatch, useState } from 'react'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { Twemoji } from '@/components/atoms/Twemoji'
 import { Button } from '@/components/styled/Button'
@@ -6,41 +6,25 @@ import { IconButton } from '@/components/styled/IconButton'
 import { Input } from '@/components/styled/Input'
 import { SlideSelector } from '@/components/styled/SlideSelector'
 import { Typography } from '@/components/styled/Typography'
-import { appender, range, remover, replacer, swapper } from '@/helpers/array'
+import { range, replacer } from '@/helpers/array'
 import { useStyles } from '@/hooks/useStyles'
-import { useUpdateEffect } from '@/hooks/useUpdateEffect'
+import { SkillsAction } from './SkillsReducer'
 import styles from './CustomSkillView.module.sass'
-import {
-  CustomSkill,
-  Status,
-  VariableEmoji,
-  VariableKey,
-  VariableKeys,
-} from '../types'
+import { CustomSkill, Status, VariableEmoji, VariableKeys } from '../types'
 
 export interface CustomSkillViewProps {
   custom: CustomSkill[]
   status: Status
   disabled?: boolean
-  onChange: (custom: CustomSkill[]) => void
+  dispatch: Dispatch<SkillsAction>
 }
 
 export const CustomSkillView = ({
-  custom: init,
+  custom,
   status,
   disabled,
-  onChange,
+  dispatch,
 }: CustomSkillViewProps) => {
-  const onChangeRef = useRef(onChange)
-  useEffect(() => {
-    onChangeRef.current = onChange
-  }, [onChange])
-
-  const [custom, setCustom] = useState(init)
-  useUpdateEffect(() => {
-    onChangeRef.current(custom)
-  }, [custom])
-
   const [names, setNames] = useState(custom.map(({ name }) => name))
 
   const classes = useStyles(styles)
@@ -58,12 +42,7 @@ export const CustomSkillView = ({
             disabled={disabled}
             onChange={(event) => setNames(replacer(event.target.value, index))}
             onCommit={(event) =>
-              setCustom(
-                swapper(
-                  (prev) => ({ ...prev, name: event.target.value }),
-                  index,
-                ),
-              )
+              dispatch({ type: 'custom-name', index, name: event.target.value })
             }
           />
 
@@ -72,15 +51,11 @@ export const CustomSkillView = ({
             defaultIndex={VariableKeys.indexOf(skill.base)}
             disabled={disabled}
             onCommit={(value) =>
-              setCustom(
-                swapper(
-                  (prev) => ({
-                    ...prev,
-                    base: VariableKeys[value],
-                  }),
-                  index,
-                ),
-              )
+              dispatch({
+                type: 'custom-base',
+                index,
+                base: VariableKeys[value],
+              })
             }
           >
             {VariableKeys.map((key, index) => (
@@ -93,7 +68,7 @@ export const CustomSkillView = ({
             defaultIndex={skill.level}
             disabled={disabled}
             onCommit={(level) =>
-              setCustom(swapper((prev) => ({ ...prev, level }), index))
+              dispatch({ type: 'custom-level', index, level })
             }
           >
             {range(0, 3).map((value, index) => (
@@ -112,7 +87,7 @@ export const CustomSkillView = ({
                 color="danger"
                 icon={faTrashAlt}
                 className="remove"
-                onClick={() => setCustom(remover(index))}
+                onClick={() => dispatch({ type: 'delete-custom', index })}
               />
             )}
           </div>
@@ -124,11 +99,7 @@ export const CustomSkillView = ({
           <Button
             variant="outline"
             color="primary"
-            onClick={() =>
-              setCustom(
-                appender({ name: '', base: '身体' as VariableKey, level: 0 }),
-              )
-            }
+            onClick={() => dispatch({ type: 'create-custom' })}
           >
             技能を追加
           </Button>

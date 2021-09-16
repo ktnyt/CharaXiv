@@ -135,7 +135,7 @@ export const ImageSection = (props: ImageSectionProps) => {
         onConfirm={() => setOpenImagePicker(false)}
       >
         <div>
-          <div style={{ marginLeft: '8px' }}>
+          <div style={{ marginLeft: '8px', marginBottom: '8px' }}>
             <Typography variant="h3">画像一覧</Typography>
           </div>
 

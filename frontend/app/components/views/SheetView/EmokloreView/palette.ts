@@ -1,4 +1,4 @@
-import { maxVariable } from './DataColumn/utils'
+import { maxVariableValue } from './DataColumn/utils'
 import {
   CustomSkill,
   isSingle,
@@ -13,7 +13,7 @@ import {
 export const formatPalette = (skills: Skills, status: Status) => {
   const formatSingleSkill = (group: string, skill: SingleSkill) =>
     `${skill.level}DM<=${
-      skill.level + maxVariable(status, skill.base)
+      skill.level + maxVariableValue(status, skill.bases)
     } 《${group}・${skill.name}》`
 
   const formatMultiSkill = (group: string, skill: MultiSkill) =>
@@ -21,7 +21,7 @@ export const formatPalette = (skills: Skills, status: Status) => {
       .map(
         (genre) =>
           `${genre.level}DM<=${
-            genre.level + maxVariable(status, skill.base)
+            genre.level + maxVariableValue(status, skill.bases)
           } 《${group}・${skill.name}：${genre.label}》`,
       )
       .join('\n')

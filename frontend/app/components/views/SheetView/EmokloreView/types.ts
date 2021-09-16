@@ -40,6 +40,14 @@ export const EmotionCategories: Record<EmotionType, EmotionCategory> = {
   罪悪感: 'wound', 狂気: 'wound', 劣等感: 'wound',
 }
 
+export const EmotionCategoryLabels: Record<EmotionCategory, string> = {
+  desire: '欲望',
+  passion: '情念',
+  ideal: '理想',
+  relation: '関係',
+  wound: '傷',
+}
+
 export const getEmotionCategory = (emotion: EmotionType) =>
   EmotionCategories[emotion]
 
@@ -93,11 +101,13 @@ export const SkillCategoryValues: SkillCategoryValue[] = [
   '手当て', '細工', '幸運',
 ]
 
+export const EXSkills = ['霊感', '奥義', '射撃', '蘇生', '強運']
+
 export interface SingleSkill {
   name: string
-  base: VariableKey[]
+  base?: VariableKey
+  bases: VariableKey[]
   level: number
-  ex: boolean
 }
 
 export interface SkillGenre {
@@ -107,9 +117,9 @@ export interface SkillGenre {
 
 export interface MultiSkill {
   name: string
-  base: VariableKey[]
+  base?: VariableKey
+  bases: VariableKey[]
   genres: SkillGenre[]
-  ex: boolean
 }
 
 export interface CustomSkill {

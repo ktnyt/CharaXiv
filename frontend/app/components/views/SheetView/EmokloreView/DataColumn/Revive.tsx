@@ -10,7 +10,7 @@ import { SkillsAction } from './SkillsReducer'
 import styles from './SingleSkillView.module.sass'
 import { SingleSkill, Status, VariableEmoji } from '../types'
 
-export interface SingleSkillViewProps {
+export interface ReviveProps {
   skill: SingleSkill
   status: Status
   disabled?: boolean
@@ -18,13 +18,13 @@ export interface SingleSkillViewProps {
   dispatch: Dispatch<SkillsAction>
 }
 
-export const SingleSkillView = ({
+export const Revive = ({
   skill: { name, base, bases, level },
   status,
   disabled,
   hideInit,
   dispatch,
-}: SingleSkillViewProps) => {
+}: ReviveProps) => {
   const key = base || maxVariableKey(status, bases)
 
   const classes = useStyles(styles)
@@ -43,18 +43,16 @@ export const SingleSkillView = ({
         ))}
       </SlideSelector>
 
-      <SlideSelector flat defaultIndex={0}>
-        {bases.map((base) => (
-          <Twemoji key={base} emoji={VariableEmoji[base]} />
-        ))}
-      </SlideSelector>
+      <Typography variant="body1">
+        <Twemoji emoji={VariableEmoji[key]} />
+      </Typography>
 
       <Typography
         variant="body1"
         color={level ? 'default' : 'caption'}
         className="bold"
       >
-        {status.variables[key] + level}
+        {Math.ceil(status.variables[key] / 2)}
       </Typography>
     </div>
   ) : null

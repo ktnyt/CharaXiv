@@ -17,7 +17,7 @@ export interface StatusSectionProps {
 export const StatusSection = ({
   sheetId,
   status: initStatus,
-  skills: initSkills,
+  skills,
   disabled,
 }: StatusSectionProps) => {
   const token = useCookie('token')
@@ -28,13 +28,6 @@ export const StatusSection = ({
       updateSheet(sheetId, { data: { status } }, token)
     }
   }, [sheetId, status])
-
-  const [skills, setSkills] = useState(initSkills)
-  useUpdateEffect(() => {
-    if (!disabled && token) {
-      updateSheet(sheetId, { data: { skills } }, token)
-    }
-  }, [sheetId, skills])
 
   return (
     <Fragment>
@@ -47,10 +40,10 @@ export const StatusSection = ({
       <ParametersSection status={status} />
 
       <SkillsSection
+        sheetId={sheetId}
         skills={skills}
         status={status}
         disabled={disabled}
-        onChange={(nextSkills) => setSkills(nextSkills)}
       />
     </Fragment>
   )

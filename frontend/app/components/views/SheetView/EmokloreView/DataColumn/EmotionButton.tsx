@@ -2,7 +2,12 @@ import { ComponentPropsWithRef, forwardRef } from 'react'
 import clsx from 'clsx'
 import { useStyles } from '@/hooks/useStyles'
 import styles from './EmotionButton.module.sass'
-import { EmotionType, getEmotionCategory } from '../types'
+import {
+  EmotionCategories,
+  EmotionCategoryLabels,
+  EmotionType,
+  getEmotionCategory,
+} from '../types'
 
 export type EmotionButtonProps = Omit<
   ComponentPropsWithRef<'button'>,
@@ -30,7 +35,11 @@ export const EmotionButton = forwardRef<HTMLButtonElement, EmotionButtonProps>(
       >
         <span>
           {prefix}
-          {emotion ? emotion : '未設定'}
+          {emotion
+            ? `${emotion}（${
+                EmotionCategoryLabels[EmotionCategories[emotion]]
+              }）`
+            : '未設定'}
         </span>
       </button>
     )

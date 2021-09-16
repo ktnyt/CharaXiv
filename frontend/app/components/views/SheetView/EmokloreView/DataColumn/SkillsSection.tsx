@@ -1,72 +1,29 @@
-import { useEffect, useReducer, useRef, useState } from 'react'
+import { useReducer, useState } from 'react'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { updateSheet } from '@/api/sheet'
 import { IconButton } from '@/components/styled/IconButton'
 import { Typography } from '@/components/styled/Typography'
-import { replace, swap } from '@/helpers/array'
+import { useCookie } from '@/context/CookiesContext'
 import { sum } from '@/helpers/math'
 import { useStyles } from '@/hooks/useStyles'
 import { useUpdateEffect } from '@/hooks/useUpdateEffect'
 import { BaseSkillView } from './BaseSkillView'
 import { CustomSkillView } from './CustomSkillView'
+import { FirstAid } from './FirstAid'
 import { MultiSkillView } from './MultiSkillView'
+import { Revive } from './Revive'
 import { SingleSkillView } from './SingleSkillView'
+import { skillsReducer } from './SkillsReducer'
 import { ValueMonitor } from './ValueMonitor'
 import styles from './SkillsSection.module.sass'
 import {
-  CustomSkill,
+  EXSkills,
   isSingle,
   MultiSkill,
   SingleSkill,
   Skills,
   Status,
 } from '../types'
-
-type Action =
-  | {
-      type: 'preset'
-      categoryIndex: number
-      groupIndex: number
-      skillIndex: number
-      skill: SingleSkill | MultiSkill
-    }
-  | { type: 'extra'; value: number }
-  | { type: 'custom'; custom: CustomSkill[] }
-
-const reducer = (skills: Skills, action: Action): Skills => {
-  switch (action.type) {
-    case 'preset':
-      return {
-        ...skills,
-        presets: swap(
-          skills.presets,
-          (category) => ({
-            ...category,
-            groups: swap(
-              category.groups,
-              (group) => ({
-                ...group,
-                skills: replace(group.skills, action.skill, action.skillIndex),
-              }),
-              action.groupIndex,
-            ),
-          }),
-          action.categoryIndex,
-        ),
-      }
-
-    case 'extra':
-      return { ...skills, extra: action.value }
-
-    case 'custom':
-      return {
-        ...skills,
-        custom: action.custom,
-      }
-
-    default:
-      return skills
-  }
-}
 
 const points = [0, 1, 5, 15]
 const doubleIf = (n: number, flag: boolean) => (flag ? n * 2 : n)
@@ -76,32 +33,30 @@ const computePoints = (skill: SingleSkill | MultiSkill) =>
     isSingle(skill)
       ? points[skill.level]
       : sum(skill.genres.map((genre) => points[genre.level])),
-    skill.ex,
+    EXSkills.includes(skill.name),
   )
 
 export interface SkillsSectionProps {
+  sheetId: string
   status: Status
   skills: Skills
   disabled?: boolean
-  onChange: (skills: Skills) => void
 }
 
 export const SkillsSection = ({
+  sheetId,
   skills: init,
   status,
   disabled,
-  onChange,
 }: SkillsSectionProps) => {
-  const onChangeRef = useRef(onChange)
+  const token = useCookie('token')
 
-  useEffect(() => {
-    onChangeRef.current = onChange
-  }, [onChange])
-
-  const [skills, dispatch] = useReducer(reducer, init)
+  const [skills, dispatch] = useReducer(skillsReducer, init)
 
   useUpdateEffect(() => {
-    onChangeRef.current(skills)
+    if (!disabled && token) {
+      updateSheet(sheetId, { data: { skills } }, token)
+    }
   }, [skills])
 
   const total =
@@ -125,7 +80,7 @@ export const SkillsSection = ({
             value={total}
             base={30}
             extra={skills.extra}
-            onChange={(extra) => dispatch({ type: 'extra', value: extra })}
+            onChange={(extra) => dispatch({ type: 'extra', extra })}
           />
         </div>
 
@@ -145,26 +100,33 @@ export const SkillsSection = ({
 
           {groups.map(({ name, base, skills }, groupIndex) => (
             <div key={groupIndex} className={classes.group}>
-              <BaseSkillView name={name} base={base} status={status} />
+              {name === '手当て' ? (
+                <FirstAid name={name} base={base} status={status} />
+              ) : (
+                <BaseSkillView name={name} base={base} status={status} />
+              )}
 
               {skills.map((skill, skillIndex) =>
                 isSingle(skill) ? (
-                  <SingleSkillView
-                    key={skillIndex}
-                    skill={skill}
-                    status={status}
-                    disabled={disabled}
-                    hideInit={hideInit}
-                    onChange={(skill) =>
-                      dispatch({
-                        type: 'preset',
-                        categoryIndex,
-                        groupIndex,
-                        skillIndex,
-                        skill,
-                      })
-                    }
-                  />
+                  skill.name === '蘇生' ? (
+                    <Revive
+                      key={skillIndex}
+                      skill={skill}
+                      status={status}
+                      disabled={disabled}
+                      hideInit={hideInit}
+                      dispatch={dispatch}
+                    />
+                  ) : (
+                    <SingleSkillView
+                      key={skillIndex}
+                      skill={skill}
+                      status={status}
+                      disabled={disabled}
+                      hideInit={hideInit}
+                      dispatch={dispatch}
+                    />
+                  )
                 ) : (
                   <MultiSkillView
                     key={skillIndex}
@@ -172,15 +134,7 @@ export const SkillsSection = ({
                     status={status}
                     disabled={disabled}
                     hideInit={hideInit}
-                    onChange={(skill) =>
-                      dispatch({
-                        type: 'preset',
-                        categoryIndex,
-                        groupIndex,
-                        skillIndex,
-                        skill,
-                      })
-                    }
+                    dispatch={dispatch}
                   />
                 ),
               )}
@@ -193,7 +147,7 @@ export const SkillsSection = ({
         custom={skills.custom}
         status={status}
         disabled={disabled}
-        onChange={(custom) => dispatch({ type: 'custom', custom })}
+        dispatch={dispatch}
       />
     </div>
   )
