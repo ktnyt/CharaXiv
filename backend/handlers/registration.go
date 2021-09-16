@@ -4,8 +4,8 @@ import (
 	"errors"
 	"net/http"
 	"net/url"
+	"regexp"
 
-	"github.com/go-ascii/ascii"
 	"github.com/ktnyt/charaxiv/backend/app"
 	"github.com/ktnyt/charaxiv/backend/controllers"
 )
@@ -14,18 +14,15 @@ type RegisterParams struct {
 	Username string `schema:"username,required"`
 }
 
+var usernameRegexp = regexp.MustCompile("^[A-Za-z0-9_]{5,}$")
+
 func (params RegisterParams) Validate() error {
 	p := []byte(params.Username)
 
-	if len(p) < 5 {
-		return errors.New("username must be at least 5 characters long")
+	if !usernameRegexp.Match(p) {
+		return errors.New("username must match regexp")
 	}
 
-	for i := range p {
-		if !ascii.IsLatin(p[i]) {
-			return errors.New("username contains non-ascii characters")
-		}
-	}
 	return nil
 }
 

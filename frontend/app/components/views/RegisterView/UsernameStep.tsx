@@ -9,7 +9,7 @@ import { useDebounce } from '@/hooks/useDebounce'
 import { useStyles } from '@/hooks/useStyles'
 import styles from './UsernameStep.module.sass'
 
-const usernameRegexp = /^[A-Za-z0-9]{5,}$/
+const usernameRegexp = /^[A-Za-z0-9_]{5,}$/
 
 type Status = 'default' | 'validating' | 'error' | 'success'
 
@@ -53,9 +53,13 @@ export const UsernameStep = ({ onNext }: UsernameStepProps) => {
 
   return (
     <Fragment>
+      <Typography variant="body2" color="caption">
+        ユーザIDは半角英数時またはアンダーバーのみを使用し、5文字以上で入力してください。
+      </Typography>
+
       <Input
         color="medium"
-        placeholder="ユーザ名"
+        placeholder="ユーザID"
         value={rawUsername}
         border={borders[status]}
         onChange={(event) => {
@@ -73,7 +77,7 @@ export const UsernameStep = ({ onNext }: UsernameStepProps) => {
 
       {status === 'error' && (
         <Typography variant="body2" color="danger">
-          このユーザ名は既に使用されています。
+          このユーザIDは既に使用されています。
         </Typography>
       )}
 
