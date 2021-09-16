@@ -65,7 +65,7 @@ func Verify(ctx context.Context, username string, passcode int32) (string, int) 
 	logger.Debug().Msg("create identity")
 	accessToken, err := actions.CreateIdentity(ctx, username)
 	if err != nil {
-		logger.Error().Err(err).Msg("failed to crete new session")
+		logger.Error().Err(err).Msg("failed to crete new identity")
 		return "", ErrToCode(err)
 	}
 
