@@ -31,7 +31,7 @@ func (c *Client) Close() error {
 	return c.fc.Close()
 }
 
-func (c *Client) RunTransaction(ctx context.Context, f func(context.Context, *Transaction) error) error {
+func (c *Client) RunTransaction(ctx context.Context, f func(ctx context.Context, tx *Transaction) error) error {
 	return c.fc.RunTransaction(ctx, func(ctx context.Context, ftx *firestore.Transaction) error {
 		return f(ctx, &Transaction{c, ftx})
 	})
