@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/ktnyt/charaxiv/backend/app"
@@ -15,13 +14,6 @@ type SheetsParams struct {
 	System string `schema:"system,required"`
 	Page   int    `schema:"page"`
 	Tags   string `schema:"tags"`
-}
-
-func cleanSplit(s, sep string) []string {
-	if s == "" {
-		return nil
-	}
-	return strings.Split(s, sep)
 }
 
 func SheetListHandler(r *http.Request) ([]models.Sheet, int) {

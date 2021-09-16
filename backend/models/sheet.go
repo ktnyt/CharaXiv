@@ -25,6 +25,9 @@ func NewSheet(system, owner string) Sheet {
 	return Sheet{
 		System: system,
 		Owner:  owner,
+		Tags:   []string{},
+		Data:   map[string]string{},
+		Images: []string{},
 	}
 }
 
@@ -40,7 +43,7 @@ func (sheet *Sheet) FillEmpty(sheetId string) error {
 		sheet.Tags = []string{}
 	}
 	if sheet.Data == nil {
-		sheet.Data = make(map[string]string)
+		sheet.Data = map[string]string{}
 	}
 	if sheet.Images == nil {
 		sheet.Images = []string{}

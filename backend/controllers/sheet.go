@@ -10,7 +10,7 @@ import (
 	"github.com/rs/zerolog"
 )
 
-const CHARACTER_PAGE_SIZE = 12
+const CharacterPageSize = 12
 
 func AuthorizedSheets(ctx context.Context, system string, page int, tags []string) ([]models.Sheet, int) {
 	logger := app.UseLogger(ctx)
@@ -24,8 +24,8 @@ func AuthorizedSheets(ctx context.Context, system string, page int, tags []strin
 	}
 
 	logger.Debug().Msg("list sheets")
-	offset := page * CHARACTER_PAGE_SIZE
-	sheets, err := actions.ListSheets(ctx, username, system, tags, offset, CHARACTER_PAGE_SIZE)
+	offset := page * CharacterPageSize
+	sheets, err := actions.ListSheets(ctx, username, system, tags, offset, CharacterPageSize)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to list sheets")
 		return nil, ErrToCode(err)
