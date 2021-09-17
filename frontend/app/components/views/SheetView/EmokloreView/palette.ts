@@ -1,6 +1,7 @@
-import { maxVariableValue } from './DataColumn/utils'
+import { maxVariableKey } from './DataColumn/utils'
 import {
   CustomSkill,
+  EXSkills,
   isSingle,
   MultiSkill,
   SingleSkill,
@@ -11,18 +12,30 @@ import {
 } from './types'
 
 export const formatPalette = (skills: Skills, status: Status) => {
-  const formatSingleSkill = (group: string, skill: SingleSkill) =>
-    `${skill.level}DM<=${
-      skill.level + maxVariableValue(status, skill.bases)
-    } 《${group}・${skill.name}》`
+  const formatName = (name: string) =>
+    EXSkills.includes(name) ? `★${name}` : name
 
-  const formatMultiSkill = (group: string, skill: MultiSkill) =>
-    skill.genres
+  const formatSingleSkill = (
+    group: string,
+    { name, base, bases, level }: SingleSkill,
+  ) =>
+    `${level}DM<=${
+      ['蘇生'].includes(name)
+        ? Math.ceil(status.variables[base || maxVariableKey(status, bases)] / 2)
+        : level + status.variables[base || maxVariableKey(status, bases)]
+    } 《${group}・${formatName(name)}》`
+
+  const formatMultiSkill = (
+    group: string,
+    { name, base, bases, genres }: MultiSkill,
+  ) =>
+    genres
       .map(
         (genre) =>
           `${genre.level}DM<=${
-            genre.level + maxVariableValue(status, skill.bases)
-          } 《${group}・${skill.name}：${genre.label}》`,
+            genre.level +
+            status.variables[base || maxVariableKey(status, bases)]
+          } 《${group}・${formatName(name)}：${genre.label}》`,
       )
       .join('\n')
 
@@ -45,7 +58,11 @@ export const formatPalette = (skills: Skills, status: Status) => {
 
   const formatGroup = (group: SkillGroup) =>
     [
-      `1DM<=${status.variables[group.base]} 《＊${group.name}》`,
+      `1DM<=${
+        ['手当て'].includes(group.name)
+          ? Math.ceil(status.variables[group.base] / 2)
+          : status.variables[group.base]
+      } 《＊${group.name}》`,
       ...filterSkills(group.skills).map(formatSkill(group.name)),
     ].join('\n')
 

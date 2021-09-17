@@ -8,7 +8,7 @@ import { range } from '@/helpers/array'
 import { useStyles } from '@/hooks/useStyles'
 import { SkillsAction } from './SkillsReducer'
 import styles from './SingleSkillView.module.sass'
-import { SingleSkill, Status, VariableEmoji } from '../types'
+import { EXSkills, SingleSkill, Status, VariableEmoji } from '../types'
 
 export interface SingleSkillViewProps {
   skill: SingleSkill
@@ -31,7 +31,9 @@ export const SingleSkillView = ({
 
   return !hideInit || level > 0 ? (
     <div className={clsx('single-skill', classes.container)}>
-      <Typography variant="body1">{name}</Typography>
+      <Typography variant="body1">
+        {EXSkills.includes(name) ? `★${name}` : name}
+      </Typography>
 
       <SlideSelector
         defaultIndex={level}

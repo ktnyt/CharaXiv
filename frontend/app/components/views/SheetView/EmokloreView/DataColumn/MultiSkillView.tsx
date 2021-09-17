@@ -1,4 +1,4 @@
-import { maxVariableValue, maxVariableKey } from './utils'
+import { maxVariableKey } from './utils'
 import { Dispatch } from 'react'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { Twemoji } from '@/components/atoms/Twemoji'
@@ -11,7 +11,7 @@ import { range } from '@/helpers/array'
 import { useStyles } from '@/hooks/useStyles'
 import { SkillsAction } from './SkillsReducer'
 import styles from './MultiSkillView.module.sass'
-import { MultiSkill, Status, VariableEmoji } from '../types'
+import { EXSkills, MultiSkill, Status, VariableEmoji } from '../types'
 
 export interface MultiSkillViewProps {
   skill: MultiSkill
@@ -28,15 +28,15 @@ export const MultiSkillView = ({
   hideInit,
   dispatch,
 }: MultiSkillViewProps) => {
-  const classes = useStyles(styles)
-
   const key = base || maxVariableKey(status, bases)
+
+  const classes = useStyles(styles)
 
   return !hideInit || genres.length > 0 ? (
     <div className={classes.container}>
       <div className={classes.base}>
         <Typography variant="body1" className="bold">
-          {name}
+          {EXSkills.includes(name) ? `★${name}` : name}
         </Typography>
 
         <SlideSelector
@@ -84,7 +84,7 @@ export const MultiSkillView = ({
           </SlideSelector>
 
           <Typography variant="body1" className="bold">
-            {genre.level + maxVariableValue(status, bases)}
+            {status.variables[key] + genre.level}
           </Typography>
 
           <IconButton
@@ -102,7 +102,9 @@ export const MultiSkillView = ({
             variant="outline"
             color="primary"
             onClick={() => dispatch({ type: 'create-genre', name })}
-          >{`${name}を追加`}</Button>
+          >
+            {`${name}を追加`}
+          </Button>
         )}
       </div>
     </div>
