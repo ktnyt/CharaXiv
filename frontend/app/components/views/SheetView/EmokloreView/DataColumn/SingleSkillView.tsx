@@ -43,7 +43,13 @@ export const SingleSkillView = ({
         ))}
       </SlideSelector>
 
-      <SlideSelector flat defaultIndex={0}>
+      <SlideSelector
+        flat
+        index={bases.indexOf(key)}
+        onCommit={(index) =>
+          dispatch({ type: 'skill-base', name, base: bases[index] })
+        }
+      >
         {bases.map((base) => (
           <Twemoji key={base} emoji={VariableEmoji[base]} />
         ))}

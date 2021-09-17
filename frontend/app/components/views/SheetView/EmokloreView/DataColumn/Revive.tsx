@@ -43,9 +43,17 @@ export const Revive = ({
         ))}
       </SlideSelector>
 
-      <Typography variant="body1">
-        <Twemoji emoji={VariableEmoji[key]} />
-      </Typography>
+      <SlideSelector
+        flat
+        index={bases.indexOf(key)}
+        onCommit={(index) =>
+          dispatch({ type: 'skill-base', name, base: bases[index] })
+        }
+      >
+        {bases.map((base) => (
+          <Twemoji key={base} emoji={VariableEmoji[base]} />
+        ))}
+      </SlideSelector>
 
       <Typography
         variant="body1"

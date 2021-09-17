@@ -50,6 +50,7 @@ export const Typography = ({
   return render({
     children,
     className: clsx(
+      'typography',
       className,
       classes.typography,
       classes[variant],

@@ -42,13 +42,10 @@ const changeGenreLabel =
     genres: swap(genres, ({ level }) => ({ label, level }), index),
   })
 
-const identity = <T extends unknown>(arg: T): T => arg
-
 const modifySkill = (
   { presets, custom, extra }: Skills,
-  skillName: string,
-  single: (skill: SingleSkill) => SingleSkill,
-  multi: (skill: MultiSkill) => MultiSkill,
+  cond: (skill: SingleSkill | MultiSkill) => boolean,
+  mod: (skill: SingleSkill | MultiSkill) => SingleSkill | MultiSkill,
 ): Skills => ({
   custom,
   extra,
@@ -57,30 +54,51 @@ const modifySkill = (
     groups: groups.map(({ name, base, skills }) => ({
       name,
       base,
-      skills: skills.map((skill) =>
-        skill.name === skillName
-          ? isSingle(skill)
-            ? single(skill)
-            : multi(skill)
-          : skill,
-      ),
+      skills: skills.map((skill) => (cond(skill) ? mod(skill) : skill)),
     })),
   })),
 })
 
 const modifySingleSkill = (
-  skills: Skills,
-  name: string,
+  { presets, custom, extra }: Skills,
+  cond: (skill: SingleSkill) => boolean,
   mod: (skill: SingleSkill) => SingleSkill,
-) => modifySkill(skills, name, mod, identity)
+) => ({
+  custom,
+  extra,
+  presets: presets.map(({ name, groups }) => ({
+    name,
+    groups: groups.map(({ name, base, skills }) => ({
+      name,
+      base,
+      skills: skills.map((skill) =>
+        isSingle(skill) && cond(skill) ? mod(skill) : skill,
+      ),
+    })),
+  })),
+})
 
 const modifyMultiSkill = (
-  skills: Skills,
-  name: string,
+  { presets, custom, extra }: Skills,
+  cond: (skill: MultiSkill) => boolean,
   mod: (skill: MultiSkill) => MultiSkill,
-) => modifySkill(skills, name, identity, mod)
+) => ({
+  custom,
+  extra,
+  presets: presets.map(({ name, groups }) => ({
+    name,
+    groups: groups.map(({ name, base, skills }) => ({
+      name,
+      base,
+      skills: skills.map((skill) =>
+        !isSingle(skill) && cond(skill) ? mod(skill) : skill,
+      ),
+    })),
+  })),
+})
 
 export type SkillsAction =
+  | { type: 'optimize' }
   | { type: 'skill-base'; name: string; base: VariableKey }
   | { type: 'skill-level'; name: string; level: number }
   | { type: 'create-genre'; name: string }
@@ -96,45 +114,72 @@ export type SkillsAction =
 
 export const skillsReducer = (skills: Skills, action: SkillsAction): Skills => {
   switch (action.type) {
+    case 'optimize': {
+      return modifySkill(
+        skills,
+        () => true,
+        ({ base, ...skill }) => skill,
+      )
+    }
+
     case 'skill-base': {
       const { name, base } = action
       return modifySkill(
         skills,
-        name,
-        changeSkillBase(base),
+        (skill) => skill.name === name,
         changeSkillBase(base),
       )
     }
 
     case 'skill-level': {
       const { name, level } = action
-      return modifySingleSkill(skills, name, changeSkillLevel(level))
+      return modifySingleSkill(
+        skills,
+        (skill) => skill.name === name,
+        changeSkillLevel(level),
+      )
     }
 
     case 'create-genre': {
       const { name } = action
-      return modifyMultiSkill(skills, name, ({ genres, ...skill }) => ({
-        ...skill,
-        genres: append(genres, { label: '', level: 0 }),
-      }))
+      return modifyMultiSkill(
+        skills,
+        (skill) => skill.name === name,
+        ({ genres, ...skill }) => ({
+          ...skill,
+          genres: append(genres, { label: '', level: 0 }),
+        }),
+      )
     }
 
     case 'delete-genre': {
       const { name, index } = action
-      return modifyMultiSkill(skills, name, ({ genres, ...skill }) => ({
-        ...skill,
-        genres: remove(genres, index),
-      }))
+      return modifyMultiSkill(
+        skills,
+        (skill) => skill.name === name,
+        ({ genres, ...skill }) => ({
+          ...skill,
+          genres: remove(genres, index),
+        }),
+      )
     }
 
     case 'genre-label': {
       const { name, index, label } = action
-      return modifyMultiSkill(skills, name, changeGenreLabel(index, label))
+      return modifyMultiSkill(
+        skills,
+        (skill) => skill.name === name,
+        changeGenreLabel(index, label),
+      )
     }
 
     case 'genre-level': {
       const { name, index, level } = action
-      return modifyMultiSkill(skills, name, changeGenreLevel(index, level))
+      return modifyMultiSkill(
+        skills,
+        (skill) => skill.name === name,
+        changeGenreLevel(index, level),
+      )
     }
 
     case 'create-custom': {

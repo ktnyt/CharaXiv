@@ -1,7 +1,9 @@
 import { useReducer, useState } from 'react'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { faEye, faEyeSlash, faMagic } from '@fortawesome/free-solid-svg-icons'
 import { updateSheet } from '@/api/sheet'
+import { Confirm } from '@/components/styled/Confirm'
 import { IconButton } from '@/components/styled/IconButton'
+import { InputGroup } from '@/components/styled/InputGroup'
 import { Typography } from '@/components/styled/Typography'
 import { useCookie } from '@/context/CookiesContext'
 import { sum } from '@/helpers/math'
@@ -67,6 +69,7 @@ export const SkillsSection = ({
     ) + sum(skills.custom.map(({ level }) => points[level]))
 
   const [hideInit, setHideInit] = useState(disabled)
+  const [openOptimize, setOpenOptimize] = useState(false)
 
   const classes = useStyles(styles)
 
@@ -85,12 +88,42 @@ export const SkillsSection = ({
         </div>
 
         <div>
-          <IconButton
-            variant="outline"
-            color="light"
-            icon={hideInit ? faEye : faEyeSlash}
-            onClick={() => setHideInit((prev) => !prev)}
-          />
+          <InputGroup>
+            <IconButton
+              variant="outline"
+              color="primary"
+              icon={faMagic}
+              onClick={() => setOpenOptimize(true)}
+            />
+
+            <IconButton
+              variant="outline"
+              color="light"
+              icon={hideInit ? faEye : faEyeSlash}
+              onClick={() => setHideInit((prev) => !prev)}
+            />
+          </InputGroup>
+
+          <Confirm
+            open={openOptimize}
+            onCancel={() => setOpenOptimize(false)}
+            onConfirm={() => {
+              dispatch({ type: 'optimize' })
+              setOpenOptimize(false)
+            }}
+          >
+            <Typography variant="h3">達成値を最大化</Typography>
+            <Typography variant="body1" render={(props) => <p {...props} />}>
+              技能の達成値が最大になるよう判定値を変更します。
+            </Typography>
+            <Typography
+              variant="body2"
+              color="caption"
+              render={(props) => <p {...props} />}
+            >
+              例：精神が4、運勢が2なら直感の判定値は精神になります。
+            </Typography>
+          </Confirm>
         </div>
       </div>
 
