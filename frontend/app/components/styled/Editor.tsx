@@ -308,6 +308,7 @@ export const Editor = ({
           className={classes.markdown}
           defaultValue={markdown}
           onChange={(event) => setMarkdown(event.target.value)}
+          disabled={disabled}
         />
       ) : (
         <div
