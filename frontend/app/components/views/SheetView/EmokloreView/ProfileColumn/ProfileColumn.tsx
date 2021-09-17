@@ -24,7 +24,7 @@ export const ProfileColumn = ({ sheet }: ProfileColumnProps) => {
 
   useUpdateEffect(() => {
     if (token) {
-      updateSheet(sheet.id, { name }, token).catch(console.error)
+      updateSheet(sheet.id, { name }, token)
     }
   }, [sheet, name])
 
@@ -33,7 +33,7 @@ export const ProfileColumn = ({ sheet }: ProfileColumnProps) => {
 
   useUpdateEffect(() => {
     if (token) {
-      updateSheet(sheet.id, { ruby }, token).catch(console.error)
+      updateSheet(sheet.id, { ruby }, token)
     }
   }, [sheet, ruby])
 
@@ -42,7 +42,7 @@ export const ProfileColumn = ({ sheet }: ProfileColumnProps) => {
 
   useUpdateEffect(() => {
     if (token) {
-      updateSheet(sheet.id, { tags }, token).catch(console.error)
+      updateSheet(sheet.id, { tags }, token)
     }
   }, [sheet, tags])
 
@@ -51,9 +51,18 @@ export const ProfileColumn = ({ sheet }: ProfileColumnProps) => {
 
   useUpdateEffect(() => {
     if (token) {
-      updateSheet(sheet.id, { memo }, token).catch(console.error)
+      updateSheet(sheet.id, { memo }, token)
     }
   }, [sheet, memo])
+
+  const [rawSecret, setRawSecret] = useState(sheet.secret)
+  const secret = useDebounce(rawSecret, { delay: 1000 })
+
+  useUpdateEffect(() => {
+    if (token) {
+      updateSheet(sheet.id, { secret }, token)
+    }
+  })
 
   const rendered = useRendered()
 
@@ -95,12 +104,26 @@ export const ProfileColumn = ({ sheet }: ProfileColumnProps) => {
       <div>
         {rendered && (
           <Editor
+            placeholder="公開メモ"
             defaultValue={rawMemo}
             onChange={(raw) => setRawMemo(raw)}
             disabled={!sheet.own}
           />
         )}
       </div>
+
+      {sheet.own && (
+        <div>
+          {rendered && (
+            <Editor
+              placeholder="秘匿メモ"
+              defaultValue={rawSecret}
+              onChange={(raw) => setRawSecret(raw)}
+              disabled={!sheet.own}
+            />
+          )}
+        </div>
+      )}
     </div>
   )
 }

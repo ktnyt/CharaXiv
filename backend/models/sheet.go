@@ -17,6 +17,7 @@ type Sheet struct {
 	Ruby    string      `firestore:"ruby" json:"ruby"`
 	Tags    []string    `firestore:"tags" json:"tags"`
 	Memo    interface{} `firestore:"memo" json:"memo"`
+	Secret  interface{} `firestore:"secret" json:"secret"`
 	Data    interface{} `firestore:"data" json:"data"`
 	Images  []string    `firestore:"images" json:"images"`
 }
@@ -52,11 +53,12 @@ func (sheet *Sheet) FillEmpty(sheetId string) error {
 }
 
 type SheetPatcher struct {
-	Name *string     `json:"name"`
-	Ruby *string     `json:"ruby"`
-	Tags []string    `json:"tags"`
-	Memo interface{} `json:"memo"`
-	Data interface{} `json:"data"`
+	Name   *string     `json:"name"`
+	Ruby   *string     `json:"ruby"`
+	Tags   []string    `json:"tags"`
+	Memo   interface{} `json:"memo"`
+	Secret interface{} `json:"secret"`
+	Data   interface{} `json:"data"`
 }
 
 func (patch SheetPatcher) Patches() (patches []lamp.Patch) {
@@ -72,8 +74,11 @@ func (patch SheetPatcher) Patches() (patches []lamp.Patch) {
 		patches = append(patches, lamp.Patch{Key: "tags", Value: patch.Tags})
 	}
 	if patch.Memo != nil {
-		memo := patch.Memo
-		patches = append(patches, lamp.Patch{Key: "memo", Value: memo})
+		patches = append(patches, lamp.Patch{Key: "memo", Value: patch.Memo})
+	}
+	if patch.Secret != nil {
+		patches = append(patches, lamp.Patch{Key: "secret", Value: patch.Secret})
+
 	}
 	if patch.Data != nil {
 		patches = append(patches, lamp.JsonPatch(patch.Data, []string{"data"})...)

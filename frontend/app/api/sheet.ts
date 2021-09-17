@@ -8,6 +8,7 @@ export interface Sheet {
   ruby: string
   tags: string[]
   memo: any
+  secret: any
   data: any
   images: string[]
 }
@@ -44,7 +45,8 @@ export type SheetPatch = Partial<{
   name: string
   ruby: string
   tags: string[]
-  memo: string
+  memo: any
+  secret: any
   data: any
 }>
 
