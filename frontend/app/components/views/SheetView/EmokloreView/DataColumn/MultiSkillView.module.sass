@@ -5,6 +5,21 @@
 .grid
     display: grid
 
+.base
+    display: grid
+    grid-template-columns: 1fr 32px 32px
+    gap: 8px
+    place-items: center
+    height: 32px
+
+    & > :first-child
+        justify-self: start
+        line-height: 1em
+
+    & > span:global(.bold)
+        line-height: 1em
+        font-weight: 600
+
 .button
     align-self: center
     margin: 8px

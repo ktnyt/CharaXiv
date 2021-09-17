@@ -1,6 +1,7 @@
 import { maxVariableValue, maxVariableKey } from './utils'
 import { Dispatch } from 'react'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { Twemoji } from '@/components/atoms/Twemoji'
 import { Button } from '@/components/styled/Button'
 import { IconButton } from '@/components/styled/IconButton'
 import { Input } from '@/components/styled/Input'
@@ -8,10 +9,9 @@ import { SlideSelector } from '@/components/styled/SlideSelector'
 import { Typography } from '@/components/styled/Typography'
 import { range } from '@/helpers/array'
 import { useStyles } from '@/hooks/useStyles'
-import { BaseSkillView } from './BaseSkillView'
 import { SkillsAction } from './SkillsReducer'
 import styles from './MultiSkillView.module.sass'
-import { MultiSkill, Status } from '../types'
+import { MultiSkill, Status, VariableEmoji } from '../types'
 
 export interface MultiSkillViewProps {
   skill: MultiSkill
@@ -34,7 +34,27 @@ export const MultiSkillView = ({
 
   return !hideInit || genres.length > 0 ? (
     <div className={classes.container}>
-      <BaseSkillView name={name} base={key} status={status} />
+      <div className={classes.base}>
+        <Typography variant="body1" className="bold">
+          {name}
+        </Typography>
+
+        <SlideSelector
+          flat
+          index={bases.indexOf(key)}
+          onCommit={(index) =>
+            dispatch({ type: 'skill-base', name, base: bases[index] })
+          }
+        >
+          {bases.map((base) => (
+            <Twemoji key={base} emoji={VariableEmoji[base]} />
+          ))}
+        </SlideSelector>
+
+        <Typography variant="body1" className="bold">
+          {status.variables[key]}
+        </Typography>
+      </div>
 
       {genres.map((genre, index) => (
         <div key={index} className={classes.genre}>
