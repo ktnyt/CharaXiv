@@ -1,8 +1,11 @@
 import { useState } from 'react'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { Sheet, updateSheet } from '@/api/sheet'
 import { Editor } from '@/components/styled/Editor'
+import { IconButton } from '@/components/styled/IconButton'
 import { Input } from '@/components/styled/Input'
 import { Tags } from '@/components/styled/Tags'
+import { Typography } from '@/components/styled/Typography'
 import { useCookie } from '@/context/CookiesContext'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useInput } from '@/hooks/useInput'
@@ -64,6 +67,8 @@ export const ProfileColumn = ({ sheet }: ProfileColumnProps) => {
     }
   })
 
+  const [showSecret, setShowSecret] = useState(sheet.own)
+
   const rendered = useRendered()
 
   const classes = useStyles(styles)
@@ -112,18 +117,27 @@ export const ProfileColumn = ({ sheet }: ProfileColumnProps) => {
         )}
       </div>
 
-      {sheet.own && (
-        <div>
-          {rendered && (
-            <Editor
-              placeholder="秘匿メモ"
-              defaultValue={rawSecret}
-              onChange={(raw) => setRawSecret(raw)}
-              disabled={!sheet.own}
-            />
-          )}
+      <div>
+        <div className={classes.header}>
+          <Typography variant="h1">秘匿メモ</Typography>
+
+          <IconButton
+            variant="outline"
+            color="light"
+            icon={showSecret ? faEyeSlash : faEye}
+            onClick={() => setShowSecret((prev) => !prev)}
+          />
         </div>
-      )}
+
+        {rendered && showSecret && (
+          <Editor
+            placeholder="秘匿メモ"
+            defaultValue={rawSecret}
+            onChange={(raw) => setRawSecret(raw)}
+            disabled={!sheet.own}
+          />
+        )}
+      </div>
     </div>
   )
 }
