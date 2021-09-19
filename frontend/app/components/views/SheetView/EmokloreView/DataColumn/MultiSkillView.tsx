@@ -87,12 +87,14 @@ export const MultiSkillView = ({
             {status.variables[key] + genre.level}
           </Typography>
 
-          <IconButton
-            variant="textual"
-            color="danger"
-            icon={faTrashAlt}
-            onClick={() => dispatch({ type: 'delete-genre', name, index })}
-          />
+          {!disabled && (
+            <IconButton
+              variant="textual"
+              color="danger"
+              icon={faTrashAlt}
+              onClick={() => dispatch({ type: 'delete-genre', name, index })}
+            />
+          )}
         </div>
       ))}
 
