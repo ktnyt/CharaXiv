@@ -1,9 +1,11 @@
+import { Fragment } from 'react'
 import type { GetServerSideProps } from 'next'
 import Error from 'next/error'
+import Head from 'next/head'
 import { ParsedUrlQuery } from 'node:querystring'
 import { listSheets, Sheet } from '@/api/sheet'
 import { getUserSystem } from '@/api/user'
-import { SheetList } from '@/components/views/SheetListView'
+import { SheetListView } from '@/components/views/SheetListView'
 import { handleServerCookies } from '@/server_cookies'
 
 interface Props {
@@ -38,7 +40,15 @@ const Home = ({ sheets }: Props) => {
   if (typeof sheets === 'number') {
     return <Error statusCode={sheets} />
   }
-  return <SheetList sheets={sheets} />
+
+  return (
+    <Fragment>
+      <Head>
+        <title>ホーム | CharaXiv</title>
+      </Head>
+      <SheetListView sheets={sheets} />
+    </Fragment>
+  )
 }
 
 export default Home

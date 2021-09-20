@@ -1,1 +1,1 @@
-export { SheetListView as SheetList } from './SheetList'
+export { SheetListView } from './SheetListView'

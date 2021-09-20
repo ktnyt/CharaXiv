@@ -18,7 +18,7 @@ import { Header } from '@/layout/Header'
 import { Layout } from '@/layout/Layout'
 import { Main } from '@/layout/Main'
 import { SheetCard } from './SheetCard'
-import styles from './SheetList.module.sass'
+import styles from './SheetListView.module.sass'
 
 export interface SheetListViewProps {
   sheets: Sheet[]
