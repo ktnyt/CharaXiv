@@ -68,6 +68,12 @@ export const SkillsSection = ({
       ),
     ) + sum(skills.custom.map(({ level }) => points[level]))
 
+  useUpdateEffect(() => {
+    if (!disabled && token) {
+      dispatch({ type: 'optimize' })
+    }
+  }, [status])
+
   const [hideInit, setHideInit] = useState(disabled)
   const [openOptimize, setOpenOptimize] = useState(false)
 
