@@ -10,7 +10,7 @@ import (
 	"github.com/rs/zerolog"
 )
 
-const CharacterPageSize = 12
+const CharacterPageSize = 48
 
 func AuthorizedSheets(ctx context.Context, system string, page int, tags []string) ([]models.Sheet, int) {
 	logger := app.UseLogger(ctx)

@@ -13,8 +13,8 @@ export interface Sheet {
   images: string[]
 }
 
-export const listSheets = async (system: string, token: string) => {
-  const params = asParams({ system })
+export const listSheets = async (system: string, token: string, page = 0) => {
+  const params = asParams({ system, page: `${page}` })
   const client = createJsonClient(token)
   const res = await client.get<Sheet[]>(`/sheet`, { params })
   return res.data
