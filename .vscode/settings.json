@@ -1,0 +1,8 @@
+{
+  "files.exclude": {
+    "backend": true,
+    "frontend": true,
+    "nginx": true
+  },
+  "python.linting.enabled": false
+}

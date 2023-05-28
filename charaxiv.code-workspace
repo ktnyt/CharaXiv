@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "backend"
+    },
+    {
+      "path": "frontend"
+    },
+    {
+      "path": "nginx"
+    }
+  ],
+  "settings": {
+    "coverage-gutters.showGutterCoverage": true,
+    "copy-github-permalink.branch": "origin/main"
+  }
+}

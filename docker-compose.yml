@@ -1,0 +1,78 @@
+version: '3.0'
+services:
+  db:
+    image: postgres:15.3
+    environment:
+      - POSTGRES_USER=charaxiv
+      - POSTGRES_PASSWORD=charaxiv
+      - POSTGRES_DB=charaxiv
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+
+  minio:
+    image: quay.io/minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: root
+      MINIO_ROOT_PASSWORD: password
+    command: server --console-address ":9001" /data
+    ports:
+      - 9000:9000
+      - 9001:9001
+
+  backend:
+    image: python:3.11.1-bullseye
+    working_dir: /app
+    volumes:
+      - ./backend:/app:cached
+      - venv_volume:/venv:cached
+    environment:
+      - DJANGO_ENV=development
+      - SECRET_KEY=secret_key
+      - SERVICE_FQDN=http://localhost:6640
+      - SERVICE_NOREPLY_ADDRESS=noreply@charaxiv.app
+      - SHEET_IMAGE_MAX_SIZE=1024
+      - POSTGRES_DB=charaxiv
+      - POSTGRES_USER=charaxiv
+      - POSTGRES_PASSWORD=charaxiv
+      - POSTGRES_HOSTNAME=db
+      - AWS_ACCESS_KEY_ID=root
+      - AWS_SECRET_ACCESS_KEY=password
+      - AWS_S3_BUCKET_NAME=charaxiv_media
+      - AWS_S3_REGION_NAME=ap-northeast-1
+      - AWS_S3_ENDPOINT_URL=http://minio:9000
+      - AWS_SES_REGION_NAME=ap-northeast-1
+      - AWS_SES_ENDPOINT_URL=
+      - SENTRY_DSN=https://87b3a34af20545a48df4f642c14c6c42@o4505247693078528.ingest.sentry.io/4505247696879616
+    entrypoint: [ "/app/scripts/entrypoint.dev.sh" ]
+    command: poetry run gunicorn app.wsgi:application --bind 0.0.0.0:8000 --reload
+    init: true
+    depends_on:
+      - db
+      - minio
+
+  frontend:
+    image: node:18.8.0-bullseye
+    working_dir: /app
+    volumes:
+      - ./frontend:/app:cached
+      - node_modules_volume:/app/node_modules:cached
+    environment:
+      - VITE_CHARAXIV_FQDN=http://localhost:6640
+    entrypoint: [ "/app/scripts/entrypoint.dev.sh" ]
+    command: npm run dev -- --host
+    depends_on:
+      - backend
+    init: true
+
+  nginx:
+    image: nginx:1.23.1-alpine
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:cached
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  venv_volume:
+  node_modules_volume:
+  db_volume:

@@ -1,0 +1,11 @@
+/* index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  width: 100vw;
+  min-height: 100vh;
+}
