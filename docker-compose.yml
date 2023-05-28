@@ -42,7 +42,6 @@ services:
       - AWS_S3_ENDPOINT_URL=http://minio:9000
       - AWS_SES_REGION_NAME=ap-northeast-1
       - AWS_SES_ENDPOINT_URL=
-      - SENTRY_DSN=https://87b3a34af20545a48df4f642c14c6c42@o4505247693078528.ingest.sentry.io/4505247696879616
     entrypoint: [ "/app/scripts/entrypoint.dev.sh" ]
     command: poetry run gunicorn app.wsgi:application --bind 0.0.0.0:8000 --reload
     init: true

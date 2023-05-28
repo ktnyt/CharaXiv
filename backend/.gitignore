@@ -9,3 +9,7 @@
 # Coverage files
 coverage.xml
 .coverage
+
+# env files
+.env
+.envrc

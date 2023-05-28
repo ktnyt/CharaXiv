@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from . import env, sentry
+from . import env
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -90,5 +90,3 @@ AUTHENTICATION_BACKEND = ['django.contrib.auth.backends.ModelBackend']
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = 'static/'
-
-sentry.init()

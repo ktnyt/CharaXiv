@@ -1,0 +1,23 @@
+version: 2.0
+
+phases:
+  install:
+    on-failure: ABORT
+    runtime-versions:
+      nodejs: 18.14
+  
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - cd $CODEBUILD_SRC_DIR/frontend
+      - npm install
+  
+  build:
+    on-failure: ABORT
+    commands:
+      - cd $CODEBUILD_SRC_DIR/frontend
+      - npm run build
+
+artifacts:
+  files:
+    - '**/*'
