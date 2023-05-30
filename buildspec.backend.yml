@@ -6,7 +6,7 @@ phases:
       - aws --version
       - ECR_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
       - REPOSITORY_URI=${ECR_URI}/charaxiv-backend
-      - CONTAINER_NAME=demo-container
+      - CONTAINER_NAME=charaxiv-backend
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
       - echo Logging in to Amazon ECR...
