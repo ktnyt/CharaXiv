@@ -21,4 +21,4 @@ phases:
 artifacts:
   files:
     - '**/*'
-  base-directory: dist
+  base-directory: $CODEBUILD_SRC_DIR/dist
