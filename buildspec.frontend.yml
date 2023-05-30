@@ -4,7 +4,7 @@ phases:
   install:
     on-failure: ABORT
     runtime-versions:
-      nodejs: 18.14
+      nodejs: 18
   
   pre_build:
     on-failure: ABORT
