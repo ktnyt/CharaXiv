@@ -18,3 +18,12 @@ const csrfMiddleware: ConfiguredMiddleware =
 export const client = wretch(CHARAXIV_API_FQDN)
   .options({ credentials: 'include' })
   .middlewares([csrfMiddleware, retry(), dedupe()])
+
+export type ResponseBase<T = undefined> = T extends undefined
+  ? {
+      error: string | null
+    }
+  : {
+      content: T
+      error: string | null
+    }

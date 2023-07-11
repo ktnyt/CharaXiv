@@ -1,0 +1,78 @@
+[tool.poetry]
+name = "charaxiv"
+version = "0.1.0"
+description = ""
+authors = ["ktnyt <mirei.itaya@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+uvicorn = "^0.22.0"
+lazy-loader = "^0.3"
+email-validator = "^2.0.0.post2"
+uuid6 = "^2023.5.2"
+base58 = "^2.1.1"
+injector = "^0.20.1"
+pillow = "^10.0.0"
+sentry-sdk = {extras = ["starlette"], version = "^1.29.2"}
+starlette = "^0.28.0"
+boto3 = "^1.26.165"
+boto3-stubs = {extras = ["s3", "ses"], version = "^1.26.165"}
+orjson = "^3.9.1"
+itsdangerous = "^2.1.2"
+argon2-cffi = "^21.3.0"
+alembic = "^1.11.1"
+pydantic = "^2.0.2"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.18"}
+aiosqlite = "^0.19.0"
+greenlet = "^2.0.2"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+flake8 = "^6.0.0"
+autopep8 = "^2.0.2"
+coverage = "^7.2.7"
+pytest-cov = "^4.1.0"
+isort = "^5.12.0"
+autoflake = "^2.2.0"
+types-mock = "^5.0.0.7"
+msgpack-types = "^0.2.0"
+mypy = "^1.4.1"
+types-pillow = "^9.5.0.5"
+httpx = "^0.24.1"
+pytest-asyncio = "^0.21.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.autopep8]
+max_line_length = 200
+
+[tool.mypy]
+strict = true
+disable_error_code = ["type-abstract"]
+exclude = []
+
+[tool.coverage.run]
+omit = [
+    # Generator scripts
+    "generate.py",
+    
+    # Protocol files
+    "charaxiv/protocols/**/*.py",
+
+    # Application files
+    "charaxiv/application/__init__.py",
+    "charaxiv/application/module.py",
+    "charaxiv/application/routing.py",
+
+    # Tests (and utils)
+    "*_tests.py",
+    "**/testutils.py",
+]
+
+[tool.pytest.ini_options]
+python_files = "*_tests.py"

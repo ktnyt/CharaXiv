@@ -1,22 +1,23 @@
 import { Username } from '@charaxiv/types/common/user'
-import { client } from './client'
+import { ResponseBase, client } from './client'
 
 export const callAuthenticated = async () =>
-  await client.get('/user/authenticated').json<boolean>()
+  await client.get('/session').json<ResponseBase<{ authenticated: boolean }>>()
 
 export const callUsernameTaken = async (key: string, tag: number) =>
-  await client.get(`/user/name_taken?key=${key}&tag=${tag}`).json<boolean>()
+  await client.get(`/name_taken?key=${key}&tag=${tag}`).json<boolean>()
 
 export const callRegister = (email: string) =>
-  client.post({ email }, '/user/register').text()
+  client.post({ email }, '/register').json<ResponseBase>()
 
 export const callActivate = (
   token: string,
   username: Username,
   password: string,
-) => client.post({ token, username, password }, '/user/activate').text()
+) =>
+  client.post({ token, username, password }, '/activate').json<ResponseBase>()
 
 export const callLogin = (email: string, password: string) =>
-  client.post({ email, password }, '/user/login').text()
+  client.post({ email, password }, '/session').json<ResponseBase>()
 
-export const callLogout = () => client.post({}, '/user/logout').text()
+export const callLogout = () => client.delete('/session').json<ResponseBase>()

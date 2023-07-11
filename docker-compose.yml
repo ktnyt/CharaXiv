@@ -1,40 +1,21 @@
 version: '3.0'
 services:
-  db:
-    image: postgres:15.3
-    environment:
-      - POSTGRES_USER=charaxiv
-      - POSTGRES_PASSWORD=charaxiv
-      - POSTGRES_DB=charaxiv
-    volumes:
-      - db_volume:/var/lib/postgresql/data
-
-  minio:
-    image: quay.io/minio/minio:latest
-    environment:
-      MINIO_ROOT_USER: root
-      MINIO_ROOT_PASSWORD: password
-    command: server --console-address ":9001" /data
-    ports:
-      - 9000:9000
-      - 9001:9001
-
   backend:
     image: python:3.11.1-bullseye
     working_dir: /app
     volumes:
-      - ./backend:/app:cached
+      - .:/app:cached
+      - /app/.venv
+      - db_volume:/db:cached
       - venv_volume:/venv:cached
     environment:
-      - DJANGO_ENV=development
-      - SECRET_KEY=secret_key
-      - SERVICE_FQDN=http://localhost:6640
-      - SERVICE_NOREPLY_ADDRESS=noreply@charaxiv.app
+      - STARLETTE_ENV=development
+      - STARLETTE_KEY=starlette_key
+      - CHARAXIV_HOST=localhost
+      - CHARAXIV_PORT=6640
+      - CHARAXIV_NOREPLY_ADDRESS=noreply@charaxiv.app
       - SHEET_IMAGE_MAX_SIZE=1024
-      - POSTGRES_DB=charaxiv
-      - POSTGRES_USER=charaxiv
-      - POSTGRES_PASSWORD=charaxiv
-      - POSTGRES_HOSTNAME=db
+      - SQLITE_PATH=/db/charaxiv.db
       - AWS_ACCESS_KEY_ID=root
       - AWS_SECRET_ACCESS_KEY=password
       - AWS_S3_BUCKET_NAME=charaxiv_media
@@ -43,11 +24,15 @@ services:
       - AWS_SES_REGION_NAME=ap-northeast-1
       - AWS_SES_ENDPOINT_URL=
     entrypoint: [ "/app/scripts/entrypoint.dev.sh" ]
-    command: poetry run gunicorn app.wsgi:application --bind 0.0.0.0:8000 --reload
+    command:
+      - "poetry"
+      - "run"
+      - "uvicorn"
+      - "--reload"
+      - "--host=0.0.0.0"
+      - "--lifespan=on"
+      - "charaxiv.application:main"
     init: true
-    depends_on:
-      - db
-      - minio
 
   frontend:
     image: node:18.8.0-bullseye

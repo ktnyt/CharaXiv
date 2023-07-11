@@ -1,0 +1,18 @@
+# Cache files and directories
+.mypy_cache/
+.pytest_cache
+*.log
+*.pyc
+**/__pycache__/
+**/.pytest_cache
+
+# Coverage files
+coverage.xml
+.coverage
+
+# env files
+.env
+.envrc
+
+# venv
+.venv
