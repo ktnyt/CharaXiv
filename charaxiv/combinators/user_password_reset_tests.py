@@ -17,14 +17,14 @@ from charaxiv.combinators.user_password_reset import (
 @pytest.mark.asyncio
 async def test_user_password_reset(password_hasher: PasswordHasher) -> None:
     # Setup data
-    userid = uuid7()
+    user_id = uuid7()
     token = secrets.token_urlsafe(32)
     password = lib.password.generate()
     hashedpw = password_hasher.hash(password)
     time_now = lib.timezone.now()
     created_at = time_now - timedelta(minutes=5)
 
-    password_reset_request = types.password_reset.PasswordResetRequest(userid=userid, created_at=created_at)
+    password_reset_request = types.password_reset.PasswordResetRequest(user_id=user_id, created_at=created_at)
 
     # Setup mocks
     manager = mock.Mock()
@@ -57,7 +57,7 @@ async def test_user_password_reset(password_hasher: PasswordHasher) -> None:
         mock.call.password_reset_request_delete(token=token),
         mock.call.timezone_now(),
         mock.call.password_hash(password=password),
-        mock.call.user_password_update_by_id(userid=userid, password=hashedpw),
+        mock.call.user_password_update_by_id(user_id=user_id, password=hashedpw),
         mock.call.context_manager.__aexit__(None, None, None),
     ]
 
@@ -106,13 +106,13 @@ async def test_user_password_reset__password_reset_request_not_found(password_ha
 @pytest.mark.asyncio
 async def test_user_password_reset__password_reset_request_expired() -> None:
     # Setup data
-    userid = uuid7()
+    user_id = uuid7()
     token = secrets.token_urlsafe(32)
     password = lib.password.generate()
     time_now = lib.timezone.now()
     created_at = time_now - timedelta(days=1, microseconds=1)
 
-    password_reset_request = types.password_reset.PasswordResetRequest(userid=userid, created_at=created_at)
+    password_reset_request = types.password_reset.PasswordResetRequest(user_id=user_id, created_at=created_at)
 
     # Setup mocks
     manager = mock.Mock()
@@ -152,14 +152,14 @@ async def test_user_password_reset__password_reset_request_expired() -> None:
 @pytest.mark.asyncio
 async def test_user_password_reset__user_password_update_with_id_failed(password_hasher: PasswordHasher) -> None:
     # Setup data
-    userid = uuid7()
+    user_id = uuid7()
     token = secrets.token_urlsafe(32)
     password = lib.password.generate()
     hashedpw = password_hasher.hash(password)
     time_now = lib.timezone.now()
     created_at = time_now - timedelta(minutes=5)
 
-    password_reset_request = types.password_reset.PasswordResetRequest(userid=userid, created_at=created_at)
+    password_reset_request = types.password_reset.PasswordResetRequest(user_id=user_id, created_at=created_at)
 
     # Setup mocks
     manager = mock.Mock()
@@ -193,6 +193,6 @@ async def test_user_password_reset__user_password_update_with_id_failed(password
         mock.call.password_reset_request_delete(token=token),
         mock.call.timezone_now(),
         mock.call.password_hash(password=password),
-        mock.call.user_password_update_by_id(userid=userid, password=hashedpw),
+        mock.call.user_password_update_by_id(user_id=user_id, password=hashedpw),
         mock.call.context_manager.__aexit__(UserPasswordUpdateWithIdFailedException, mock.ANY, mock.ANY),
     ]

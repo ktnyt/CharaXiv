@@ -1,11 +1,19 @@
-import { Route, Router, Routes } from '@solidjs/router'
-import { Component, lazy } from 'solid-js'
+import { Route, Router, Routes } from "@solidjs/router";
+import { Component, lazy } from "solid-js";
 
-const IndexPage = lazy(() => import('./pages/Index'))
-const RegisterPage = lazy(() => import('./pages/Register'))
-const RegisterSentPage = lazy(() => import('./pages/RegisterSent'))
-const ActivatePage = lazy(() => import('./pages/Activate'))
-const SheetPage = lazy(() => import('./pages/Sheet'))
+const IndexPage = lazy(() => import("./pages/Index"));
+const RegisterPage = lazy(() => import("./pages/Register"));
+const RegisterSentPage = lazy(() => import("./pages/RegisterSent"));
+const ActivatePage = lazy(() => import("./pages/Activate"));
+const PasswordResetRequestPage = lazy(
+  () => import("./pages/PasswordResetRequest"),
+);
+const PasswordResetRequestSentPage = lazy(
+  () => import("./pages/PasswordResetRequestSent"),
+);
+const PasswordResetPage = lazy(() => import("./pages/PasswordReset"));
+const SheetPage = lazy(() => import("./pages/Sheet"));
+const NotFoundPage = lazy(() => import("./pages/NotFound"));
 
 const App: Component = () => {
   return (
@@ -15,11 +23,20 @@ const App: Component = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/register_sent" element={<RegisterSentPage />} />
         <Route path="/activate" element={<ActivatePage />} />
+        <Route
+          path="/password_reset_request"
+          element={<PasswordResetRequestPage />}
+        />
+        <Route
+          path="/password_reset_request_sent"
+          element={<PasswordResetRequestSentPage />}
+        />
+        <Route path="/password_reset" element={<PasswordResetPage />} />
         <Route path="/sheet/:sheet_id" element={<SheetPage />} />
-        <Route path="/*" element={<div>Not Found</div>} />
+        <Route path="/*" element={<NotFoundPage />} />
       </Routes>
     </Router>
-  )
-}
+  );
+};
 
-export default App
+export default App;

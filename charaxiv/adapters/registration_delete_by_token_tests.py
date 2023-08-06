@@ -5,11 +5,11 @@ import sqlalchemy
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from charaxiv import repositories
-from charaxiv.adapters.registration_delete import Adapter
+from charaxiv.adapters.registration_delete_by_token import Adapter
 
 
 @pytest.mark.asyncio
-async def test_registration_delete(database_session: AsyncSession) -> None:
+async def test_registration_delete_by_token(database_session: AsyncSession) -> None:
     registration_model = repositories.database.models.Registration(
         token=secrets.token_urlsafe(32),
         email="test@example.com",

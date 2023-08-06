@@ -1,33 +1,33 @@
-import { Article } from '@charaxiv/components/Article'
-import { Button } from '@charaxiv/components/Button'
-import { Header } from '@charaxiv/components/Header'
-import { IconButton } from '@charaxiv/components/IconButton'
-import { Input } from '@charaxiv/components/Input'
-import { Section } from '@charaxiv/components/Section'
-import { Skeleton } from '@charaxiv/components/Skeleton'
-import { TagInput } from '@charaxiv/components/TagInput'
-import { Sheet } from '@charaxiv/types/common/sheet'
-import { EmokloreData } from '@charaxiv/types/systems/emoklore'
-import { Component, createSignal, Show } from 'solid-js'
+import { Article } from "@charaxiv/components/Article";
+import { Button } from "@charaxiv/components/Button";
+import { Header } from "@charaxiv/components/Header";
+import { IconButton } from "@charaxiv/components/IconButton";
+import { Input } from "@charaxiv/components/Input";
+import { Section } from "@charaxiv/components/Section";
+import { Skeleton } from "@charaxiv/components/Skeleton";
+import { TagInput } from "@charaxiv/components/TagInput";
+import { Sheet } from "@charaxiv/types/common/sheet";
+import { EmokloreData } from "@charaxiv/types/systems/emoklore";
+import { Component, createSignal, Show } from "solid-js";
 
 export type EmokloreProps = {
-  sheet: Sheet<EmokloreData>
-}
+  sheet: Sheet<EmokloreData>;
+};
 
 export const Emoklore: Component<EmokloreProps> = () => {
-  const [loading, setLoading] = createSignal(true)
-  const [values, setValues] = createSignal([
-    'tag0',
-    'tag1',
-    'tag2',
-    'tag3',
-    'tag4',
-    'tag5',
-    'tag6',
-    'tag7',
-    'tag8',
-  ])
-  const toggleLoading = () => setLoading((prev) => !prev)
+  const [loading, loadingSet] = createSignal(true);
+  const [values, valuesSet] = createSignal([
+    "tag0",
+    "tag1",
+    "tag2",
+    "tag3",
+    "tag4",
+    "tag5",
+    "tag6",
+    "tag7",
+    "tag8",
+  ]);
+  const toggleLoading = () => loadingSet((prev) => !prev);
   return (
     <Article class="space-y-2">
       <Header>
@@ -101,7 +101,7 @@ export const Emoklore: Component<EmokloreProps> = () => {
             <div>
               <TagInput
                 values={values()}
-                update={(values) => setValues(values)}
+                update={(values) => valuesSet(values)}
               />
             </div>
           </div>
@@ -110,5 +110,5 @@ export const Emoklore: Component<EmokloreProps> = () => {
         <Section class="w-full min-w-[320px] md:max-w-[320px] min-h-screen"></Section>
       </div>
     </Article>
-  )
-}
+  );
+};

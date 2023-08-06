@@ -13,14 +13,14 @@ from charaxiv.combinators.user_login import (Combinator,
 @pytest.mark.asyncio
 async def test_user_login(password_hasher: PasswordHasher) -> None:
     # Setup data
-    userid = uuid7()
+    user_id = uuid7()
     email = "test@example.com"
     username = "username"
     password = lib.password.generate()
     hashedpw = password_hasher.hash(password)
     group = types.user.Group.ADMIN
     user = types.user.User(
-        id=userid,
+        id=user_id,
         email=email,
         username=username,
         password=hashedpw,
@@ -45,7 +45,7 @@ async def test_user_login(password_hasher: PasswordHasher) -> None:
     output = await combinator(email=email, password=password)
 
     # Assert output (if available)
-    assert output == userid
+    assert output == user_id
 
     # Assert depndency calls
     assert manager.mock_calls == [
@@ -93,14 +93,14 @@ async def test_user_login__user_with_email_not_found() -> None:
 @pytest.mark.asyncio
 async def test_user_login__password_verify_failed(password_hasher: PasswordHasher) -> None:
     # Setup data
-    userid = uuid7()
+    user_id = uuid7()
     email = "test@example.com"
     username = "username"
     password = lib.password.generate()
     hashedpw = password_hasher.hash(password)
     group = types.user.Group.ADMIN
     user = types.user.User(
-        id=userid,
+        id=user_id,
         email=email,
         username=username,
         password=hashedpw,

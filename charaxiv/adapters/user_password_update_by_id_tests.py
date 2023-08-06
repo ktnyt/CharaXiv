@@ -25,7 +25,7 @@ async def test_user_password_update_by_id(database_session: AsyncSession, passwo
 
     adapter = Adapter(session=database_session)
 
-    out = await adapter(userid=user_model.id, password=hashedpw)
+    out = await adapter(user_id=user_model.id, password=hashedpw)
     assert out is True
 
     updated_user = (await database_session.execute(
@@ -34,5 +34,5 @@ async def test_user_password_update_by_id(database_session: AsyncSession, passwo
     )).scalar_one()
     assert updated_user.password == hashedpw
 
-    out = await adapter(userid=uuid7(), password=hashedpw)
+    out = await adapter(user_id=uuid7(), password=hashedpw)
     assert out is False

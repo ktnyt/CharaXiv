@@ -35,7 +35,7 @@ class SendMock(protocols.mail_send.Protocol):
 
     async def __call__(self, /, *, mail: types.mail.Mail) -> None:
         message = "\n".join([f"    {line}" for line in mail.content.message.splitlines()])
-        self.logger.info(
+        self.logger.warn(
             f"Mock mail send\n"
             f"  From:    {mail.frm}\n"
             f"  To:      {', '.join(mail.to)}\n"
@@ -49,7 +49,7 @@ class SendMock(protocols.mail_send.Protocol):
 def setup(*overrides: integrations.starlette.InstallableModuleType) -> Starlette:
     if not settings.DEBUG:
         sentry_sdk.init(
-            dsn=settings.SENTRY_DSN,
+            dsn=settings.CHARAXIV_SENTRY_DSN,
             environment=settings.STARLETTE_ENV.value,
             traces_sample_rate=1.0,
         )
@@ -70,6 +70,8 @@ def setup(*overrides: integrations.starlette.InstallableModuleType) -> Starlette
     async def request_lifespan() -> typing.AsyncGenerator[integrations.starlette.InstallableModuleType, None]:
         async with session_maker() as session:
             def configure(binder: Binder) -> None:
+                binder.install(bindings.configure)
+
                 binder.bind(PasswordHasher, to=InstanceProvider(PasswordHasher(
                     time_cost=2,  # 2 iterations
                     memory_cost=19*1024,  # 19 * 1024 KiB = 19 MiB
@@ -85,7 +87,6 @@ def setup(*overrides: integrations.starlette.InstallableModuleType) -> Starlette
                 if settings.STARLETTE_ENV == settings.StarletteEnv.DEVELOPMENT:
                     binder.bind(protocols.mail_send.Protocol, to=SendMock)
 
-                binder.install(bindings.configure)
                 for override in overrides:
                     binder.install(override)
 
@@ -97,7 +98,7 @@ def setup(*overrides: integrations.starlette.InstallableModuleType) -> Starlette
         routes=routes,
         middleware=[
             Middleware(integrations.starlette.InjectorMiddleware, request_lifespan=request_lifespan),
-            Middleware(CustomHeaderMiddleware, custom_header="X-CHARAXIV-CSRF-PROTECTION"),
+            Middleware(CustomHeaderMiddleware, custom_header=settings.CHARAXIV_CUSTOM_HEADER),
             Middleware(TrustedHostMiddleware, allowed_hosts=[settings.CHARAXIV_HOST]),
             Middleware(SameOriginMiddleware, allow_origins=[settings.CHARAXIV_ORIGIN]),
             Middleware(CORSMiddleware, allow_origins=[settings.CHARAXIV_ORIGIN]),

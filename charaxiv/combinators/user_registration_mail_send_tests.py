@@ -1,5 +1,6 @@
 import secrets
 from unittest import mock
+from urllib.parse import urlencode
 
 import pytest
 
@@ -35,7 +36,7 @@ async def test_user_registration_mail_send() -> None:
                 message=(
                     f"この度はCharaXivをご利用いただきありがとうございます。\n"
                     f"ユーザ登録を完了するには24時間以内に以下のURLにアクセスしてください。\n\n"
-                    f"{settings.CHARAXIV_ORIGIN}/register?token={token}\n"
+                    f"{settings.CHARAXIV_ORIGIN}/activate?{urlencode(dict(email=email, token=token))}\n"
                 )
             ),
         ))

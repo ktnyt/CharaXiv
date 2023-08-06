@@ -5,5 +5,5 @@ from pydantic import BaseModel
 
 
 class PasswordResetRequest(BaseModel, strict=True):
-    userid: UUID
+    user_id: UUID
     created_at: datetime

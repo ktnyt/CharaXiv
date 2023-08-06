@@ -1,20 +1,20 @@
-import { Accessor, createEffect, createSignal } from 'solid-js'
+import { Accessor, createEffect, createSignal } from "solid-js";
 
 export const createDebounce = <T>(
   source: Accessor<T>,
   wait: number,
 ): Accessor<T> => {
-  const [signal, setSignal] = createSignal(source())
+  const [signal, signalSet] = createSignal(source());
   let timeout = setTimeout(() => {
-    const value = source()
-    if (value !== signal()) setSignal(() => value)
-  }, wait)
+    const value = source();
+    if (value !== signal()) signalSet(() => value);
+  }, wait);
   createEffect(() => {
-    const value = source()
-    clearTimeout(timeout)
+    const value = source();
+    clearTimeout(timeout);
     timeout = setTimeout(() => {
-      setSignal(() => value)
-    }, wait)
-  })
-  return signal
-}
+      signalSet(() => value);
+    }, wait);
+  });
+  return signal;
+};

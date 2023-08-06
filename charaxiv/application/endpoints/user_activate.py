@@ -21,6 +21,22 @@ class Endpoint(HTTPEndpoint):
     @lib.decorators.method_decorator(
         integrations.starlette.use_injector,
         integrations.starlette.validate(PostParams),
+        integrations.starlette.raises(
+            combinators.user_activate.RegistrationNotFoundException,
+            AppResponse(content=dict(error="RegistrationNotFoundException"))
+        ),
+        integrations.starlette.raises(
+            combinators.user_activate.UserWithEmailExistsException,
+            AppResponse(content=dict(error="UserWithEmailExistsException"))
+        ),
+        integrations.starlette.raises(
+            combinators.user_activate.UserWithUsernameExistsException,
+            AppResponse(content=dict(error="UserWithUsernameExistsException"))
+        ),
+        integrations.starlette.raises(
+            combinators.user_activate.RegistrationExpiredException,
+            AppResponse(content=dict(error="RegistrationExpiredException"))
+        ),
     )
     async def post(self, request: Request, injector: Injector, params: PostParams) -> Response:
         exec = injector.get(combinators.user_activate.Combinator)

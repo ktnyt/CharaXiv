@@ -1,10 +1,10 @@
-import { createEffect, createSignal, Signal } from 'solid-js'
+import { createEffect, createSignal, Signal } from "solid-js";
 
 export const createLocalStorage = <T>(key: string, init: T): Signal<T> => {
-  const stored = localStorage.getItem(key)
-  const [value, setValue] = createSignal(
+  const stored = localStorage.getItem(key);
+  const [value, valueSet] = createSignal(
     stored === null ? init : (JSON.parse(stored) as T),
-  )
-  createEffect(() => localStorage.setItem(key, JSON.stringify(value())))
-  return [value, setValue]
-}
+  );
+  createEffect(() => localStorage.setItem(key, JSON.stringify(value())));
+  return [value, valueSet];
+};

@@ -1,4 +1,4 @@
-from . import database as database
+from . import database
 
 __all__ = [
     "database",

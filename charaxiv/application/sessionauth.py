@@ -12,8 +12,8 @@ from charaxiv import combinators, integrations, settings
 
 class SessionAuthBackend(AuthenticationBackend):
     async def authenticate(self, conn: HTTPConnection) -> typing.Tuple[AuthCredentials, BaseUser]:
-        userid = conn.session.get(settings.SESSION_USERID_KEY)
-        if userid is None:
+        user_id = conn.session.get(settings.SESSION_USERID_KEY)
+        if user_id is None:
             return AuthCredentials(), UnauthenticatedUser()
 
         assert integrations.starlette.INJECTOR_KEY in conn.scope, "InjectorMiddleware must be installed to access injector"
@@ -23,7 +23,7 @@ class SessionAuthBackend(AuthenticationBackend):
         exec = injector.get(combinators.user_authenticate.Combinator)
 
         try:
-            user = await exec(userid=UUID(userid))
+            user = await exec(user_id=UUID(user_id))
         except combinators.user_authenticate.UserWithIDNotFoundException as e:
             conn.session.pop(settings.SESSION_USERID_KEY)
             raise AuthenticationError("User not found") from e

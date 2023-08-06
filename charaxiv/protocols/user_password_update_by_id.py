@@ -4,5 +4,5 @@ from uuid import UUID
 
 @typing.runtime_checkable
 class Protocol(typing.Protocol):
-    async def __call__(self, /, *, userid: UUID, password: str) -> bool:
+    async def __call__(self, /, *, user_id: UUID, password: str) -> bool:
         ...

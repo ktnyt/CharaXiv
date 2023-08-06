@@ -21,7 +21,7 @@ async def test_user_register() -> None:
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
     manager.user_with_email_exists = mock.AsyncMock(spec=protocols.user_with_email_exists.Protocol, side_effect=[False])
     manager.registration_exists = mock.AsyncMock(spec=protocols.registration_exists.Protocol, side_effect=[False])
-    manager.registration_delete = mock.AsyncMock(spec=protocols.registration_delete.Protocol)
+    manager.registration_delete_by_email = mock.AsyncMock(spec=protocols.registration_delete_by_email.Protocol)
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[token])
     manager.registration_create = mock.AsyncMock(spec=protocols.registration_create.Protocol)
     manager.user_registration_mail_send = mock.AsyncMock(spec=combinators.user_registration_mail_send.Combinator)
@@ -31,7 +31,7 @@ async def test_user_register() -> None:
         transaction_atomic=manager.transaction_atomic,
         user_with_email_exists=manager.user_with_email_exists,
         registration_exists=manager.registration_exists,
-        registration_delete=manager.registration_delete,
+        registration_delete_by_email=manager.registration_delete_by_email,
         secret_token_generate=manager.secret_token_generate,
         registration_create=manager.registration_create,
         user_registration_mail_send=manager.user_registration_mail_send,
@@ -65,7 +65,7 @@ async def test_user_register__user_exists() -> None:
     manager.user_with_email_exists = mock.AsyncMock(spec=protocols.user_with_email_exists.Protocol, side_effect=[True])
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=Exception("should not be called"))
     manager.registration_exists = mock.AsyncMock(spec=protocols.registration_exists.Protocol, side_effect=Exception("should not be called"))
-    manager.registration_delete = mock.AsyncMock(spec=protocols.registration_delete.Protocol, side_effect=Exception("should not be called"))
+    manager.registration_delete_by_email = mock.AsyncMock(spec=protocols.registration_delete_by_email.Protocol, side_effect=Exception("should not be called"))
     manager.registration_create = mock.AsyncMock(spec=protocols.registration_create.Protocol, side_effect=Exception("should not be called"))
     manager.user_registration_mail_send = mock.AsyncMock(spec=combinators.user_registration_mail_send.Combinator, side_effect=Exception("should not be called"))
 
@@ -75,7 +75,7 @@ async def test_user_register__user_exists() -> None:
         user_with_email_exists=manager.user_with_email_exists,
         secret_token_generate=manager.secret_token_generate,
         registration_exists=manager.registration_exists,
-        registration_delete=manager.registration_delete,
+        registration_delete_by_email=manager.registration_delete_by_email,
         registration_create=manager.registration_create,
         user_registration_mail_send=manager.user_registration_mail_send,
     )
@@ -106,7 +106,7 @@ async def test_user_register__registration_exists() -> None:
     manager.user_with_email_exists = mock.AsyncMock(spec=protocols.user_with_email_exists.Protocol, side_effect=[False])
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[token])
     manager.registration_exists = mock.AsyncMock(spec=protocols.registration_exists.Protocol, side_effect=[True])
-    manager.registration_delete = mock.AsyncMock(spec=protocols.registration_delete.Protocol)
+    manager.registration_delete_by_email = mock.AsyncMock(spec=protocols.registration_delete_by_email.Protocol)
     manager.registration_create = mock.AsyncMock(spec=protocols.registration_create.Protocol)
     manager.user_registration_mail_send = mock.AsyncMock(spec=combinators.user_registration_mail_send.Combinator)
 
@@ -115,7 +115,7 @@ async def test_user_register__registration_exists() -> None:
         transaction_atomic=manager.transaction_atomic,
         user_with_email_exists=manager.user_with_email_exists,
         registration_exists=manager.registration_exists,
-        registration_delete=manager.registration_delete,
+        registration_delete_by_email=manager.registration_delete_by_email,
         secret_token_generate=manager.secret_token_generate,
         registration_create=manager.registration_create,
         user_registration_mail_send=manager.user_registration_mail_send,
@@ -130,7 +130,7 @@ async def test_user_register__registration_exists() -> None:
         mock.call.context_manager.__aenter__(),
         mock.call.user_with_email_exists(email=email),
         mock.call.registration_exists(email=email),
-        mock.call.registration_delete(email=email),
+        mock.call.registration_delete_by_email(email=email),
         mock.call.secret_token_generate(),
         mock.call.registration_create(email=email, token=token),
         mock.call.user_registration_mail_send(email=email, token=token),

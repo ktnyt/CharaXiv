@@ -28,10 +28,10 @@ class Combinator:
             if not user:
                 raise UserWithEmailNotFoundException(email)
 
-            if await self.user_password_reset_exists(userid=user.id):
-                await self.user_password_reset_delete(userid=user.id)
+            if await self.user_password_reset_exists(user_id=user.id):
+                await self.user_password_reset_delete(user_id=user.id)
 
             token = self.secret_token_generate()
 
-            await self.user_password_reset_create(userid=user.id, token=token)
+            await self.user_password_reset_create(user_id=user.id, token=token)
             await self.user_password_reset_mail_send(email=email, token=token)

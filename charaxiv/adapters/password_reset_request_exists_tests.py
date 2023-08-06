@@ -21,11 +21,11 @@ async def test_user_password_reset_exists(database_session: AsyncSession, passwo
     await database_session.flush()
 
     adapter = Adapter(session=database_session)
-    out = await adapter(userid=user_model.id)
+    out = await adapter(user_id=user_model.id)
     assert not out
 
     password_reset_request = repositories.database.models.PasswordResetRequest(
-        userid=user_model.id,
+        user_id=user_model.id,
         token=secrets.token_urlsafe(32),
     )
 
@@ -33,5 +33,5 @@ async def test_user_password_reset_exists(database_session: AsyncSession, passwo
     await database_session.flush()
 
     adapter = Adapter(session=database_session)
-    out = await adapter(userid=user_model.id)
+    out = await adapter(user_id=user_model.id)
     assert out

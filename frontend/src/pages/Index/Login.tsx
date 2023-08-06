@@ -1,53 +1,55 @@
-import { callLogin } from '@charaxiv/api/user'
-import { Button } from '@charaxiv/components/Button'
-import { Input } from '@charaxiv/components/Input'
-import { Link } from '@charaxiv/components/Link'
-import { UnauthenticatedLayout } from '@charaxiv/components/UnauthorizedLayout'
-import { refetchAuthenticated } from '@charaxiv/context/authenticated'
-import clsx from 'clsx'
-import { Component, createSignal } from 'solid-js'
+import { callLogin } from "@charaxiv/api/user";
+import { Button } from "@charaxiv/components/Button";
+import { Input } from "@charaxiv/components/Input";
+import { Label } from "@charaxiv/components/Label";
+import { Link } from "@charaxiv/components/Link";
+import { UnauthenticatedLayout } from "@charaxiv/components/UnauthorizedLayout";
+import { refetchAuthenticated } from "@charaxiv/context/authenticated";
+import { Component, createSignal } from "solid-js";
 
 export const Login: Component = () => {
-  const [email, setEmail] = createSignal('')
-  const [password, setPassword] = createSignal('')
+  const [email, emailSet] = createSignal("");
+  const [password, passwordSet] = createSignal("");
 
-  const formInvalid = () => email().length === 0 || password().length < 10
+  const formInvalid = () => email().length === 0 || password().length < 12;
 
   const onSubmitLoginForm = async () => {
     if (!formInvalid()) {
-      await callLogin(email(), password())
-      await refetchAuthenticated()
+      await callLogin(email(), password());
+      await refetchAuthenticated();
     }
-  }
+  };
 
   return (
     <UnauthenticatedLayout>
       <form
         class="flex flex-col space-y-2 justify-center items-center"
         onSubmit={(event) => {
-          event.preventDefault()
-          onSubmitLoginForm()
+          event.preventDefault();
+          onSubmitLoginForm();
         }}
       >
         <div class="w-full">
+          <Label for="email">メールアドレス</Label>
           <Input
-            placeholder="メールアドレス"
+            name="email"
             type="email"
             autocomplete="username"
             required
-            onInput={(event) => setEmail(event.currentTarget.value)}
-            onChange={(event) => setEmail(event.currentTarget.value)}
+            onInput={(event) => emailSet(event.currentTarget.value)}
+            onChange={(event) => emailSet(event.currentTarget.value)}
           />
         </div>
 
         <div class="w-full">
+          <Label for="password">パスワード</Label>
           <Input
-            placeholder="パスワード"
+            name="password"
             type="password"
             autocomplete="current-password"
             required
-            onInput={(event) => setPassword(event.currentTarget.value)}
-            onChange={(event) => setPassword(event.currentTarget.value)}
+            onInput={(event) => passwordSet(event.currentTarget.value)}
+            onChange={(event) => passwordSet(event.currentTarget.value)}
           />
         </div>
 
@@ -64,7 +66,12 @@ export const Login: Component = () => {
         </div>
 
         <div class="w-full">
-          <Link href="/password_reset" variant="textual" color="red" fullWidth>
+          <Link
+            href="/password_reset_request"
+            variant="textual"
+            color="red"
+            fullWidth
+          >
             パスワードを忘れた
           </Link>
         </div>
@@ -78,5 +85,5 @@ export const Login: Component = () => {
         </Link>
       </div>
     </UnauthenticatedLayout>
-  )
-}
+  );
+};

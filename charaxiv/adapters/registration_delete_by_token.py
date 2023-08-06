@@ -10,7 +10,7 @@ from charaxiv import protocols, repositories
 @singleton
 @inject
 @dataclass
-class Adapter(protocols.registration_delete.Protocol):
+class Adapter(protocols.registration_delete_by_token.Protocol):
     session: AsyncSession
 
     async def __call__(self, /, *, token: str) -> None:

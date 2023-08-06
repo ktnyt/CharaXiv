@@ -13,8 +13,8 @@ from charaxiv import protocols, repositories
 class Adapter(protocols.password_reset_request_create.Protocol):
     session: AsyncSession
 
-    async def __call__(self, /, *, userid: UUID, token: str) -> None:
+    async def __call__(self, /, *, user_id: UUID, token: str) -> None:
         self.session.add(repositories.database.models.PasswordResetRequest(
             token=token,
-            userid=userid,
+            user_id=user_id,
         ))

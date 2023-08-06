@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: 2b95441670c0
+Revision ID: 97fa5a279afa
 Revises: 
-Create Date: 2023-08-05 16:40:44.367349
+Create Date: 2023-08-06 20:49:55.943204
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2b95441670c0'
+revision = '97fa5a279afa'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -40,12 +40,12 @@ def upgrade() -> None:
     op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=True)
     op.create_table('password_reset_requests',
     sa.Column('token', sa.String(length=43), nullable=False),
-    sa.Column('userid', sa.Uuid(), nullable=False),
+    sa.Column('user_id', sa.Uuid(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['userid'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('token'),
-    sa.UniqueConstraint('userid')
+    sa.UniqueConstraint('user_id')
     )
     # ### end Alembic commands ###
 

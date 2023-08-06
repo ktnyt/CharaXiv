@@ -37,35 +37,35 @@ def test_user_session__405(method: str) -> None:
 
 class SessionCheckEndpoint(HTTPEndpoint):
     def get(self, request: Request) -> Response:
-        request_userid = request.query_params.get("userid")
-        session_userid = request.session.get(settings.SESSION_USERID_KEY)
-        assert request_userid == session_userid
+        request_user_id = request.query_params.get("user_id")
+        session_user_id = request.session.get(settings.SESSION_USERID_KEY)
+        assert request_user_id == session_user_id
         return Response(status_code=HTTP_204_NO_CONTENT)
 
 
 @dataclass
 class UserLoginSideEffect:
-    userid: UUID
+    user_id: UUID
     email: str
     password: str
 
     def __call__(self, /, *, email: str, password: str) -> UUID:
         if email == self.email and password == self.password:
-            return self.userid
+            return self.user_id
         raise combinators.user_login.UserVerificationException(email)
 
 
 @pytest.mark.asyncio
 async def test_user_session__get_post_delete() -> None:
-    userid = uuid7()
+    user_id = uuid7()
     email = "test@example.com"
     password = lib.password.generate()
 
-    user_login_side_effect = UserLoginSideEffect(userid=userid, email=email, password=password)
+    user_login_side_effect = UserLoginSideEffect(user_id=user_id, email=email, password=password)
 
     async def authenticate_side_effect(conn: HTTPConnection) -> typing.Tuple[AuthCredentials, BaseUser]:
         if settings.SESSION_USERID_KEY in conn.session:
-            return AuthCredentials("authenticated"), SimpleUser(username=str(userid))
+            return AuthCredentials("authenticated"), SimpleUser(username=str(user_id))
         return AuthCredentials(), UnauthenticatedUser()
 
     manager = mock.Mock()
@@ -102,7 +102,7 @@ async def test_user_session__get_post_delete() -> None:
         manager.reset_mock()
 
         # Session should be persisted
-        out = client.get(f"/session_check?userid={userid}")
+        out = client.get(f"/session_check?user_id={user_id}")
         assert out.status_code == HTTP_204_NO_CONTENT
         assert manager.mock_calls == [
             mock.call.auth_backend.authenticate(integrations.mock.TypeIs(HTTPConnection)),

@@ -1,7 +1,7 @@
-import { A } from '@solidjs/router'
-import { ParentComponent } from 'solid-js'
-import { IconButton } from './IconButton'
-import { Logo } from './Logo'
+import { A } from "@solidjs/router";
+import { ParentComponent } from "solid-js";
+import { IconButton } from "./IconButton";
+import { Logo } from "./Logo";
 
 export const Header: ParentComponent = (props) => (
   <header class="flex flex-row justify-between items-center w-screen h-12 px-2 bg-nord-0 text-nord-1000 transition dark:bg-nord-1000 dark:text-nord-0">
@@ -21,4 +21,4 @@ export const Header: ParentComponent = (props) => (
       </IconButton>
     </div>
   </header>
-)
+);

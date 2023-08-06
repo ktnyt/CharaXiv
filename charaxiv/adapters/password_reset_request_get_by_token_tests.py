@@ -29,7 +29,7 @@ async def test_password_reset_request_get_by_token(database_session: AsyncSessio
 
     password_reset_request_model = repositories.database.models.PasswordResetRequest(
         token=token,
-        userid=user_model.id,
+        user_id=user_model.id,
     )
 
     database_session.add(password_reset_request_model)
@@ -38,6 +38,6 @@ async def test_password_reset_request_get_by_token(database_session: AsyncSessio
     out = await adapter(token=token)
     assert out is not None
     assert out == types.password_reset.PasswordResetRequest(
-        userid=password_reset_request_model.userid,
+        user_id=password_reset_request_model.user_id,
         created_at=lib.timezone.aware(password_reset_request_model.created_at),
     )

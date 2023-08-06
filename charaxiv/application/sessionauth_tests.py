@@ -26,7 +26,7 @@ from charaxiv.combinators.user_authenticate import UserWithIDNotFoundException
 
 
 class PostParams(BaseModel):
-    userid: str
+    user_id: str
 
 
 class Endpoint(HTTPEndpoint):
@@ -36,7 +36,7 @@ class Endpoint(HTTPEndpoint):
 
     async def post(self, request: Request) -> Response:
         params = PostParams(**(await request.json()))
-        request.session[settings.SESSION_USERID_KEY] = params.userid
+        request.session[settings.SESSION_USERID_KEY] = params.user_id
         return Response(status_code=HTTP_201_CREATED)
 
     async def delete(self, request: Request) -> Response:
@@ -62,12 +62,12 @@ def test_sessionauth(password_hasher: PasswordHasher) -> None:
         group=types.user.Group.ADMIN,
     )
 
-    def user_authenticate_side_effect(userid: UUID) -> types.user.User:
-        if userid == base_user.id:
+    def user_authenticate_side_effect(user_id: UUID) -> types.user.User:
+        if user_id == base_user.id:
             return base_user
-        if userid == admin_user.id:
+        if user_id == admin_user.id:
             return admin_user
-        raise UserWithIDNotFoundException(userid)
+        raise UserWithIDNotFoundException(user_id)
 
     manager = mock.Mock()
     manager.user_authenticate = mock.AsyncMock(spec=combinators.user_authenticate.Combinator, side_effect=user_authenticate_side_effect)
@@ -89,19 +89,19 @@ def test_sessionauth(password_hasher: PasswordHasher) -> None:
         out = client.get("/")
         assert out.status_code == HTTP_403_FORBIDDEN
 
-        out = client.post("/", json=PostParams(userid=str(base_user.id)).model_dump())
+        out = client.post("/", json=PostParams(user_id=str(base_user.id)).model_dump())
         assert out.status_code == HTTP_201_CREATED
 
         out = client.get("/")
         assert out.status_code == HTTP_403_FORBIDDEN
 
-        out = client.post("/", json=PostParams(userid=str(admin_user.id)).model_dump())
+        out = client.post("/", json=PostParams(user_id=str(admin_user.id)).model_dump())
         assert out.status_code == HTTP_201_CREATED
 
         out = client.get("/")
         assert out.status_code == HTTP_204_NO_CONTENT
 
-        out = client.post("/", json=PostParams(userid=str(uuid7())).model_dump())
+        out = client.post("/", json=PostParams(user_id=str(uuid7())).model_dump())
         assert out.status_code == HTTP_201_CREATED
 
         out = client.get("/")

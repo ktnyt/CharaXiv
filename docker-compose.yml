@@ -1,11 +1,19 @@
 version: '3.0'
 services:
   backend:
-    image: python:3.11.1-bullseye
+    build:
+      dockerfile_inline: |
+        FROM python:3.11.1-bullseye
+
+        RUN apt-get update && apt-get install -y sqlite3 && \
+            apt-get clean && \
+            rm -rf /var/lib/apt/lists/*
+        RUN pip install --upgrade pip && pip install poetry 
     working_dir: /app
     volumes:
       - .:/app:cached
       - /app/.venv
+      - /app/frontend
       - db_volume:/db:cached
       - venv_volume:/venv:cached
     environment:
@@ -13,14 +21,12 @@ services:
       - STARLETTE_KEY=starlette_key
       - CHARAXIV_HOST=localhost
       - CHARAXIV_PORT=6640
-      - CHARAXIV_NOREPLY_ADDRESS=noreply@charaxiv.app
+      - CHARAXIV_NOREPLY_EMAIL=noreply@charaxiv.app
+      - CHARAXIV_CUSTOM_HEADER=X-CHARAXIV-CSRF-PROTECTION
       - SHEET_IMAGE_MAX_SIZE=1024
       - SQLITE_PATH=/db/charaxiv.db
       - AWS_ACCESS_KEY_ID=root
       - AWS_SECRET_ACCESS_KEY=password
-      - AWS_S3_BUCKET_NAME=charaxiv_media
-      - AWS_S3_REGION_NAME=ap-northeast-1
-      - AWS_S3_ENDPOINT_URL=http://minio:9000
       - AWS_SES_REGION_NAME=ap-northeast-1
       - AWS_SES_ENDPOINT_URL=
     entrypoint: [ "/app/scripts/entrypoint.dev.sh" ]
@@ -42,6 +48,7 @@ services:
       - node_modules_volume:/app/node_modules:cached
     environment:
       - VITE_CHARAXIV_FQDN=http://localhost:6640
+      - VITE_CHARAXIV_CUSTOM_HEADER=X-CHARAXIV-CSRF-PROTECTION
     entrypoint: [ "/app/scripts/entrypoint.dev.sh" ]
     command: npm run dev -- --host
     depends_on:

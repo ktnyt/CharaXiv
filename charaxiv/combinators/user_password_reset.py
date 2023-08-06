@@ -18,8 +18,8 @@ class PasswordResetRequestExpiredException(Exception):
 
 
 class UserPasswordUpdateWithIdFailedException(Exception):
-    def __init__(self, /, *, userid: UUID) -> None:
-        super().__init__(f"userid={str(userid)}")
+    def __init__(self, /, *, user_id: UUID) -> None:
+        super().__init__(f"user_id={str(user_id)}")
 
 
 @singleton
@@ -46,9 +46,9 @@ class Combinator:
 
             hashedpw = self.password_hash(password=password)
             updated = await self.user_password_update_by_id(
-                userid=password_reset_request.userid,
+                user_id=password_reset_request.user_id,
                 password=hashedpw,
             )
 
             if not updated:
-                raise UserPasswordUpdateWithIdFailedException(userid=password_reset_request.userid)
+                raise UserPasswordUpdateWithIdFailedException(user_id=password_reset_request.user_id)

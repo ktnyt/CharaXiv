@@ -14,8 +14,8 @@ from charaxiv import protocols, repositories
 class Adapter(protocols.password_reset_request_exists.Protocol):
     session: AsyncSession
 
-    async def __call__(self, /, *, userid: UUID) -> bool:
+    async def __call__(self, /, *, user_id: UUID) -> bool:
         return (await self.session.execute(
             sqlalchemy.select(repositories.database.models.PasswordResetRequest)
-            .filter(repositories.database.models.PasswordResetRequest.userid == userid)
+            .filter(repositories.database.models.PasswordResetRequest.user_id == user_id)
         )).scalar_one_or_none() is not None

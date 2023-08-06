@@ -1,8 +1,8 @@
-import { CATCH_COPY } from '@charaxiv/constants'
-import { ParentComponent } from 'solid-js'
-import { Article } from './Article'
-import { Logo } from './Logo'
-import { Section } from './Section'
+import { CATCH_COPY } from "@charaxiv/constants";
+import { ParentComponent } from "solid-js";
+import { Article } from "./Article";
+import { Logo } from "./Logo";
+import { Section } from "./Section";
 
 export const UnauthenticatedLayout: ParentComponent = (props) => (
   <Article class="flex justify-center items-start">
@@ -19,4 +19,4 @@ export const UnauthenticatedLayout: ParentComponent = (props) => (
       </div>
     </Section>
   </Article>
-)
+);

@@ -3,13 +3,13 @@ name: Python package
 on:
   push:
     branches:
-      - '**'
+      - "**"
 
 env:
   DJANGO_ENV: development
   SECRET_KEY: secret_key
   SERVICE_FQDN: https://charaxiv.app
-  SERVICE_NOREPLY_ADDRESS: noreply@charaxiv.app
+  SERVICE_NOREPLY_ADDRESS: support-noreply@charaxiv.app
   SHEET_IMAGE_MAX_SIZE: 1024
   POSTGRES_DB: charaxiv
   POSTGRES_USER: charaxiv
@@ -21,7 +21,7 @@ env:
   AWS_S3_REGION_NAME: ap-northeast-1
   AWS_S3_ENDPOINT_URL: http://minio:9000
   AWS_SES_REGION_NAME: ap-northeast-1
-  AWS_SES_ENDPOINT_URL: 
+  AWS_SES_ENDPOINT_URL:
   SENTRY_DSN: dummy
 
 jobs:
@@ -42,7 +42,7 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-    
+
     defaults:
       run:
         working-directory: ./backend

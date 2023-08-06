@@ -18,7 +18,7 @@ class Combinator:
     user_with_email_exists: protocols.user_with_email_exists.Protocol
     secret_token_generate: protocols.secret_token_generate.Protocol
     registration_exists: protocols.registration_exists.Protocol
-    registration_delete: protocols.registration_delete.Protocol
+    registration_delete_by_email: protocols.registration_delete_by_email.Protocol
     registration_create: protocols.registration_create.Protocol
     user_registration_mail_send: combinators.user_registration_mail_send.Combinator
 
@@ -28,7 +28,7 @@ class Combinator:
                 raise UserWithEmailExistsException(email)
 
             if await self.registration_exists(email=email):
-                await self.registration_delete(email=email)
+                await self.registration_delete_by_email(email=email)
 
             token = self.secret_token_generate()
 

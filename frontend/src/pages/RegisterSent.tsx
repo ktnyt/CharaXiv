@@ -1,18 +1,17 @@
-import { UnauthenticatedLayout } from '@charaxiv/components/UnauthorizedLayout'
-import { CHARAXIV_FQDN } from '@charaxiv/constants'
-import { useNavigate, useSearchParams } from '@solidjs/router'
-import { Component } from 'solid-js'
+import { UnauthenticatedLayout } from "@charaxiv/components/UnauthorizedLayout";
+import { useNavigate, useSearchParams } from "@solidjs/router";
+import { Component } from "solid-js";
 
 export const RegisterSentPage: Component = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [{ registrant_address }] = useSearchParams<{
-    registrant_address?: string
-  }>()
+  const [{ email }] = useSearchParams<{
+    email?: string;
+  }>();
 
-  if (!registrant_address) {
-    navigate('/register')
-    return null
+  if (!email) {
+    navigate("/register");
+    return null;
   }
 
   return (
@@ -24,7 +23,7 @@ export const RegisterSentPage: Component = () => {
 
         <div class="w-full pb-4 space-y-2">
           <p class="text-md">
-            <span class="font-bold">{registrant_address}</span>{' '}
+            <span class="font-bold">{email}</span>{" "}
             宛にユーザ登録用メールが送信されました。
           </p>
           <p class="text-sm text-justify">
@@ -36,7 +35,7 @@ export const RegisterSentPage: Component = () => {
         </div>
       </div>
     </UnauthenticatedLayout>
-  )
-}
+  );
+};
 
-export default RegisterSentPage
+export default RegisterSentPage;

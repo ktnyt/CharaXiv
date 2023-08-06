@@ -12,14 +12,14 @@ from charaxiv.combinators.user_authenticate import (
 @pytest.mark.asyncio
 async def test_user_authenticate(password_hasher: PasswordHasher) -> None:
     # Setup data
-    userid = uuid7()
+    user_id = uuid7()
     email = "test@example.com"
     username = "username"
     password = password_hasher.hash(lib.password.generate())
     group = types.user.Group.ADMIN
 
     user = types.user.User(
-        id=userid,
+        id=user_id,
         email=email,
         username=username,
         password=password,
@@ -34,21 +34,21 @@ async def test_user_authenticate(password_hasher: PasswordHasher) -> None:
     combinator = Combinator(user_get_by_id=manager.user_get_by_id)
 
     # Execute combinator
-    output = await combinator(userid)
+    output = await combinator(user_id)
 
     # Assert output (if available)
     assert output == user
 
     # Assert depndency calls
     assert manager.mock_calls == [
-        mock.call.user_get_by_id(id=userid),
+        mock.call.user_get_by_id(id=user_id),
     ]
 
 
 @pytest.mark.asyncio
 async def test_user_authenticate__user_not_found() -> None:
     # Setup data
-    userid = uuid7()
+    user_id = uuid7()
 
     # Setup mocks
     manager = mock.Mock()
@@ -59,9 +59,9 @@ async def test_user_authenticate__user_not_found() -> None:
 
     # Execute combinator
     with pytest.raises(UserWithIDNotFoundException):
-        await combinator(userid)
+        await combinator(user_id)
 
     # Assert depndency calls
     assert manager.mock_calls == [
-        mock.call.user_get_by_id(id=userid),
+        mock.call.user_get_by_id(id=user_id),
     ]

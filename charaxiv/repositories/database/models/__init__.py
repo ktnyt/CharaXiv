@@ -1,8 +1,7 @@
-from .base import Base as Base
-from .password_reset_request import \
-    PasswordResetRequest as PasswordResetRequest
-from .registration import Registration as Registration
-from .user import User as User
+from .base import Base
+from .password_reset_request import PasswordResetRequest
+from .registration import Registration
+from .user import User
 
 __all__ = [
     "Base",

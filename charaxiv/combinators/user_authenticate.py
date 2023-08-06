@@ -7,8 +7,8 @@ from charaxiv import protocols, types
 
 
 class UserWithIDNotFoundException(Exception):
-    def __init__(self, userid: UUID) -> None:
-        super().__init__(f"User with id '{str(userid)}' not found")
+    def __init__(self, user_id: UUID) -> None:
+        super().__init__(f"User with id '{str(user_id)}' not found")
 
 
 @singleton
@@ -17,8 +17,8 @@ class UserWithIDNotFoundException(Exception):
 class Combinator:
     user_get_by_id: protocols.user_get_by_id.Protocol
 
-    async def __call__(self, userid: UUID) -> types.user.User:
-        user = await self.user_get_by_id(id=userid)
+    async def __call__(self, user_id: UUID) -> types.user.User:
+        user = await self.user_get_by_id(id=user_id)
         if user is None:
-            raise UserWithIDNotFoundException(userid)
+            raise UserWithIDNotFoundException(user_id)
         return user

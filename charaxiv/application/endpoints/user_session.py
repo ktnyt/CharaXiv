@@ -33,8 +33,8 @@ class Endpoint(HTTPEndpoint):
     )
     async def post(self, request: Request, injector: Injector, params: PostParams) -> Response:
         exec = injector.get(combinators.user_login.Combinator)
-        userid = await exec(email=params.email, password=params.password)
-        request.session[settings.SESSION_USERID_KEY] = str(userid)
+        user_id = await exec(email=params.email, password=params.password)
+        request.session[settings.SESSION_USERID_KEY] = str(user_id)
         return AppResponse(
             content=dict(error=None),
             status_code=HTTP_201_CREATED,

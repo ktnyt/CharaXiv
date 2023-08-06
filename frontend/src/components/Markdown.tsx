@@ -4,21 +4,21 @@ import {
   createSignal,
   For,
   JSXElement,
-} from 'solid-js'
-import { remark } from 'remark'
-import remarkParse from 'remark-parse'
-import remarkGfm from 'remark-gfm'
-import { Content, PhrasingContent } from 'mdast'
-import remarkHtml from 'remark-html'
+} from "solid-js";
+import { remark } from "remark";
+import remarkParse from "remark-parse";
+import remarkGfm from "remark-gfm";
+import { Content, PhrasingContent } from "mdast";
+import remarkHtml from "remark-html";
 
 export type MarkdownProps = {
-  text: string
-}
+  text: string;
+};
 
 export const Markdown: Component<MarkdownProps> = (props) => {
-  const [innerHTML, setInnerHTML] = createSignal<string>()
+  const [innerHTML, innerHTMLSet] = createSignal<string>();
   createEffect(async () => {
-    setInnerHTML(
+    innerHTMLSet(
       String(
         await remark()
           .use(remarkParse)
@@ -26,7 +26,7 @@ export const Markdown: Component<MarkdownProps> = (props) => {
           .use(remarkHtml, true)
           .process(props.text),
       ),
-    )
-  })
-  return <div class="markdown-body" innerHTML={innerHTML()} />
-}
+    );
+  });
+  return <div class="markdown-body" innerHTML={innerHTML()} />;
+};

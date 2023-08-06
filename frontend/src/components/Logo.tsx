@@ -1,12 +1,12 @@
-import clsx from 'clsx'
-import { Component, ComponentProps } from 'solid-js'
+import clsx from "clsx";
+import { Component, ComponentProps } from "solid-js";
 
-export type LogoProps = ComponentProps<'span'>
+export type LogoProps = ComponentProps<"span">;
 
 export const Logo: Component<LogoProps> = (props) => (
   <span
     {...props}
-    class={clsx('inline-block text-nord-1000 dark:text-nord-0', props.class)}
+    class={clsx("inline-block text-nord-1000 dark:text-nord-0", props.class)}
   >
     <svg
       id="_イヤー_2"
@@ -61,4 +61,4 @@ export const Logo: Component<LogoProps> = (props) => (
       </g>
     </svg>
   </span>
-)
+);

@@ -1,21 +1,21 @@
-import { callSheetGet } from '@charaxiv/api/sheet'
-import { Article } from '@charaxiv/components/Article'
-import { Button } from '@charaxiv/components/Button'
-import { Header } from '@charaxiv/components/Header'
-import { IconButton } from '@charaxiv/components/IconButton'
-import { Input } from '@charaxiv/components/Input'
-import { Markdown } from '@charaxiv/components/Markdown'
-import { Section } from '@charaxiv/components/Section'
-import { TagInput } from '@charaxiv/components/TagInput'
-import { useParams } from '@solidjs/router'
-import { Component, createResource } from 'solid-js'
+import { callSheetGet } from "@charaxiv/api/sheet";
+import { Article } from "@charaxiv/components/Article";
+import { Button } from "@charaxiv/components/Button";
+import { Header } from "@charaxiv/components/Header";
+import { IconButton } from "@charaxiv/components/IconButton";
+import { Input } from "@charaxiv/components/Input";
+import { Markdown } from "@charaxiv/components/Markdown";
+import { Section } from "@charaxiv/components/Section";
+import { TagInput } from "@charaxiv/components/TagInput";
+import { useParams } from "@solidjs/router";
+import { Component, createResource } from "solid-js";
 
 export const SheetPage: Component = () => {
-  const params = useParams<{ sheet_id: string }>()
+  const params = useParams<{ sheet_id: string }>();
 
   const [sheet, refetchSheet] = createResource(() =>
     callSheetGet(params.sheet_id),
-  )
+  );
 
   return (
     <Article>
@@ -78,7 +78,7 @@ export const SheetPage: Component = () => {
         </div>
       </div>
     </Article>
-  )
-}
+  );
+};
 
-export default SheetPage
+export default SheetPage;

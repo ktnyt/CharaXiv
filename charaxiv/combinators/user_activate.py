@@ -3,8 +3,9 @@ from datetime import timedelta
 
 from injector import inject, singleton
 
-from charaxiv import protocols
-from charaxiv.combinators.user_register import UserWithEmailExistsException
+from charaxiv import combinators, protocols
+
+UserWithEmailExistsException = combinators.user_register.UserWithEmailExistsException
 
 
 class RegistrationNotFoundException(Exception):
@@ -31,7 +32,7 @@ class Combinator:
     user_with_email_exists: protocols.user_with_email_exists.Protocol
     user_with_username_exists: protocols.user_with_username_exists.Protocol
     timezone_now: protocols.timezone_now.Protocol
-    registration_delete: protocols.registration_delete.Protocol
+    registration_delete_by_token: protocols.registration_delete_by_token.Protocol
     password_hash: protocols.password_hash.Protocol
     user_create: protocols.user_create.Protocol
 
@@ -47,7 +48,7 @@ class Combinator:
             if await self.user_with_username_exists(username=username):
                 raise UserWithUsernameExistsException(username=username)
 
-            await self.registration_delete(token=token)
+            await self.registration_delete_by_token(token=token)
 
             if registration.created_at + timedelta(days=1) < self.timezone_now():
                 raise RegistrationExpiredException(token=token)

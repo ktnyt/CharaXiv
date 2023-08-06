@@ -34,7 +34,7 @@ async def test_user_activate(password_hasher: PasswordHasher) -> None:
     manager.user_with_email_exists = mock.AsyncMock(spec=protocols.user_with_email_exists.Protocol, side_effect=[False])
     manager.user_with_username_exists = mock.AsyncMock(spec=protocols.user_with_username_exists.Protocol, side_effect=[False])
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
-    manager.registration_delete = mock.AsyncMock(spec=protocols.registration_delete.Protocol)
+    manager.registration_delete_by_token = mock.AsyncMock(spec=protocols.registration_delete_by_token.Protocol)
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=[hashedpw])
     manager.user_create = mock.AsyncMock(spec=protocols.user_create.Protocol)
 
@@ -45,7 +45,7 @@ async def test_user_activate(password_hasher: PasswordHasher) -> None:
         user_with_email_exists=manager.user_with_email_exists,
         user_with_username_exists=manager.user_with_username_exists,
         timezone_now=manager.timezone_now,
-        registration_delete=manager.registration_delete,
+        registration_delete_by_token=manager.registration_delete_by_token,
         password_hash=manager.password_hash,
         user_create=manager.user_create,
     )
@@ -64,7 +64,7 @@ async def test_user_activate(password_hasher: PasswordHasher) -> None:
         mock.call.registration_get_by_token(token=token),
         mock.call.user_with_email_exists(email=email),
         mock.call.user_with_username_exists(username=username),
-        mock.call.registration_delete(token=token),
+        mock.call.registration_delete_by_token(token=token),
         mock.call.timezone_now(),
         mock.call.password_hash(password=password),
         mock.call.user_create(
@@ -91,7 +91,7 @@ async def test_user_activate__no_registration() -> None:
     manager.user_with_email_exists = mock.AsyncMock(spec=protocols.user_with_email_exists.Protocol, side_effect=Exception("should not be called"))
     manager.user_with_username_exists = mock.AsyncMock(spec=protocols.user_with_username_exists.Protocol, side_effect=Exception("should not be called"))
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=Exception("should not be called"))
-    manager.registration_delete = mock.AsyncMock(spec=protocols.registration_delete.Protocol, side_effect=Exception("should not be called"))
+    manager.registration_delete_by_token = mock.AsyncMock(spec=protocols.registration_delete_by_token.Protocol, side_effect=Exception("should not be called"))
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
     manager.user_create = mock.AsyncMock(spec=protocols.user_create.Protocol, side_effect=Exception("should not be called"))
 
@@ -102,7 +102,7 @@ async def test_user_activate__no_registration() -> None:
         user_with_email_exists=manager.user_with_email_exists,
         user_with_username_exists=manager.user_with_username_exists,
         timezone_now=manager.timezone_now,
-        registration_delete=manager.registration_delete,
+        registration_delete_by_token=manager.registration_delete_by_token,
         password_hash=manager.password_hash,
         user_create=manager.user_create,
     )
@@ -144,7 +144,7 @@ async def test_user_activate__user_with_email_exists() -> None:
     manager.user_with_email_exists = mock.AsyncMock(spec=protocols.user_with_email_exists.Protocol, side_effect=[True])
     manager.user_with_username_exists = mock.AsyncMock(spec=protocols.user_with_username_exists.Protocol, side_effect=Exception("should not be called"))
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=Exception("should not be called"))
-    manager.registration_delete = mock.AsyncMock(spec=protocols.registration_delete.Protocol, side_effect=Exception("should not be called"))
+    manager.registration_delete_by_token = mock.AsyncMock(spec=protocols.registration_delete_by_token.Protocol, side_effect=Exception("should not be called"))
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
     manager.user_create = mock.AsyncMock(spec=protocols.user_create.Protocol, side_effect=Exception("should not be called"))
 
@@ -155,7 +155,7 @@ async def test_user_activate__user_with_email_exists() -> None:
         user_with_email_exists=manager.user_with_email_exists,
         user_with_username_exists=manager.user_with_username_exists,
         timezone_now=manager.timezone_now,
-        registration_delete=manager.registration_delete,
+        registration_delete_by_token=manager.registration_delete_by_token,
         password_hash=manager.password_hash,
         user_create=manager.user_create,
     )
@@ -198,7 +198,7 @@ async def test_user_activate__user_with_username_exists() -> None:
     manager.user_with_email_exists = mock.AsyncMock(spec=protocols.user_with_email_exists.Protocol, side_effect=[False])
     manager.user_with_username_exists = mock.AsyncMock(spec=protocols.user_with_username_exists.Protocol, side_effect=[True])
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=Exception("should not be called"))
-    manager.registration_delete = mock.AsyncMock(spec=protocols.registration_delete.Protocol, side_effect=Exception("should not be called"))
+    manager.registration_delete_by_token = mock.AsyncMock(spec=protocols.registration_delete_by_token.Protocol, side_effect=Exception("should not be called"))
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
     manager.user_create = mock.AsyncMock(spec=protocols.user_create.Protocol, side_effect=Exception("should not be called"))
 
@@ -209,7 +209,7 @@ async def test_user_activate__user_with_username_exists() -> None:
         user_with_email_exists=manager.user_with_email_exists,
         user_with_username_exists=manager.user_with_username_exists,
         timezone_now=manager.timezone_now,
-        registration_delete=manager.registration_delete,
+        registration_delete_by_token=manager.registration_delete_by_token,
         password_hash=manager.password_hash,
         user_create=manager.user_create,
     )
@@ -253,7 +253,7 @@ async def test_user_activate__registration_expired() -> None:
     manager.user_with_email_exists = mock.AsyncMock(spec=protocols.user_with_email_exists.Protocol, side_effect=[False])
     manager.user_with_username_exists = mock.AsyncMock(spec=protocols.user_with_username_exists.Protocol, side_effect=[False])
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
-    manager.registration_delete = mock.AsyncMock(spec=protocols.registration_delete.Protocol)
+    manager.registration_delete_by_token = mock.AsyncMock(spec=protocols.registration_delete_by_token.Protocol)
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
     manager.user_create = mock.AsyncMock(spec=protocols.user_create.Protocol, side_effect=Exception("should not be called"))
 
@@ -264,7 +264,7 @@ async def test_user_activate__registration_expired() -> None:
         user_with_email_exists=manager.user_with_email_exists,
         user_with_username_exists=manager.user_with_username_exists,
         timezone_now=manager.timezone_now,
-        registration_delete=manager.registration_delete,
+        registration_delete_by_token=manager.registration_delete_by_token,
         password_hash=manager.password_hash,
         user_create=manager.user_create,
     )
@@ -284,7 +284,7 @@ async def test_user_activate__registration_expired() -> None:
         mock.call.registration_get_by_token(token=token),
         mock.call.user_with_email_exists(email=email),
         mock.call.user_with_username_exists(username=username),
-        mock.call.registration_delete(token=token),
+        mock.call.registration_delete_by_token(token=token),
         mock.call.timezone_now(),
         mock.call.context_manager.__aexit__(RegistrationExpiredException, mock.ANY, mock.ANY),
     ]

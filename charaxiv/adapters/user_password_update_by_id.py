@@ -14,10 +14,10 @@ from charaxiv import protocols, repositories
 class Adapter(protocols.user_password_update_by_id.Protocol):
     session: AsyncSession
 
-    async def __call__(self, /, *, userid: UUID, password: str) -> bool:
+    async def __call__(self, /, *, user_id: UUID, password: str) -> bool:
         result = (await self.session.execute(
             sqlalchemy.update(repositories.database.models.User)
-            .where(repositories.database.models.User.id == userid)
+            .where(repositories.database.models.User.id == user_id)
             .values(password=password)
         ))
         assert type(result) == sqlalchemy.CursorResult

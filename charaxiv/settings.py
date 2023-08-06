@@ -23,15 +23,20 @@ CHARAXIV_PORT = int(os.environ.get("CHARAXIV_PORT", "6640"))
 CHARAXIV_SCHEME = os.environ.get("CHARAXIV_SCHEME", "http")
 CHARAXIV_ORIGIN = f"{CHARAXIV_SCHEME}://{CHARAXIV_HOST}:{CHARAXIV_PORT}"
 
-CHARAXIV_NOREPLY_EMAIL = os.environ.get("CHARAXIV_NOREPLY_EMIAIL", "noreply@charaxiv.app")
+CHARAXIV_NOREPLY_EMAIL = os.environ["CHARAXIV_NOREPLY_EMAIL"]
+CHARAXIV_CUSTOM_HEADER = os.environ.get("CHARAXIV_CUSTOM_HEADER")
+CHARAXIV_SENTRY_DSN = os.environ.get("CHARAXIV_SENTRY_DSN")
 
-SQLITE_PATH = os.environ.get("SQLITE_PATH", "charaxiv.db")
+SQLITE_PATH = os.environ["SQLITE_PATH"]
 
 DATABASE_URL = str(url.URL.create(
     drivername="sqlite+aiosqlite",
     database=SQLITE_PATH
 ))
 
-SESSION_USERID_KEY = os.environ.get("SESSION_USERID_KEY", "_userid")
+SESSION_USERID_KEY = os.environ.get("SESSION_USERID_KEY", "_user_id")
 
-SENTRY_DSN = os.environ.get("SENTRY_DSN")
+
+if not DEBUG:  # pragma: no cover
+    assert CHARAXIV_CUSTOM_HEADER is not None, "CHARAXIV_CUSTOM_HEADER must be set for non debug environments"
+    assert CHARAXIV_SENTRY_DSN is not None, "CHARAXIV_SENTRY_DSN must be set for non debug environments"

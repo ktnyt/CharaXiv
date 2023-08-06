@@ -1,28 +1,28 @@
-import { callSheetCreate, callSheetList } from '@charaxiv/api/sheet'
-import { Article } from '@charaxiv/components/Article'
-import { Button } from '@charaxiv/components/Button'
-import { Header } from '@charaxiv/components/Header'
-import { IconButton } from '@charaxiv/components/IconButton'
-import { createLocalStorage } from '@charaxiv/hooks/createLocalStorage'
-import { useNavigate } from '@solidjs/router'
-import { Component, createResource, Index, Show } from 'solid-js'
+import { callSheetCreate, callSheetList } from "@charaxiv/api/sheet";
+import { Article } from "@charaxiv/components/Article";
+import { Button } from "@charaxiv/components/Button";
+import { Header } from "@charaxiv/components/Header";
+import { IconButton } from "@charaxiv/components/IconButton";
+import { createLocalStorage } from "@charaxiv/hooks/createLocalStorage";
+import { useNavigate } from "@solidjs/router";
+import { Component, createResource, Index, Show } from "solid-js";
 
 export const Sheets: Component = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [display, setDisplay] = createLocalStorage<'list' | 'grid'>(
-    'SHEET_LIST_DISPLAY',
-    'list',
-  )
+  const [display, setDisplay] = createLocalStorage<"list" | "grid">(
+    "SHEET_LIST_DISPLAY",
+    "list",
+  );
 
   const [sheetList] = createResource(
-    async () => await callSheetList('emoklore'),
-  )
+    async () => await callSheetList("emoklore"),
+  );
 
   const onClickSheetCreate = async () => {
-    const sheetId = await callSheetCreate('emoklore')
-    navigate(`/sheet/${sheetId}`)
-  }
+    const sheetId = await callSheetCreate("emoklore");
+    navigate(`/sheet/${sheetId}`);
+  };
 
   return (
     <Article>
@@ -30,15 +30,15 @@ export const Sheets: Component = () => {
         <div class="flex flex-row">
           <IconButton
             class="rounded-r-none disabled:bg-nord-300 disabled:text-nord-1000 disabled:opacity-100"
-            disabled={display() === 'list'}
-            onClick={() => setDisplay('list')}
+            disabled={display() === "list"}
+            onClick={() => setDisplay("list")}
           >
             <i class="fas fa-list" />
           </IconButton>
           <IconButton
             class="rounded-l-none disabled:bg-nord-300 disabled:text-nord-1000 disabled:opacity-100"
-            disabled={display() === 'grid'}
-            onClick={() => setDisplay('grid')}
+            disabled={display() === "grid"}
+            onClick={() => setDisplay("grid")}
           >
             <i class="fas fa-border-all" />
           </IconButton>
@@ -81,7 +81,7 @@ export const Sheets: Component = () => {
                       href={`/sheet/${sheet().id}`}
                       class="after:absolute after:inset-0"
                     >
-                      <h2>{sheet().content.name || '名無しさん'}</h2>
+                      <h2>{sheet().content.name || "名無しさん"}</h2>
                     </a>
                   </div>
                 </div>
@@ -91,5 +91,5 @@ export const Sheets: Component = () => {
         </div>
       </Show>
     </Article>
-  )
-}
+  );
+};

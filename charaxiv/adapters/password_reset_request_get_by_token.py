@@ -23,6 +23,6 @@ class Adapter(protocols.password_reset_request_get_by_token.Protocol):
         if password_reset_request_model is None:
             return password_reset_request_model
         return types.password_reset.PasswordResetRequest(
-            userid=password_reset_request_model.userid,
+            user_id=password_reset_request_model.user_id,
             created_at=self.timezone_aware(password_reset_request_model.created_at),
         )

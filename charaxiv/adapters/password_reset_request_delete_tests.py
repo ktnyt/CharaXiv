@@ -23,7 +23,7 @@ async def test_user_password_reset_delete(database_session: AsyncSession, passwo
 
     password_reset_request_model = repositories.database.models.PasswordResetRequest(
         token=secrets.token_urlsafe(32),
-        userid=user_model.id,
+        user_id=user_model.id,
     )
 
     database_session.add(password_reset_request_model)
@@ -36,7 +36,7 @@ async def test_user_password_reset_delete(database_session: AsyncSession, passwo
         sqlalchemy.select(repositories.database.models.PasswordResetRequest)
         .filter(sqlalchemy.or_(
             repositories.database.models.PasswordResetRequest.token == password_reset_request_model.token,
-            repositories.database.models.PasswordResetRequest.userid == password_reset_request_model.userid,
+            repositories.database.models.PasswordResetRequest.user_id == password_reset_request_model.user_id,
         ))
     )).scalars().all()
     assert len(out) == 0
