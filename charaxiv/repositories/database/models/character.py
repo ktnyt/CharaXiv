@@ -28,11 +28,14 @@ class CharacterTag(Base):
 
     character_id: Mapped[UUID] = mapped_column("character_id", sqlalchemy.ForeignKey(Character.id, ondelete="CASCADE"), primary_key=True, sort_order=0)
     value: Mapped[str] = mapped_column("value", sqlalchemy.String(255), primary_key=True, sort_order=1)
-    index: Mapped[int] = mapped_column("value", sqlalchemy.Integer(), unique=True, nullable=False, sort_order=2)
+    index: Mapped[int] = mapped_column("index", sqlalchemy.Integer(), unique=True, nullable=False, sort_order=2)
 
 
 class CharacterImage(Base, AutoIDMixin):
     __tablename__ = "character_images"
-    __table_args__ = (sqlalchemy.UniqueConstraint("id", "character_id"))
+    __table_args__ = (
+        sqlalchemy.UniqueConstraint("id", "character_id"),
+    )
 
     character_id: Mapped[UUID] = mapped_column("character_id", sqlalchemy.ForeignKey(Character.id, ondelete="CASCADE"), sort_order=0)
+    index: Mapped[int] = mapped_column("index", sqlalchemy.Integer(), unique=True, nullable=False, sort_order=1)

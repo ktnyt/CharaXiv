@@ -17,7 +17,7 @@ from charaxiv.application.endpoints.user_activate import Endpoint, PostParams
 
 
 @pytest.mark.parametrize("method", ["get", "put", "patch", "delete"])
-def test_login__405(method: str) -> None:
+def test_user_activate__405(method: str) -> None:
     app = Starlette(routes=[Route("/", endpoint=Endpoint)])
 
     with TestClient(app) as client:

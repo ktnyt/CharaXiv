@@ -28,10 +28,10 @@ async def test_user_authenticate(password_hasher: PasswordHasher) -> None:
 
     # Setup mocks
     manager = mock.Mock()
-    manager.user_get_by_id = mock.AsyncMock(spec=protocols.user_get_by_id.Protocol, side_effect=[user])
+    manager.db_user_get_by_id = mock.AsyncMock(spec=protocols.db_user_get_by_id.Protocol, side_effect=[user])
 
     # Instantiate combinator
-    combinator = Combinator(user_get_by_id=manager.user_get_by_id)
+    combinator = Combinator(db_user_get_by_id=manager.db_user_get_by_id)
 
     # Execute combinator
     output = await combinator(user_id)
@@ -41,7 +41,7 @@ async def test_user_authenticate(password_hasher: PasswordHasher) -> None:
 
     # Assert depndency calls
     assert manager.mock_calls == [
-        mock.call.user_get_by_id(id=user_id),
+        mock.call.db_user_get_by_id(id=user_id),
     ]
 
 
@@ -52,10 +52,10 @@ async def test_user_authenticate__user_not_found() -> None:
 
     # Setup mocks
     manager = mock.Mock()
-    manager.user_get_by_id = mock.AsyncMock(spec=protocols.user_get_by_id.Protocol, side_effect=[None])
+    manager.db_user_get_by_id = mock.AsyncMock(spec=protocols.db_user_get_by_id.Protocol, side_effect=[None])
 
     # Instantiate combinator
-    combinator = Combinator(user_get_by_id=manager.user_get_by_id)
+    combinator = Combinator(db_user_get_by_id=manager.db_user_get_by_id)
 
     # Execute combinator
     with pytest.raises(UserWithIDNotFoundException):
@@ -63,5 +63,5 @@ async def test_user_authenticate__user_not_found() -> None:
 
     # Assert depndency calls
     assert manager.mock_calls == [
-        mock.call.user_get_by_id(id=user_id),
+        mock.call.db_user_get_by_id(id=user_id),
     ]

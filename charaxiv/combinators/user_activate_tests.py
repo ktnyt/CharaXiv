@@ -30,24 +30,24 @@ async def test_user_activate(password_hasher: PasswordHasher) -> None:
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.registration_get_by_token = mock.AsyncMock(spec=protocols.registration_get_by_token.Protocol, side_effect=[registration])
-    manager.user_with_email_exists = mock.AsyncMock(spec=protocols.user_with_email_exists.Protocol, side_effect=[False])
-    manager.user_with_username_exists = mock.AsyncMock(spec=protocols.user_with_username_exists.Protocol, side_effect=[False])
+    manager.db_registration_get_by_token = mock.AsyncMock(spec=protocols.db_registration_get_by_token.Protocol, side_effect=[registration])
+    manager.db_user_with_email_exists = mock.AsyncMock(spec=protocols.db_user_with_email_exists.Protocol, side_effect=[False])
+    manager.db_user_with_username_exists = mock.AsyncMock(spec=protocols.db_user_with_username_exists.Protocol, side_effect=[False])
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
-    manager.registration_delete_by_token = mock.AsyncMock(spec=protocols.registration_delete_by_token.Protocol)
+    manager.db_registration_delete_by_token = mock.AsyncMock(spec=protocols.db_registration_delete_by_token.Protocol)
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=[hashedpw])
-    manager.user_create = mock.AsyncMock(spec=protocols.user_create.Protocol)
+    manager.db_user_create = mock.AsyncMock(spec=protocols.db_user_create.Protocol)
 
     # Instantiate combinator
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        registration_get_by_token=manager.registration_get_by_token,
-        user_with_email_exists=manager.user_with_email_exists,
-        user_with_username_exists=manager.user_with_username_exists,
+        db_registration_get_by_token=manager.db_registration_get_by_token,
+        db_user_with_email_exists=manager.db_user_with_email_exists,
+        db_user_with_username_exists=manager.db_user_with_username_exists,
         timezone_now=manager.timezone_now,
-        registration_delete_by_token=manager.registration_delete_by_token,
+        db_registration_delete_by_token=manager.db_registration_delete_by_token,
         password_hash=manager.password_hash,
-        user_create=manager.user_create,
+        db_user_create=manager.db_user_create,
     )
 
     # Execute combinator
@@ -61,13 +61,13 @@ async def test_user_activate(password_hasher: PasswordHasher) -> None:
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.registration_get_by_token(token=token),
-        mock.call.user_with_email_exists(email=email),
-        mock.call.user_with_username_exists(username=username),
-        mock.call.registration_delete_by_token(token=token),
+        mock.call.db_registration_get_by_token(token=token),
+        mock.call.db_user_with_email_exists(email=email),
+        mock.call.db_user_with_username_exists(username=username),
+        mock.call.db_registration_delete_by_token(token=token),
         mock.call.timezone_now(),
         mock.call.password_hash(password=password),
-        mock.call.user_create(
+        mock.call.db_user_create(
             email=email,
             username=username,
             password=hashedpw,
@@ -87,24 +87,24 @@ async def test_user_activate__no_registration() -> None:
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.registration_get_by_token = mock.AsyncMock(spec=protocols.registration_get_by_token.Protocol, side_effect=[None])
-    manager.user_with_email_exists = mock.AsyncMock(spec=protocols.user_with_email_exists.Protocol, side_effect=Exception("should not be called"))
-    manager.user_with_username_exists = mock.AsyncMock(spec=protocols.user_with_username_exists.Protocol, side_effect=Exception("should not be called"))
+    manager.db_registration_get_by_token = mock.AsyncMock(spec=protocols.db_registration_get_by_token.Protocol, side_effect=[None])
+    manager.db_user_with_email_exists = mock.AsyncMock(spec=protocols.db_user_with_email_exists.Protocol, side_effect=Exception("should not be called"))
+    manager.db_user_with_username_exists = mock.AsyncMock(spec=protocols.db_user_with_username_exists.Protocol, side_effect=Exception("should not be called"))
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=Exception("should not be called"))
-    manager.registration_delete_by_token = mock.AsyncMock(spec=protocols.registration_delete_by_token.Protocol, side_effect=Exception("should not be called"))
+    manager.db_registration_delete_by_token = mock.AsyncMock(spec=protocols.db_registration_delete_by_token.Protocol, side_effect=Exception("should not be called"))
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
-    manager.user_create = mock.AsyncMock(spec=protocols.user_create.Protocol, side_effect=Exception("should not be called"))
+    manager.db_user_create = mock.AsyncMock(spec=protocols.db_user_create.Protocol, side_effect=Exception("should not be called"))
 
     # Instantiate combinator
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        registration_get_by_token=manager.registration_get_by_token,
-        user_with_email_exists=manager.user_with_email_exists,
-        user_with_username_exists=manager.user_with_username_exists,
+        db_registration_get_by_token=manager.db_registration_get_by_token,
+        db_user_with_email_exists=manager.db_user_with_email_exists,
+        db_user_with_username_exists=manager.db_user_with_username_exists,
         timezone_now=manager.timezone_now,
-        registration_delete_by_token=manager.registration_delete_by_token,
+        db_registration_delete_by_token=manager.db_registration_delete_by_token,
         password_hash=manager.password_hash,
-        user_create=manager.user_create,
+        db_user_create=manager.db_user_create,
     )
 
     # Execute combinator
@@ -119,13 +119,13 @@ async def test_user_activate__no_registration() -> None:
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.registration_get_by_token(token=token),
+        mock.call.db_registration_get_by_token(token=token),
         mock.call.context_manager.__aexit__(RegistrationNotFoundException, mock.ANY, mock.ANY),
     ]
 
 
 @pytest.mark.asyncio
-async def test_user_activate__user_with_email_exists() -> None:
+async def test_user_activate__db_user_with_email_exists() -> None:
     # Setup data
     token = secrets.token_urlsafe(32)
     email = "test@example.com"
@@ -140,24 +140,24 @@ async def test_user_activate__user_with_email_exists() -> None:
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.registration_get_by_token = mock.AsyncMock(spec=protocols.registration_get_by_token.Protocol, side_effect=[registration])
-    manager.user_with_email_exists = mock.AsyncMock(spec=protocols.user_with_email_exists.Protocol, side_effect=[True])
-    manager.user_with_username_exists = mock.AsyncMock(spec=protocols.user_with_username_exists.Protocol, side_effect=Exception("should not be called"))
+    manager.db_registration_get_by_token = mock.AsyncMock(spec=protocols.db_registration_get_by_token.Protocol, side_effect=[registration])
+    manager.db_user_with_email_exists = mock.AsyncMock(spec=protocols.db_user_with_email_exists.Protocol, side_effect=[True])
+    manager.db_user_with_username_exists = mock.AsyncMock(spec=protocols.db_user_with_username_exists.Protocol, side_effect=Exception("should not be called"))
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=Exception("should not be called"))
-    manager.registration_delete_by_token = mock.AsyncMock(spec=protocols.registration_delete_by_token.Protocol, side_effect=Exception("should not be called"))
+    manager.db_registration_delete_by_token = mock.AsyncMock(spec=protocols.db_registration_delete_by_token.Protocol, side_effect=Exception("should not be called"))
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
-    manager.user_create = mock.AsyncMock(spec=protocols.user_create.Protocol, side_effect=Exception("should not be called"))
+    manager.db_user_create = mock.AsyncMock(spec=protocols.db_user_create.Protocol, side_effect=Exception("should not be called"))
 
     # Instantiate combinator
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        registration_get_by_token=manager.registration_get_by_token,
-        user_with_email_exists=manager.user_with_email_exists,
-        user_with_username_exists=manager.user_with_username_exists,
+        db_registration_get_by_token=manager.db_registration_get_by_token,
+        db_user_with_email_exists=manager.db_user_with_email_exists,
+        db_user_with_username_exists=manager.db_user_with_username_exists,
         timezone_now=manager.timezone_now,
-        registration_delete_by_token=manager.registration_delete_by_token,
+        db_registration_delete_by_token=manager.db_registration_delete_by_token,
         password_hash=manager.password_hash,
-        user_create=manager.user_create,
+        db_user_create=manager.db_user_create,
     )
 
     # Execute combinator
@@ -172,14 +172,14 @@ async def test_user_activate__user_with_email_exists() -> None:
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.registration_get_by_token(token=token),
-        mock.call.user_with_email_exists(email=email),
+        mock.call.db_registration_get_by_token(token=token),
+        mock.call.db_user_with_email_exists(email=email),
         mock.call.context_manager.__aexit__(UserWithEmailExistsException, mock.ANY, mock.ANY),
     ]
 
 
 @pytest.mark.asyncio
-async def test_user_activate__user_with_username_exists() -> None:
+async def test_user_activate__db_user_with_username_exists() -> None:
     # Setup data
     token = secrets.token_urlsafe(32)
     email = "test@example.com"
@@ -194,24 +194,24 @@ async def test_user_activate__user_with_username_exists() -> None:
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.registration_get_by_token = mock.AsyncMock(spec=protocols.registration_get_by_token.Protocol, side_effect=[registration])
-    manager.user_with_email_exists = mock.AsyncMock(spec=protocols.user_with_email_exists.Protocol, side_effect=[False])
-    manager.user_with_username_exists = mock.AsyncMock(spec=protocols.user_with_username_exists.Protocol, side_effect=[True])
+    manager.db_registration_get_by_token = mock.AsyncMock(spec=protocols.db_registration_get_by_token.Protocol, side_effect=[registration])
+    manager.db_user_with_email_exists = mock.AsyncMock(spec=protocols.db_user_with_email_exists.Protocol, side_effect=[False])
+    manager.db_user_with_username_exists = mock.AsyncMock(spec=protocols.db_user_with_username_exists.Protocol, side_effect=[True])
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=Exception("should not be called"))
-    manager.registration_delete_by_token = mock.AsyncMock(spec=protocols.registration_delete_by_token.Protocol, side_effect=Exception("should not be called"))
+    manager.db_registration_delete_by_token = mock.AsyncMock(spec=protocols.db_registration_delete_by_token.Protocol, side_effect=Exception("should not be called"))
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
-    manager.user_create = mock.AsyncMock(spec=protocols.user_create.Protocol, side_effect=Exception("should not be called"))
+    manager.db_user_create = mock.AsyncMock(spec=protocols.db_user_create.Protocol, side_effect=Exception("should not be called"))
 
     # Instantiate combinator
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        registration_get_by_token=manager.registration_get_by_token,
-        user_with_email_exists=manager.user_with_email_exists,
-        user_with_username_exists=manager.user_with_username_exists,
+        db_registration_get_by_token=manager.db_registration_get_by_token,
+        db_user_with_email_exists=manager.db_user_with_email_exists,
+        db_user_with_username_exists=manager.db_user_with_username_exists,
         timezone_now=manager.timezone_now,
-        registration_delete_by_token=manager.registration_delete_by_token,
+        db_registration_delete_by_token=manager.db_registration_delete_by_token,
         password_hash=manager.password_hash,
-        user_create=manager.user_create,
+        db_user_create=manager.db_user_create,
     )
 
     # Execute combinator
@@ -226,15 +226,15 @@ async def test_user_activate__user_with_username_exists() -> None:
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.registration_get_by_token(token=token),
-        mock.call.user_with_email_exists(email=email),
-        mock.call.user_with_username_exists(username=username),
+        mock.call.db_registration_get_by_token(token=token),
+        mock.call.db_user_with_email_exists(email=email),
+        mock.call.db_user_with_username_exists(username=username),
         mock.call.context_manager.__aexit__(UserWithUsernameExistsException, mock.ANY, mock.ANY),
     ]
 
 
 @pytest.mark.asyncio
-async def test_user_activate__registration_expired() -> None:
+async def test_user_activate__db_registration_expired() -> None:
     # Setup data
     token = secrets.token_urlsafe(32)
     email = "test@example.com"
@@ -249,24 +249,24 @@ async def test_user_activate__registration_expired() -> None:
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.registration_get_by_token = mock.AsyncMock(spec=protocols.registration_get_by_token.Protocol, side_effect=[registration])
-    manager.user_with_email_exists = mock.AsyncMock(spec=protocols.user_with_email_exists.Protocol, side_effect=[False])
-    manager.user_with_username_exists = mock.AsyncMock(spec=protocols.user_with_username_exists.Protocol, side_effect=[False])
+    manager.db_registration_get_by_token = mock.AsyncMock(spec=protocols.db_registration_get_by_token.Protocol, side_effect=[registration])
+    manager.db_user_with_email_exists = mock.AsyncMock(spec=protocols.db_user_with_email_exists.Protocol, side_effect=[False])
+    manager.db_user_with_username_exists = mock.AsyncMock(spec=protocols.db_user_with_username_exists.Protocol, side_effect=[False])
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
-    manager.registration_delete_by_token = mock.AsyncMock(spec=protocols.registration_delete_by_token.Protocol)
+    manager.db_registration_delete_by_token = mock.AsyncMock(spec=protocols.db_registration_delete_by_token.Protocol)
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
-    manager.user_create = mock.AsyncMock(spec=protocols.user_create.Protocol, side_effect=Exception("should not be called"))
+    manager.db_user_create = mock.AsyncMock(spec=protocols.db_user_create.Protocol, side_effect=Exception("should not be called"))
 
     # Instantiate combinator
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        registration_get_by_token=manager.registration_get_by_token,
-        user_with_email_exists=manager.user_with_email_exists,
-        user_with_username_exists=manager.user_with_username_exists,
+        db_registration_get_by_token=manager.db_registration_get_by_token,
+        db_user_with_email_exists=manager.db_user_with_email_exists,
+        db_user_with_username_exists=manager.db_user_with_username_exists,
         timezone_now=manager.timezone_now,
-        registration_delete_by_token=manager.registration_delete_by_token,
+        db_registration_delete_by_token=manager.db_registration_delete_by_token,
         password_hash=manager.password_hash,
-        user_create=manager.user_create,
+        db_user_create=manager.db_user_create,
     )
 
     # Execute combinator
@@ -281,10 +281,10 @@ async def test_user_activate__registration_expired() -> None:
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.registration_get_by_token(token=token),
-        mock.call.user_with_email_exists(email=email),
-        mock.call.user_with_username_exists(username=username),
-        mock.call.registration_delete_by_token(token=token),
+        mock.call.db_registration_get_by_token(token=token),
+        mock.call.db_user_with_email_exists(email=email),
+        mock.call.db_user_with_username_exists(username=username),
+        mock.call.db_registration_delete_by_token(token=token),
         mock.call.timezone_now(),
         mock.call.context_manager.__aexit__(RegistrationExpiredException, mock.ANY, mock.ANY),
     ]

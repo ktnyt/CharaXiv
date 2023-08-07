@@ -15,16 +15,16 @@ class UserWithEmailNotFoundException(Exception):
 @dataclass
 class Combinator:
     transaction_atomic: protocols.transaction_atomic.Protocol
-    user_get_by_email: protocols.user_get_by_email.Protocol
-    user_password_reset_exists: protocols.password_reset_request_exists.Protocol
-    user_password_reset_delete: protocols.password_reset_request_delete.Protocol
+    db_user_get_by_email: protocols.db_user_get_by_email.Protocol
+    user_password_reset_exists: protocols.db_password_reset_request_exists.Protocol
+    user_password_reset_delete: protocols.db_password_reset_request_delete.Protocol
     secret_token_generate: protocols.secret_token_generate.Protocol
-    user_password_reset_create: protocols.password_reset_request_create.Protocol
+    user_password_reset_create: protocols.db_password_reset_request_create.Protocol
     user_password_reset_mail_send: combinators.user_password_reset_mail_send.Combinator
 
     async def __call__(self, /, *, email: str) -> None:
         async with self.transaction_atomic():
-            user = await self.user_get_by_email(email=email)
+            user = await self.db_user_get_by_email(email=email)
             if not user:
                 raise UserWithEmailNotFoundException(email)
 

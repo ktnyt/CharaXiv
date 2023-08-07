@@ -4,9 +4,7 @@ from charaxiv import lib
 from charaxiv.adapters.password_hash import Adapter
 
 
-def test_password_hash() -> None:
-    password_hasher = PasswordHasher()
-
+def test_password_hash(password_hasher: PasswordHasher) -> None:
     password = lib.password.generate()
 
     adapter = Adapter(password_hasher)

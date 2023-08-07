@@ -137,7 +137,7 @@ async def test_{name}() -> None:
 BINDINGS_TEMPLATE = """
 from injector import Binder
 
-from {package} import protocols, adapters
+from {package} import adapters, protocols
 
 __all__ = ["configure"]
 
@@ -266,7 +266,7 @@ from {package}.application.endpoints.{name} import Endpoint
 
 
 @pytest.mark.parametrize("method", ["get", "post", "put", "patch", "delete"])
-def test_login__405(method: str) -> None:
+def test_{name}__405(method: str) -> None:
     app = Starlette(routes=[Route("/", endpoint=Endpoint)])
 
     with TestClient(app) as client:
@@ -318,7 +318,7 @@ def protocol_main(args: argparse.Namespace) -> int:
             logger.info(f"protocol {name} skipped")
 
     protocol_modules = sorted([file.name.removesuffix(".py") for file in protocols_dir.glob("*.py") if file.name != "__init__.py" and not file.name.endswith("_tests.py")])
-    protocol_imports = "\n".join([f"from . import {filename}" for filename in protocol_modules])
+    protocol_imports = "\n".join([f"from . import {filename} as {filename}" for filename in protocol_modules])
     protocol_symbols = "\n".join([f"    \"{filename}\"," for filename in protocol_modules])
     protocol_initpy = INITPYI_TEMPLATE.format(imports=protocol_imports, symbols=protocol_symbols)
     protocol_initpyi = protocols_dir / "__init__.pyi"
@@ -355,7 +355,7 @@ def protocol_main(args: argparse.Namespace) -> int:
                 print(template.format(name=name, package=package), file=f)
 
     adapter_modules = sorted([file.name.removesuffix(".py") for file in adapters_dir.glob("*.py") if file.name != "__init__.py" and not file.name.endswith("_tests.py")])
-    adapter_imports = "\n".join([f"from . import {filename}" for filename in adapter_modules])
+    adapter_imports = "\n".join([f"from . import {filename} as {filename}" for filename in adapter_modules])
     adapter_symbols = "\n".join([f"    \"{filename}\"," for filename in adapter_modules])
     adapter_initpy = INITPYI_TEMPLATE.format(imports=adapter_imports, symbols=adapter_symbols)
     adapter_initpyi = adapters_dir / "__init__.pyi"
@@ -435,7 +435,7 @@ def combinator_main(args: argparse.Namespace) -> int:
             print(template.format(name=name, package=package), file=f)
 
     combinator_modules = sorted([file.name.removesuffix(".py") for file in combinators_dir.glob("*.py") if file.name != "__init__.py" and not file.name.endswith("_tests.py")])
-    combinator_imports = "\n".join([f"from . import {filename}" for filename in combinator_modules])
+    combinator_imports = "\n".join([f"from . import {filename} as {filename}" for filename in combinator_modules])
     combinator_symbols = "\n".join([f"    \"{filename}\"," for filename in combinator_modules])
     combinator_initpy = INITPYI_TEMPLATE.format(imports=combinator_imports, symbols=combinator_symbols)
     combinator_initpyi = combinators_dir / "__init__.pyi"
@@ -484,7 +484,7 @@ def type_main(args: argparse.Namespace) -> int:
         logger.info(f"type {name} skipped")
 
     type_modules = sorted([file.name.removesuffix(".py") for file in types_dir.glob("*.py") if file.name != "__init__.py" and not file.name.endswith("_tests.py")])
-    type_imports = "\n".join([f"from . import {filename}" for filename in type_modules])
+    type_imports = "\n".join([f"from . import {filename} as {filename}" for filename in type_modules])
     type_symbols = "\n".join([f"    \"{filename}\"," for filename in type_modules])
     type_initpy = INITPYI_TEMPLATE.format(imports=type_imports, symbols=type_symbols)
     type_initpyi = types_dir / "__init__.pyi"
@@ -533,7 +533,7 @@ def endpoint_main(args: argparse.Namespace) -> int:
         logger.info(f"endpoint {name} skipped")
 
     endpoint_modules = sorted([file.name.removesuffix(".py") for file in endpoints_dir.glob("*.py") if file.name != "__init__.py" and not file.name.endswith("_tests.py")])
-    endpoint_imports = "\n".join([f"from . import {filename}" for filename in endpoint_modules])
+    endpoint_imports = "\n".join([f"from . import {filename} as {filename}" for filename in endpoint_modules])
     endpoint_symbols = "\n".join([f"    \"{filename}\"," for filename in endpoint_modules])
     endpoint_initpy = INITPYI_TEMPLATE.format(imports=endpoint_imports, symbols=endpoint_symbols)
     endpoint_initpyi = endpoints_dir / "__init__.pyi"
@@ -570,7 +570,7 @@ def reshim_main(args: argparse.Namespace) -> int:
 
     protocols_dir = root / "protocols"
     protocol_modules = sorted([file.name.removesuffix(".py") for file in protocols_dir.glob("*.py") if file.name != "__init__.py" and not file.name.endswith("_tests.py")])
-    protocol_imports = "\n".join([f"from . import {filename}" for filename in protocol_modules])
+    protocol_imports = "\n".join([f"from . import {filename} as {filename}" for filename in protocol_modules])
     protocol_symbols = "\n".join([f"    \"{filename}\"," for filename in protocol_modules])
     protocol_initpy = INITPYI_TEMPLATE.format(imports=protocol_imports, symbols=protocol_symbols)
     protocol_initpyi = protocols_dir / "__init__.pyi"
@@ -580,7 +580,7 @@ def reshim_main(args: argparse.Namespace) -> int:
 
     adapters_dir = root / "adapters"
     adapter_modules = sorted([file.name.removesuffix(".py") for file in adapters_dir.glob("*.py") if file.name != "__init__.py" and not file.name.endswith("_tests.py")])
-    adapter_imports = "\n".join([f"from . import {filename}" for filename in adapter_modules])
+    adapter_imports = "\n".join([f"from . import {filename} as {filename}" for filename in adapter_modules])
     adapter_symbols = "\n".join([f"    \"{filename}\"," for filename in adapter_modules])
     adapter_initpy = INITPYI_TEMPLATE.format(imports=adapter_imports, symbols=adapter_symbols)
     adapter_initpyi = adapters_dir / "__init__.pyi"
@@ -609,7 +609,7 @@ def reshim_main(args: argparse.Namespace) -> int:
 
     combinators_dir = root / "combinators"
     combinator_modules = sorted([file.name.removesuffix(".py") for file in combinators_dir.glob("*.py") if file.name != "__init__.py" and not file.name.endswith("_tests.py")])
-    combinator_imports = "\n".join([f"from . import {filename}" for filename in combinator_modules])
+    combinator_imports = "\n".join([f"from . import {filename} as {filename}" for filename in combinator_modules])
     combinator_symbols = "\n".join([f"    \"{filename}\"," for filename in combinator_modules])
     combinator_initpy = INITPYI_TEMPLATE.format(imports=combinator_imports, symbols=combinator_symbols)
     combinator_initpyi = combinators_dir / "__init__.pyi"
@@ -619,7 +619,7 @@ def reshim_main(args: argparse.Namespace) -> int:
 
     types_dir = root / "types"
     type_modules = sorted([file.name.removesuffix(".py") for file in types_dir.glob("*.py") if file.name != "__init__.py" and not file.name.endswith("_tests.py")])
-    type_imports = "\n".join([f"from . import {filename}" for filename in type_modules])
+    type_imports = "\n".join([f"from . import {filename} as {filename}" for filename in type_modules])
     type_symbols = "\n".join([f"    \"{filename}\"," for filename in type_modules])
     type_initpy = INITPYI_TEMPLATE.format(imports=type_imports, symbols=type_symbols)
     type_initpyi = types_dir / "__init__.pyi"
@@ -629,7 +629,7 @@ def reshim_main(args: argparse.Namespace) -> int:
 
     endpoints_dir = root / "application/endpoints"
     endpoint_modules = sorted([file.name.removesuffix(".py") for file in endpoints_dir.glob("*.py") if file.name != "__init__.py" and not file.name.endswith("_tests.py")])
-    endpoint_imports = "\n".join([f"from . import {filename}" for filename in endpoint_modules])
+    endpoint_imports = "\n".join([f"from . import {filename} as {filename}" for filename in endpoint_modules])
     endpoint_symbols = "\n".join([f"    \"{filename}\"," for filename in endpoint_modules])
     endpoint_initpy = INITPYI_TEMPLATE.format(imports=endpoint_imports, symbols=endpoint_symbols)
     endpoint_initpyi = endpoints_dir / "__init__.pyi"

@@ -27,25 +27,25 @@ class UserPasswordUpdateWithIdFailedException(Exception):
 @dataclass
 class Combinator:
     transaction_atomic: protocols.transaction_atomic.Protocol
-    password_reset_request_get_by_token: protocols.password_reset_request_get_by_token.Protocol
-    password_reset_request_delete: protocols.password_reset_request_delete.Protocol
+    db_password_reset_request_get_by_token: protocols.db_password_reset_request_get_by_token.Protocol
+    db_password_reset_request_delete: protocols.db_password_reset_request_delete.Protocol
     timezone_now: protocols.timezone_now.Protocol
     password_hash: protocols.password_hash.Protocol
-    user_password_update_by_id: protocols.user_password_update_by_id.Protocol
+    db_user_password_update_by_id: protocols.db_user_password_update_by_id.Protocol
 
     async def __call__(self, /, *, token: str, password: str) -> None:
         async with self.transaction_atomic():
-            password_reset_request = await self.password_reset_request_get_by_token(token=token)
+            password_reset_request = await self.db_password_reset_request_get_by_token(token=token)
             if password_reset_request is None:
                 raise PasswordResetRequestNotFoundException(token=token)
 
-            await self.password_reset_request_delete(token=token)
+            await self.db_password_reset_request_delete(token=token)
 
             if password_reset_request.created_at + timedelta(days=1) < self.timezone_now():
                 raise PasswordResetRequestExpiredException(token=token)
 
             hashedpw = self.password_hash(password=password)
-            updated = await self.user_password_update_by_id(
+            updated = await self.db_user_password_update_by_id(
                 user_id=password_reset_request.user_id,
                 password=hashedpw,
             )

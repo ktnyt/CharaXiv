@@ -20,7 +20,7 @@ from charaxiv.application.endpoints.password_reset import (Endpoint,
 
 
 @pytest.mark.parametrize("method", ["get", "patch", "delete"])
-def test_login__405(method: str) -> None:
+def test_password_reset__405(method: str) -> None:
     app = Starlette(routes=[Route("/", endpoint=Endpoint)])
 
     with TestClient(app) as client:

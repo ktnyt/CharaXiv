@@ -30,20 +30,20 @@ async def test_user_password_reset(password_hasher: PasswordHasher) -> None:
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.password_reset_request_get_by_token = mock.AsyncMock(spec=protocols.password_reset_request_get_by_token.Protocol, side_effect=[password_reset_request])
-    manager.password_reset_request_delete = mock.AsyncMock(spec=protocols.password_reset_request_delete.Protocol)
+    manager.db_password_reset_request_get_by_token = mock.AsyncMock(spec=protocols.db_password_reset_request_get_by_token.Protocol, side_effect=[password_reset_request])
+    manager.db_password_reset_request_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol)
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=[hashedpw])
-    manager.user_password_update_by_id = mock.AsyncMock(spec=protocols.user_password_update_by_id.Protocol, side_effect=[True])
+    manager.db_user_password_update_by_id = mock.AsyncMock(spec=protocols.db_user_password_update_by_id.Protocol, side_effect=[True])
 
     # Setup dependencies
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        password_reset_request_get_by_token=manager.password_reset_request_get_by_token,
-        password_reset_request_delete=manager.password_reset_request_delete,
+        db_password_reset_request_get_by_token=manager.db_password_reset_request_get_by_token,
+        db_password_reset_request_delete=manager.db_password_reset_request_delete,
         timezone_now=manager.timezone_now,
         password_hash=manager.password_hash,
-        user_password_update_by_id=manager.user_password_update_by_id,
+        db_user_password_update_by_id=manager.db_user_password_update_by_id,
     )
 
     # Execute combinator
@@ -53,17 +53,17 @@ async def test_user_password_reset(password_hasher: PasswordHasher) -> None:
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.password_reset_request_get_by_token(token=token),
-        mock.call.password_reset_request_delete(token=token),
+        mock.call.db_password_reset_request_get_by_token(token=token),
+        mock.call.db_password_reset_request_delete(token=token),
         mock.call.timezone_now(),
         mock.call.password_hash(password=password),
-        mock.call.user_password_update_by_id(user_id=user_id, password=hashedpw),
+        mock.call.db_user_password_update_by_id(user_id=user_id, password=hashedpw),
         mock.call.context_manager.__aexit__(None, None, None),
     ]
 
 
 @pytest.mark.asyncio
-async def test_user_password_reset__password_reset_request_not_found(password_hasher: PasswordHasher) -> None:
+async def test_user_password_reset__db_password_reset_request_not_found(password_hasher: PasswordHasher) -> None:
     # Setup data
     token = secrets.token_urlsafe(32)
     password = lib.password.generate()
@@ -75,19 +75,19 @@ async def test_user_password_reset__password_reset_request_not_found(password_ha
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
-    manager.password_reset_request_get_by_token = mock.AsyncMock(spec=protocols.password_reset_request_get_by_token.Protocol, side_effect=[None])
-    manager.password_reset_request_delete = mock.AsyncMock(spec=protocols.password_reset_request_delete.Protocol)
+    manager.db_password_reset_request_get_by_token = mock.AsyncMock(spec=protocols.db_password_reset_request_get_by_token.Protocol, side_effect=[None])
+    manager.db_password_reset_request_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol)
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=[hashedpw])
-    manager.user_password_update_by_id = mock.AsyncMock(spec=protocols.user_password_update_by_id.Protocol, side_effect=Exception("should not be called"))
+    manager.db_user_password_update_by_id = mock.AsyncMock(spec=protocols.db_user_password_update_by_id.Protocol, side_effect=Exception("should not be called"))
 
     # Setup dependencies
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        password_reset_request_get_by_token=manager.password_reset_request_get_by_token,
-        password_reset_request_delete=manager.password_reset_request_delete,
+        db_password_reset_request_get_by_token=manager.db_password_reset_request_get_by_token,
+        db_password_reset_request_delete=manager.db_password_reset_request_delete,
         timezone_now=manager.timezone_now,
         password_hash=manager.password_hash,
-        user_password_update_by_id=manager.user_password_update_by_id,
+        db_user_password_update_by_id=manager.db_user_password_update_by_id,
     )
 
     # Execute combinator
@@ -98,13 +98,13 @@ async def test_user_password_reset__password_reset_request_not_found(password_ha
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.password_reset_request_get_by_token(token=token),
+        mock.call.db_password_reset_request_get_by_token(token=token),
         mock.call.context_manager.__aexit__(PasswordResetRequestNotFoundException, mock.ANY, mock.ANY),
     ]
 
 
 @pytest.mark.asyncio
-async def test_user_password_reset__password_reset_request_expired() -> None:
+async def test_user_password_reset__db_password_reset_request_expired() -> None:
     # Setup data
     user_id = uuid7()
     token = secrets.token_urlsafe(32)
@@ -118,20 +118,20 @@ async def test_user_password_reset__password_reset_request_expired() -> None:
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.password_reset_request_get_by_token = mock.AsyncMock(spec=protocols.password_reset_request_get_by_token.Protocol, side_effect=[password_reset_request])
-    manager.password_reset_request_delete = mock.AsyncMock(spec=protocols.password_reset_request_delete.Protocol)
+    manager.db_password_reset_request_get_by_token = mock.AsyncMock(spec=protocols.db_password_reset_request_get_by_token.Protocol, side_effect=[password_reset_request])
+    manager.db_password_reset_request_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol)
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
-    manager.user_password_update_by_id = mock.AsyncMock(spec=protocols.user_password_update_by_id.Protocol, side_effect=Exception("should not be called"))
+    manager.db_user_password_update_by_id = mock.AsyncMock(spec=protocols.db_user_password_update_by_id.Protocol, side_effect=Exception("should not be called"))
 
     # Setup dependencies
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        password_reset_request_get_by_token=manager.password_reset_request_get_by_token,
-        password_reset_request_delete=manager.password_reset_request_delete,
+        db_password_reset_request_get_by_token=manager.db_password_reset_request_get_by_token,
+        db_password_reset_request_delete=manager.db_password_reset_request_delete,
         timezone_now=manager.timezone_now,
         password_hash=manager.password_hash,
-        user_password_update_by_id=manager.user_password_update_by_id,
+        db_user_password_update_by_id=manager.db_user_password_update_by_id,
     )
 
     # Execute combinator
@@ -142,15 +142,15 @@ async def test_user_password_reset__password_reset_request_expired() -> None:
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.password_reset_request_get_by_token(token=token),
-        mock.call.password_reset_request_delete(token=token),
+        mock.call.db_password_reset_request_get_by_token(token=token),
+        mock.call.db_password_reset_request_delete(token=token),
         mock.call.timezone_now(),
         mock.call.context_manager.__aexit__(PasswordResetRequestExpiredException, mock.ANY, mock.ANY),
     ]
 
 
 @pytest.mark.asyncio
-async def test_user_password_reset__user_password_update_with_id_failed(password_hasher: PasswordHasher) -> None:
+async def test_user_password_reset__db_user_password_update_with_id_failed(password_hasher: PasswordHasher) -> None:
     # Setup data
     user_id = uuid7()
     token = secrets.token_urlsafe(32)
@@ -165,20 +165,20 @@ async def test_user_password_reset__user_password_update_with_id_failed(password
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.password_reset_request_get_by_token = mock.AsyncMock(spec=protocols.password_reset_request_get_by_token.Protocol, side_effect=[password_reset_request])
-    manager.password_reset_request_delete = mock.AsyncMock(spec=protocols.password_reset_request_delete.Protocol)
+    manager.db_password_reset_request_get_by_token = mock.AsyncMock(spec=protocols.db_password_reset_request_get_by_token.Protocol, side_effect=[password_reset_request])
+    manager.db_password_reset_request_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol)
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=[hashedpw])
-    manager.user_password_update_by_id = mock.AsyncMock(spec=protocols.user_password_update_by_id.Protocol, side_effect=[False])
+    manager.db_user_password_update_by_id = mock.AsyncMock(spec=protocols.db_user_password_update_by_id.Protocol, side_effect=[False])
 
     # Setup dependencies
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        password_reset_request_get_by_token=manager.password_reset_request_get_by_token,
-        password_reset_request_delete=manager.password_reset_request_delete,
+        db_password_reset_request_get_by_token=manager.db_password_reset_request_get_by_token,
+        db_password_reset_request_delete=manager.db_password_reset_request_delete,
         timezone_now=manager.timezone_now,
         password_hash=manager.password_hash,
-        user_password_update_by_id=manager.user_password_update_by_id,
+        db_user_password_update_by_id=manager.db_user_password_update_by_id,
     )
 
     # Execute combinator
@@ -189,10 +189,10 @@ async def test_user_password_reset__user_password_update_with_id_failed(password
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.password_reset_request_get_by_token(token=token),
-        mock.call.password_reset_request_delete(token=token),
+        mock.call.db_password_reset_request_get_by_token(token=token),
+        mock.call.db_password_reset_request_delete(token=token),
         mock.call.timezone_now(),
         mock.call.password_hash(password=password),
-        mock.call.user_password_update_by_id(user_id=user_id, password=hashedpw),
+        mock.call.db_user_password_update_by_id(user_id=user_id, password=hashedpw),
         mock.call.context_manager.__aexit__(UserPasswordUpdateWithIdFailedException, mock.ANY, mock.ANY),
     ]
