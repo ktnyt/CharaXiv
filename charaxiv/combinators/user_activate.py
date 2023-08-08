@@ -34,7 +34,7 @@ class Combinator:
     timezone_now: protocols.timezone_now.Protocol
     db_registration_delete_by_token: protocols.db_registration_delete_by_token.Protocol
     password_hash: protocols.password_hash.Protocol
-    db_user_create: protocols.db_user_create.Protocol
+    db_user_insert: protocols.db_user_insert.Protocol
 
     async def __call__(self, /, *, token: str, username: str, password: str) -> None:
         async with self.transaction_atomic():
@@ -54,7 +54,7 @@ class Combinator:
                 raise RegistrationExpiredException(token=token)
 
             hashedpw = self.password_hash(password=password)
-            await self.db_user_create(
+            await self.db_user_insert(
                 email=registration.email,
                 username=username,
                 password=hashedpw,

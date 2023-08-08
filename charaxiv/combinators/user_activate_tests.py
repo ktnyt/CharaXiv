@@ -36,7 +36,7 @@ async def test_user_activate(password_hasher: PasswordHasher) -> None:
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
     manager.db_registration_delete_by_token = mock.AsyncMock(spec=protocols.db_registration_delete_by_token.Protocol)
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=[hashedpw])
-    manager.db_user_create = mock.AsyncMock(spec=protocols.db_user_create.Protocol)
+    manager.db_user_insert = mock.AsyncMock(spec=protocols.db_user_insert.Protocol)
 
     # Instantiate combinator
     combinator = Combinator(
@@ -47,7 +47,7 @@ async def test_user_activate(password_hasher: PasswordHasher) -> None:
         timezone_now=manager.timezone_now,
         db_registration_delete_by_token=manager.db_registration_delete_by_token,
         password_hash=manager.password_hash,
-        db_user_create=manager.db_user_create,
+        db_user_insert=manager.db_user_insert,
     )
 
     # Execute combinator
@@ -67,7 +67,7 @@ async def test_user_activate(password_hasher: PasswordHasher) -> None:
         mock.call.db_registration_delete_by_token(token=token),
         mock.call.timezone_now(),
         mock.call.password_hash(password=password),
-        mock.call.db_user_create(
+        mock.call.db_user_insert(
             email=email,
             username=username,
             password=hashedpw,
@@ -93,7 +93,7 @@ async def test_user_activate__no_registration() -> None:
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=Exception("should not be called"))
     manager.db_registration_delete_by_token = mock.AsyncMock(spec=protocols.db_registration_delete_by_token.Protocol, side_effect=Exception("should not be called"))
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
-    manager.db_user_create = mock.AsyncMock(spec=protocols.db_user_create.Protocol, side_effect=Exception("should not be called"))
+    manager.db_user_insert = mock.AsyncMock(spec=protocols.db_user_insert.Protocol, side_effect=Exception("should not be called"))
 
     # Instantiate combinator
     combinator = Combinator(
@@ -104,7 +104,7 @@ async def test_user_activate__no_registration() -> None:
         timezone_now=manager.timezone_now,
         db_registration_delete_by_token=manager.db_registration_delete_by_token,
         password_hash=manager.password_hash,
-        db_user_create=manager.db_user_create,
+        db_user_insert=manager.db_user_insert,
     )
 
     # Execute combinator
@@ -146,7 +146,7 @@ async def test_user_activate__db_user_with_email_exists() -> None:
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=Exception("should not be called"))
     manager.db_registration_delete_by_token = mock.AsyncMock(spec=protocols.db_registration_delete_by_token.Protocol, side_effect=Exception("should not be called"))
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
-    manager.db_user_create = mock.AsyncMock(spec=protocols.db_user_create.Protocol, side_effect=Exception("should not be called"))
+    manager.db_user_insert = mock.AsyncMock(spec=protocols.db_user_insert.Protocol, side_effect=Exception("should not be called"))
 
     # Instantiate combinator
     combinator = Combinator(
@@ -157,7 +157,7 @@ async def test_user_activate__db_user_with_email_exists() -> None:
         timezone_now=manager.timezone_now,
         db_registration_delete_by_token=manager.db_registration_delete_by_token,
         password_hash=manager.password_hash,
-        db_user_create=manager.db_user_create,
+        db_user_insert=manager.db_user_insert,
     )
 
     # Execute combinator
@@ -200,7 +200,7 @@ async def test_user_activate__db_user_with_username_exists() -> None:
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=Exception("should not be called"))
     manager.db_registration_delete_by_token = mock.AsyncMock(spec=protocols.db_registration_delete_by_token.Protocol, side_effect=Exception("should not be called"))
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
-    manager.db_user_create = mock.AsyncMock(spec=protocols.db_user_create.Protocol, side_effect=Exception("should not be called"))
+    manager.db_user_insert = mock.AsyncMock(spec=protocols.db_user_insert.Protocol, side_effect=Exception("should not be called"))
 
     # Instantiate combinator
     combinator = Combinator(
@@ -211,7 +211,7 @@ async def test_user_activate__db_user_with_username_exists() -> None:
         timezone_now=manager.timezone_now,
         db_registration_delete_by_token=manager.db_registration_delete_by_token,
         password_hash=manager.password_hash,
-        db_user_create=manager.db_user_create,
+        db_user_insert=manager.db_user_insert,
     )
 
     # Execute combinator
@@ -255,7 +255,7 @@ async def test_user_activate__db_registration_expired() -> None:
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
     manager.db_registration_delete_by_token = mock.AsyncMock(spec=protocols.db_registration_delete_by_token.Protocol)
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
-    manager.db_user_create = mock.AsyncMock(spec=protocols.db_user_create.Protocol, side_effect=Exception("should not be called"))
+    manager.db_user_insert = mock.AsyncMock(spec=protocols.db_user_insert.Protocol, side_effect=Exception("should not be called"))
 
     # Instantiate combinator
     combinator = Combinator(
@@ -266,7 +266,7 @@ async def test_user_activate__db_registration_expired() -> None:
         timezone_now=manager.timezone_now,
         db_registration_delete_by_token=manager.db_registration_delete_by_token,
         password_hash=manager.password_hash,
-        db_user_create=manager.db_user_create,
+        db_user_insert=manager.db_user_insert,
     )
 
     # Execute combinator

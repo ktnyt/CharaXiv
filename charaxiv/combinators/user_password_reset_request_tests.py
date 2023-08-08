@@ -32,7 +32,7 @@ async def test_user_password_reset_request(password_hasher: PasswordHasher) -> N
     manager.user_password_reset_exists = mock.AsyncMock(spec=protocols.db_password_reset_request_exists.Protocol, side_effect=[False])
     manager.user_password_reset_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol)
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[token])
-    manager.user_password_reset_create = mock.AsyncMock(spec=protocols.db_password_reset_request_create.Protocol)
+    manager.user_password_reset_create = mock.AsyncMock(spec=protocols.db_password_reset_request_insert.Protocol)
     manager.user_password_reset_mail_send = mock.AsyncMock(spec=combinators.user_password_reset_mail_send.Combinator)
 
     # Instantiate combinator
@@ -83,7 +83,7 @@ async def test_user_db_password_reset_request__db_user_with_email_not_found(pass
     manager.user_password_reset_exists = mock.AsyncMock(spec=protocols.db_password_reset_request_exists.Protocol, side_effect=Exception("should not be called"))
     manager.user_password_reset_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol, side_effect=Exception("should not be called"))
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=Exception("should not be called"))
-    manager.user_password_reset_create = mock.AsyncMock(spec=protocols.db_password_reset_request_create.Protocol, side_effect=Exception("should not be called"))
+    manager.user_password_reset_create = mock.AsyncMock(spec=protocols.db_password_reset_request_insert.Protocol, side_effect=Exception("should not be called"))
     manager.user_password_reset_mail_send = mock.AsyncMock(spec=combinators.user_password_reset_mail_send.Combinator, side_effect=Exception("should not be called"))
 
     # Instantiate combinator
@@ -132,7 +132,7 @@ async def test_user_db_password_reset_request__password_reset_request_exists(pas
     manager.user_password_reset_exists = mock.AsyncMock(spec=protocols.db_password_reset_request_exists.Protocol, side_effect=[True])
     manager.user_password_reset_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol)
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[token])
-    manager.user_password_reset_create = mock.AsyncMock(spec=protocols.db_password_reset_request_create.Protocol)
+    manager.user_password_reset_create = mock.AsyncMock(spec=protocols.db_password_reset_request_insert.Protocol)
     manager.user_password_reset_mail_send = mock.AsyncMock(spec=combinators.user_password_reset_mail_send.Combinator)
 
     # Instantiate combinator

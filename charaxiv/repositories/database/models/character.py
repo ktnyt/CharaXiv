@@ -17,7 +17,8 @@ class Character(Base, AutoIDMixin, TimestampMixin):
     owner_id: Mapped[UUID] = mapped_column("owner_id", sqlalchemy.ForeignKey(User.id, ondelete="CASCADE"), sort_order=0)
     system: Mapped[types.system.System] = mapped_column("system", sqlalchemy.Enum(types.system.System), nullable=False, sort_order=1)
     name: Mapped[str] = mapped_column("name", sqlalchemy.String(255), nullable=False, sort_order=2)
-    data: Mapped[bytes] = mapped_column("data", sqlalchemy.LargeBinary(), nullable=False, sort_order=3)
+    public_data: Mapped[bytes] = mapped_column("public_data", sqlalchemy.LargeBinary(), nullable=False, sort_order=3)
+    secret_data: Mapped[bytes] = mapped_column("secret_data", sqlalchemy.LargeBinary(), nullable=False, sort_order=4)
 
     tags: Mapped[typing.List["CharacterTag"]] = relationship(lazy="immediate")
     images: Mapped[typing.List["CharacterImage"]] = relationship(lazy="immediate")

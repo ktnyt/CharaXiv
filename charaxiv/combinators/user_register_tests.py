@@ -23,7 +23,7 @@ async def test_user_register() -> None:
     manager.db_registration_exists = mock.AsyncMock(spec=protocols.db_registration_exists.Protocol, side_effect=[False])
     manager.db_registration_delete_by_email = mock.AsyncMock(spec=protocols.db_registration_delete_by_email.Protocol)
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[token])
-    manager.db_registration_create = mock.AsyncMock(spec=protocols.db_registration_create.Protocol)
+    manager.db_registration_insert = mock.AsyncMock(spec=protocols.db_registration_insert.Protocol)
     manager.user_registration_mail_send = mock.AsyncMock(spec=combinators.user_registration_mail_send.Combinator)
 
     # Instantiate combinator
@@ -33,7 +33,7 @@ async def test_user_register() -> None:
         db_registration_exists=manager.db_registration_exists,
         db_registration_delete_by_email=manager.db_registration_delete_by_email,
         secret_token_generate=manager.secret_token_generate,
-        db_registration_create=manager.db_registration_create,
+        db_registration_insert=manager.db_registration_insert,
         user_registration_mail_send=manager.user_registration_mail_send,
     )
 
@@ -47,7 +47,7 @@ async def test_user_register() -> None:
         mock.call.db_user_with_email_exists(email=email),
         mock.call.db_registration_exists(email=email),
         mock.call.secret_token_generate(),
-        mock.call.db_registration_create(email=email, token=token),
+        mock.call.db_registration_insert(email=email, token=token),
         mock.call.user_registration_mail_send(email=email, token=token),
         mock.call.context_manager.__aexit__(None, None, None),
     ]
@@ -66,7 +66,7 @@ async def test_user_register__user_exists() -> None:
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=Exception("should not be called"))
     manager.db_registration_exists = mock.AsyncMock(spec=protocols.db_registration_exists.Protocol, side_effect=Exception("should not be called"))
     manager.db_registration_delete_by_email = mock.AsyncMock(spec=protocols.db_registration_delete_by_email.Protocol, side_effect=Exception("should not be called"))
-    manager.db_registration_create = mock.AsyncMock(spec=protocols.db_registration_create.Protocol, side_effect=Exception("should not be called"))
+    manager.db_registration_insert = mock.AsyncMock(spec=protocols.db_registration_insert.Protocol, side_effect=Exception("should not be called"))
     manager.user_registration_mail_send = mock.AsyncMock(spec=combinators.user_registration_mail_send.Combinator, side_effect=Exception("should not be called"))
 
     # Instantiate combinator
@@ -76,7 +76,7 @@ async def test_user_register__user_exists() -> None:
         secret_token_generate=manager.secret_token_generate,
         db_registration_exists=manager.db_registration_exists,
         db_registration_delete_by_email=manager.db_registration_delete_by_email,
-        db_registration_create=manager.db_registration_create,
+        db_registration_insert=manager.db_registration_insert,
         user_registration_mail_send=manager.user_registration_mail_send,
     )
 
@@ -107,7 +107,7 @@ async def test_user_register__db_registration_exists() -> None:
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[token])
     manager.db_registration_exists = mock.AsyncMock(spec=protocols.db_registration_exists.Protocol, side_effect=[True])
     manager.db_registration_delete_by_email = mock.AsyncMock(spec=protocols.db_registration_delete_by_email.Protocol)
-    manager.db_registration_create = mock.AsyncMock(spec=protocols.db_registration_create.Protocol)
+    manager.db_registration_insert = mock.AsyncMock(spec=protocols.db_registration_insert.Protocol)
     manager.user_registration_mail_send = mock.AsyncMock(spec=combinators.user_registration_mail_send.Combinator)
 
     # Instantiate combinator
@@ -117,7 +117,7 @@ async def test_user_register__db_registration_exists() -> None:
         db_registration_exists=manager.db_registration_exists,
         db_registration_delete_by_email=manager.db_registration_delete_by_email,
         secret_token_generate=manager.secret_token_generate,
-        db_registration_create=manager.db_registration_create,
+        db_registration_insert=manager.db_registration_insert,
         user_registration_mail_send=manager.user_registration_mail_send,
     )
 
@@ -132,7 +132,7 @@ async def test_user_register__db_registration_exists() -> None:
         mock.call.db_registration_exists(email=email),
         mock.call.db_registration_delete_by_email(email=email),
         mock.call.secret_token_generate(),
-        mock.call.db_registration_create(email=email, token=token),
+        mock.call.db_registration_insert(email=email, token=token),
         mock.call.user_registration_mail_send(email=email, token=token),
         mock.call.context_manager.__aexit__(None, None, None),
     ]

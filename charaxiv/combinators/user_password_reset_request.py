@@ -19,7 +19,7 @@ class Combinator:
     user_password_reset_exists: protocols.db_password_reset_request_exists.Protocol
     user_password_reset_delete: protocols.db_password_reset_request_delete.Protocol
     secret_token_generate: protocols.secret_token_generate.Protocol
-    user_password_reset_create: protocols.db_password_reset_request_create.Protocol
+    user_password_reset_create: protocols.db_password_reset_request_insert.Protocol
     user_password_reset_mail_send: combinators.user_password_reset_mail_send.Combinator
 
     async def __call__(self, /, *, email: str) -> None:

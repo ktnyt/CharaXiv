@@ -19,7 +19,7 @@ class Combinator:
     secret_token_generate: protocols.secret_token_generate.Protocol
     db_registration_exists: protocols.db_registration_exists.Protocol
     db_registration_delete_by_email: protocols.db_registration_delete_by_email.Protocol
-    db_registration_create: protocols.db_registration_create.Protocol
+    db_registration_insert: protocols.db_registration_insert.Protocol
     user_registration_mail_send: combinators.user_registration_mail_send.Combinator
 
     async def __call__(self, /, *, email: str) -> None:
@@ -32,5 +32,5 @@ class Combinator:
 
             token = self.secret_token_generate()
 
-            await self.db_registration_create(email=email, token=token)
+            await self.db_registration_insert(email=email, token=token)
             await self.user_registration_mail_send(email=email, token=token)

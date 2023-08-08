@@ -14,11 +14,11 @@ from charaxiv.lib.id_token import IDToken
 class Combinator:
     transaction_atomic: protocols.transaction_atomic.Protocol
     object_dump: protocols.object_dump.Protocol
-    character_create: protocols.character_create.Protocol
+    db_character_insert: protocols.db_character_insert.Protocol
 
     async def __call__(self, /, *, owner_id: UUID, system: types.system.System, data: typing.Any) -> IDToken:
         async with self.transaction_atomic():
-            character_id = await self.character_create(
+            character_id = await self.db_character_insert(
                 owner_id=owner_id,
                 system=system,
                 name="",

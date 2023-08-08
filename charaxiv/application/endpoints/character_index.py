@@ -13,7 +13,7 @@ from charaxiv.application.response import AppResponse
 
 class PostParams(BaseModel):
     system: types.system.System
-    data: typing.Any
+    initial_data: typing.Any
 
 
 class Endpoint(HTTPEndpoint):
@@ -27,6 +27,6 @@ class Endpoint(HTTPEndpoint):
     @requires(types.user.Group.BASE.value)
     async def post(self, request: Request, injector: Injector, params: PostParams) -> Response:
         assert type(request.user) == types.user.User
-        exec = injector.get(combinators.character_create_new.Combinator)
-        character_id = await exec(owner_id=request.user.id, system=params.system, data=params.data)
+        exec = injector.get(combinators.db_character_insert_new.Combinator)
+        character_id = await exec(owner_id=request.user.id, system=params.system, data=params.initial_data)
         return AppResponse(content=dict(error=None, content=dict(character_id=character_id)))
