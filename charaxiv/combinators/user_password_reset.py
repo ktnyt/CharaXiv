@@ -27,7 +27,7 @@ class UserPasswordUpdateWithIdFailedException(Exception):
 @dataclass
 class Combinator:
     transaction_atomic: protocols.transaction_atomic.Protocol
-    db_password_reset_request_get_by_token: protocols.db_password_reset_request_get_by_token.Protocol
+    db_password_reset_request_get_by_token: protocols.db_password_reset_request_select_by_token.Protocol
     db_password_reset_request_delete: protocols.db_password_reset_request_delete.Protocol
     timezone_now: protocols.timezone_now.Protocol
     password_hash: protocols.password_hash.Protocol
@@ -35,7 +35,7 @@ class Combinator:
 
     async def __call__(self, /, *, token: str, password: str) -> None:
         async with self.transaction_atomic():
-            password_reset_request = await self.db_password_reset_request_get_by_token(token=token)
+            password_reset_request = await self.db_password_reset_request_select_by_token(token=token)
             if password_reset_request is None:
                 raise PasswordResetRequestNotFoundException(token=token)
 

@@ -12,7 +12,7 @@ from charaxiv import protocols, repositories, types
 @singleton
 @inject
 @dataclass
-class Adapter(protocols.db_user_get_by_id.Protocol):
+class Adapter(protocols.db_user_select_by_id.Protocol):
     session: AsyncSession
 
     async def __call__(self, /, *, id: UUID) -> typing.Optional[types.user.User]:

@@ -11,7 +11,7 @@ from charaxiv import protocols, repositories, types
 @singleton
 @inject
 @dataclass
-class Adapter(protocols.db_user_get_by_email.Protocol):
+class Adapter(protocols.db_user_select_by_email.Protocol):
     session: AsyncSession
 
     async def __call__(self, /, *, email: str) -> typing.Optional[types.user.User]:

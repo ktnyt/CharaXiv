@@ -4,11 +4,11 @@ import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from charaxiv import lib, repositories, types
-from charaxiv.adapters.db_registration_get_by_token import Adapter
+from charaxiv.adapters.db_registration_select_by_token import Adapter
 
 
 @pytest.mark.asyncio
-async def test_db_registration_get_by_token(database_session: AsyncSession) -> None:
+async def test_db_registration_select_by_token(database_session: AsyncSession) -> None:
     token = secrets.token_urlsafe(32)
 
     adapter = Adapter(session=database_session, timezone_aware=lib.timezone.aware)

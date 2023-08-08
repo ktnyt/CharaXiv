@@ -11,7 +11,7 @@ from charaxiv import protocols, repositories, types
 @singleton
 @inject
 @dataclass
-class Adapter(protocols.db_registration_get_by_token.Protocol):
+class Adapter(protocols.db_registration_select_by_token.Protocol):
     session: AsyncSession
     timezone_aware: protocols.timezone_aware.Protocol
 

@@ -28,7 +28,7 @@ class RegistrationExpiredException(Exception):
 @dataclass
 class Combinator:
     transaction_atomic: protocols.transaction_atomic.Protocol
-    db_registration_get_by_token: protocols.db_registration_get_by_token.Protocol
+    db_registration_get_by_token: protocols.db_registration_select_by_token.Protocol
     db_user_with_email_exists: protocols.db_user_with_email_exists.Protocol
     db_user_with_username_exists: protocols.db_user_with_username_exists.Protocol
     timezone_now: protocols.timezone_now.Protocol
@@ -38,7 +38,7 @@ class Combinator:
 
     async def __call__(self, /, *, token: str, username: str, password: str) -> None:
         async with self.transaction_atomic():
-            registration = await self.db_registration_get_by_token(token=token)
+            registration = await self.db_registration_select_by_token(token=token)
             if registration is None:
                 raise RegistrationNotFoundException(token=token)
 

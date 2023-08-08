@@ -16,12 +16,12 @@ class UserVerificationException(Exception):
 @dataclass
 class Combinator:
     transaction_atomic: protocols.transaction_atomic.Protocol
-    db_user_get_by_email: protocols.db_user_get_by_email.Protocol
+    db_user_get_by_email: protocols.db_user_select_by_email.Protocol
     password_verify: protocols.password_verify.Protocol
 
     async def __call__(self, /, *, email: str, password: str) -> UUID:
         async with self.transaction_atomic():
-            user = await self.db_user_get_by_email(email=email)
+            user = await self.db_user_select_by_email(email=email)
             if user is None:
                 raise UserVerificationException(email)
             if not self.password_verify(hash=user.password, password=password):

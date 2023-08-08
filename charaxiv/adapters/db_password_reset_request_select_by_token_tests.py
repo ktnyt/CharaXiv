@@ -5,11 +5,11 @@ from argon2 import PasswordHasher
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from charaxiv import lib, repositories, types
-from charaxiv.adapters.db_password_reset_request_get_by_token import Adapter
+from charaxiv.adapters.db_password_reset_request_select_by_token import Adapter
 
 
 @pytest.mark.asyncio
-async def test_db_password_reset_request_get_by_token(database_session: AsyncSession, password_hasher: PasswordHasher) -> None:
+async def test_db_password_reset_request_select_by_token(database_session: AsyncSession, password_hasher: PasswordHasher) -> None:
     token = secrets.token_urlsafe(32)
 
     user_model = repositories.database.models.User(

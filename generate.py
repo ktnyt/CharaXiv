@@ -721,13 +721,11 @@ def rename_main(args: argparse.Namespace) -> int:
 
             for i, line in enumerate(f):
                 original_line = line.rstrip()
-                replaced_line = re.sub(oldpattern, newpattern, original_line)
-                if original_line != replaced_line:
-                    changed_lines.append((i, original_line, replaced_line))
+                replaced_line = original_line
                 for before, after in modified:
-                    before_module = str(before.with_name(before.stem)).replace("/", ".").removeprefix("charaxiv.")
-                    after_module = str(after.with_name(after.stem)).replace("/", ".").removeprefix("charaxiv.")
-                    replaced_line = replaced_line.replace(before_module, after_module)
+                    replaced_line = replaced_line.replace(before.stem, after.stem)
+                if replaced_line != original_line:
+                    changed_lines.append((i, original_line, replaced_line))
                 lines.append(replaced_line)
 
             if len(changed_lines) > 0:
