@@ -15,7 +15,7 @@ class UserWithIDNotFoundException(Exception):
 @inject
 @dataclass
 class Combinator:
-    db_user_get_by_id: protocols.db_user_select_by_id.Protocol
+    db_user_select_by_id: protocols.db_user_select_by_id.Protocol
 
     async def __call__(self, user_id: UUID) -> types.user.User:
         user = await self.db_user_select_by_id(id=user_id)

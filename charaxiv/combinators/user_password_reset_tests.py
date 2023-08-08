@@ -30,7 +30,7 @@ async def test_user_password_reset(password_hasher: PasswordHasher) -> None:
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.db_password_reset_request_get_by_token = mock.AsyncMock(spec=protocols.db_password_reset_request_select_by_token.Protocol, side_effect=[password_reset_request])
+    manager.db_password_reset_request_select_by_token = mock.AsyncMock(spec=protocols.db_password_reset_request_select_by_token.Protocol, side_effect=[password_reset_request])
     manager.db_password_reset_request_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol)
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=[hashedpw])
@@ -39,7 +39,7 @@ async def test_user_password_reset(password_hasher: PasswordHasher) -> None:
     # Setup dependencies
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        db_password_reset_request_get_by_token=manager.db_password_reset_request_select_by_token,
+        db_password_reset_request_select_by_token=manager.db_password_reset_request_select_by_token,
         db_password_reset_request_delete=manager.db_password_reset_request_delete,
         timezone_now=manager.timezone_now,
         password_hash=manager.password_hash,
@@ -75,7 +75,7 @@ async def test_user_password_reset__db_password_reset_request_not_found(password
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
-    manager.db_password_reset_request_get_by_token = mock.AsyncMock(spec=protocols.db_password_reset_request_select_by_token.Protocol, side_effect=[None])
+    manager.db_password_reset_request_select_by_token = mock.AsyncMock(spec=protocols.db_password_reset_request_select_by_token.Protocol, side_effect=[None])
     manager.db_password_reset_request_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol)
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=[hashedpw])
     manager.db_user_password_update_by_id = mock.AsyncMock(spec=protocols.db_user_password_update_by_id.Protocol, side_effect=Exception("should not be called"))
@@ -83,7 +83,7 @@ async def test_user_password_reset__db_password_reset_request_not_found(password
     # Setup dependencies
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        db_password_reset_request_get_by_token=manager.db_password_reset_request_select_by_token,
+        db_password_reset_request_select_by_token=manager.db_password_reset_request_select_by_token,
         db_password_reset_request_delete=manager.db_password_reset_request_delete,
         timezone_now=manager.timezone_now,
         password_hash=manager.password_hash,
@@ -118,7 +118,7 @@ async def test_user_password_reset__db_password_reset_request_expired() -> None:
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.db_password_reset_request_get_by_token = mock.AsyncMock(spec=protocols.db_password_reset_request_select_by_token.Protocol, side_effect=[password_reset_request])
+    manager.db_password_reset_request_select_by_token = mock.AsyncMock(spec=protocols.db_password_reset_request_select_by_token.Protocol, side_effect=[password_reset_request])
     manager.db_password_reset_request_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol)
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=Exception("should not be called"))
@@ -127,7 +127,7 @@ async def test_user_password_reset__db_password_reset_request_expired() -> None:
     # Setup dependencies
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        db_password_reset_request_get_by_token=manager.db_password_reset_request_select_by_token,
+        db_password_reset_request_select_by_token=manager.db_password_reset_request_select_by_token,
         db_password_reset_request_delete=manager.db_password_reset_request_delete,
         timezone_now=manager.timezone_now,
         password_hash=manager.password_hash,
@@ -165,7 +165,7 @@ async def test_user_password_reset__db_user_password_update_with_id_failed(passw
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.db_password_reset_request_get_by_token = mock.AsyncMock(spec=protocols.db_password_reset_request_select_by_token.Protocol, side_effect=[password_reset_request])
+    manager.db_password_reset_request_select_by_token = mock.AsyncMock(spec=protocols.db_password_reset_request_select_by_token.Protocol, side_effect=[password_reset_request])
     manager.db_password_reset_request_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol)
     manager.timezone_now = mock.Mock(spec=protocols.timezone_now.Protocol, side_effect=[time_now])
     manager.password_hash = mock.Mock(spec=protocols.password_hash.Protocol, side_effect=[hashedpw])
@@ -174,7 +174,7 @@ async def test_user_password_reset__db_user_password_update_with_id_failed(passw
     # Setup dependencies
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        db_password_reset_request_get_by_token=manager.db_password_reset_request_select_by_token,
+        db_password_reset_request_select_by_token=manager.db_password_reset_request_select_by_token,
         db_password_reset_request_delete=manager.db_password_reset_request_delete,
         timezone_now=manager.timezone_now,
         password_hash=manager.password_hash,

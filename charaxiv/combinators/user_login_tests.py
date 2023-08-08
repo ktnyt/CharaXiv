@@ -31,13 +31,13 @@ async def test_user_login(password_hasher: PasswordHasher) -> None:
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.db_user_get_by_email = mock.AsyncMock(spec=protocols.db_user_select_by_email.Protocol, side_effect=[user])
+    manager.db_user_select_by_email = mock.AsyncMock(spec=protocols.db_user_select_by_email.Protocol, side_effect=[user])
     manager.password_verify = mock.Mock(spec=protocols.password_verify.Protocol, side_effect=[True])
 
     # Instantiate combinator
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        db_user_get_by_email=manager.db_user_select_by_email,
+        db_user_select_by_email=manager.db_user_select_by_email,
         password_verify=manager.password_verify,
     )
 
@@ -67,13 +67,13 @@ async def test_user_login__db_user_with_email_not_found() -> None:
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.db_user_get_by_email = mock.AsyncMock(spec=protocols.db_user_select_by_email.Protocol, side_effect=[None])
+    manager.db_user_select_by_email = mock.AsyncMock(spec=protocols.db_user_select_by_email.Protocol, side_effect=[None])
     manager.password_verify = mock.Mock(spec=protocols.password_verify.Protocol, side_effect=Exception("should not be called"))
 
     # Instantiate combinator
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        db_user_get_by_email=manager.db_user_select_by_email,
+        db_user_select_by_email=manager.db_user_select_by_email,
         password_verify=manager.password_verify,
     )
 
@@ -111,13 +111,13 @@ async def test_user_login__password_verify_failed(password_hasher: PasswordHashe
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.db_user_get_by_email = mock.AsyncMock(spec=protocols.db_user_select_by_email.Protocol, side_effect=[user])
+    manager.db_user_select_by_email = mock.AsyncMock(spec=protocols.db_user_select_by_email.Protocol, side_effect=[user])
     manager.password_verify = mock.Mock(spec=protocols.password_verify.Protocol, side_effect=[False])
 
     # Instantiate combinator
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        db_user_get_by_email=manager.db_user_select_by_email,
+        db_user_select_by_email=manager.db_user_select_by_email,
         password_verify=manager.password_verify,
     )
 

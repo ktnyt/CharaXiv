@@ -15,7 +15,7 @@ class UserWithEmailNotFoundException(Exception):
 @dataclass
 class Combinator:
     transaction_atomic: protocols.transaction_atomic.Protocol
-    db_user_get_by_email: protocols.db_user_select_by_email.Protocol
+    db_user_select_by_email: protocols.db_user_select_by_email.Protocol
     user_password_reset_exists: protocols.db_password_reset_request_exists.Protocol
     user_password_reset_delete: protocols.db_password_reset_request_delete.Protocol
     secret_token_generate: protocols.secret_token_generate.Protocol

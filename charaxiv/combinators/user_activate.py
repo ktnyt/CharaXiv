@@ -28,7 +28,7 @@ class RegistrationExpiredException(Exception):
 @dataclass
 class Combinator:
     transaction_atomic: protocols.transaction_atomic.Protocol
-    db_registration_get_by_token: protocols.db_registration_select_by_token.Protocol
+    db_registration_select_by_token: protocols.db_registration_select_by_token.Protocol
     db_user_with_email_exists: protocols.db_user_with_email_exists.Protocol
     db_user_with_username_exists: protocols.db_user_with_username_exists.Protocol
     timezone_now: protocols.timezone_now.Protocol

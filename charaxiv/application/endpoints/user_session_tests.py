@@ -56,7 +56,7 @@ class UserLoginSideEffect:
 
 
 @pytest.mark.asyncio
-async def test_user_session__get_post_delete() -> None:
+async def test_user_session__select_post_delete() -> None:
     user_id = uuid7()
     email = "test@example.com"
     password = lib.password.generate()

@@ -28,7 +28,7 @@ async def test_user_password_reset_request(password_hasher: PasswordHasher) -> N
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock()
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.db_user_get_by_email = mock.AsyncMock(spec=protocols.db_user_select_by_email.Protocol, side_effect=[user])
+    manager.db_user_select_by_email = mock.AsyncMock(spec=protocols.db_user_select_by_email.Protocol, side_effect=[user])
     manager.user_password_reset_exists = mock.AsyncMock(spec=protocols.db_password_reset_request_exists.Protocol, side_effect=[False])
     manager.user_password_reset_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol)
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[token])
@@ -38,7 +38,7 @@ async def test_user_password_reset_request(password_hasher: PasswordHasher) -> N
     # Instantiate combinator
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        db_user_get_by_email=manager.db_user_select_by_email,
+        db_user_select_by_email=manager.db_user_select_by_email,
         user_password_reset_exists=manager.user_password_reset_exists,
         user_password_reset_delete=manager.user_password_reset_delete,
         secret_token_generate=manager.secret_token_generate,
@@ -79,7 +79,7 @@ async def test_user_db_password_reset_request__db_user_with_email_not_found(pass
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock()
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.db_user_get_by_email = mock.AsyncMock(spec=protocols.db_user_select_by_email.Protocol, side_effect=[None])
+    manager.db_user_select_by_email = mock.AsyncMock(spec=protocols.db_user_select_by_email.Protocol, side_effect=[None])
     manager.user_password_reset_exists = mock.AsyncMock(spec=protocols.db_password_reset_request_exists.Protocol, side_effect=Exception("should not be called"))
     manager.user_password_reset_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol, side_effect=Exception("should not be called"))
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=Exception("should not be called"))
@@ -89,7 +89,7 @@ async def test_user_db_password_reset_request__db_user_with_email_not_found(pass
     # Instantiate combinator
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        db_user_get_by_email=manager.db_user_select_by_email,
+        db_user_select_by_email=manager.db_user_select_by_email,
         user_password_reset_exists=manager.user_password_reset_exists,
         user_password_reset_delete=manager.user_password_reset_delete,
         secret_token_generate=manager.secret_token_generate,
@@ -128,7 +128,7 @@ async def test_user_db_password_reset_request__password_reset_request_exists(pas
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock()
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
-    manager.db_user_get_by_email = mock.AsyncMock(spec=protocols.db_user_select_by_email.Protocol, side_effect=[user])
+    manager.db_user_select_by_email = mock.AsyncMock(spec=protocols.db_user_select_by_email.Protocol, side_effect=[user])
     manager.user_password_reset_exists = mock.AsyncMock(spec=protocols.db_password_reset_request_exists.Protocol, side_effect=[True])
     manager.user_password_reset_delete = mock.AsyncMock(spec=protocols.db_password_reset_request_delete.Protocol)
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[token])
@@ -138,7 +138,7 @@ async def test_user_db_password_reset_request__password_reset_request_exists(pas
     # Instantiate combinator
     combinator = Combinator(
         transaction_atomic=manager.transaction_atomic,
-        db_user_get_by_email=manager.db_user_select_by_email,
+        db_user_select_by_email=manager.db_user_select_by_email,
         user_password_reset_exists=manager.user_password_reset_exists,
         user_password_reset_delete=manager.user_password_reset_delete,
         secret_token_generate=manager.secret_token_generate,

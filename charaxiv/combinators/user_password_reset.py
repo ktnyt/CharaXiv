@@ -27,7 +27,7 @@ class UserPasswordUpdateWithIdFailedException(Exception):
 @dataclass
 class Combinator:
     transaction_atomic: protocols.transaction_atomic.Protocol
-    db_password_reset_request_get_by_token: protocols.db_password_reset_request_select_by_token.Protocol
+    db_password_reset_request_select_by_token: protocols.db_password_reset_request_select_by_token.Protocol
     db_password_reset_request_delete: protocols.db_password_reset_request_delete.Protocol
     timezone_now: protocols.timezone_now.Protocol
     password_hash: protocols.password_hash.Protocol
