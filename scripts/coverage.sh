@@ -7,5 +7,6 @@ export STARLETTE_KEY=starlette_key
 export SQLITE_PATH=:memory:
 export CHARAXIV_NOREPLY_EMAIL=noreply@charaxiv.app
 
+poetry run mypy charaxiv
 poetry run python -m pytest -vv --cov=. --cov-report=xml --ignore=tests || exit 1
 poetry run coverage report -m --sort=miss

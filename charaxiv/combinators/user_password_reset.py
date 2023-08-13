@@ -28,8 +28,9 @@ class UserPasswordUpdateWithIdFailedException(Exception):
 class Combinator:
     transaction_atomic: protocols.transaction_atomic.Protocol
     db_password_reset_request_select_by_token: protocols.db_password_reset_request_select_by_token.Protocol
-    db_password_reset_request_delete: protocols.db_password_reset_request_delete.Protocol
+    db_password_reset_request_delete_by_token: protocols.db_password_reset_request_delete_by_token.Protocol
     timezone_now: protocols.timezone_now.Protocol
+    datetime_diff_gt: protocols.datetime_diff_gt.Protocol
     password_hash: protocols.password_hash.Protocol
     db_user_password_update_by_id: protocols.db_user_password_update_by_id.Protocol
 
@@ -39,9 +40,10 @@ class Combinator:
             if password_reset_request is None:
                 raise PasswordResetRequestNotFoundException(token=token)
 
-            await self.db_password_reset_request_delete(token=token)
+            await self.db_password_reset_request_delete_by_token(token=token)
 
-            if password_reset_request.created_at + timedelta(days=1) < self.timezone_now():
+            current_time = self.timezone_now()
+            if self.datetime_diff_gt(password_reset_request.created_at, current_time, timedelta(days=1)):
                 raise PasswordResetRequestExpiredException(token=token)
 
             hashedpw = self.password_hash(password=password)

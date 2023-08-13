@@ -1,6 +1,9 @@
 {
   "recommendations": [
     "ms-python.python",
+    "ms-python.flake8",
+    "ms-python.mypy-type-checker",
+    "ms-python.autopep8",
     "kawamataryo.copy-python-dotted-path",
     "ryanluker.vscode-coverage-gutters",
     "dbaeumer.vscode-eslint"

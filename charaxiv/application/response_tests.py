@@ -6,16 +6,16 @@ from starlette.responses import Response
 from starlette.routing import Route
 from starlette.testclient import TestClient
 
-from charaxiv.application.response import AppResponse
+from charaxiv.application.response import AppResponse, ResponseContent
 
 
-class OrjsonEndpoint(HTTPEndpoint):
+class AppEndpoint(HTTPEndpoint):
     async def post(self, request: Request) -> Response:
-        return AppResponse(await request.json())
+        return AppResponse(ResponseContent(value=await request.json()))
 
 
-def test_orjson_response() -> None:
-    app = Starlette(routes=[Route("/", endpoint=OrjsonEndpoint)])
+def test_app_response() -> None:
+    app = Starlette(routes=[Route("/", endpoint=AppEndpoint)])
 
     with TestClient(app) as client:
         payload = dict(
@@ -25,4 +25,4 @@ def test_orjson_response() -> None:
         )
 
         out = client.post("/", json=payload)
-        assert out.content == orjson.dumps(payload)
+        assert out.json() == ResponseContent(value=payload).model_dump()

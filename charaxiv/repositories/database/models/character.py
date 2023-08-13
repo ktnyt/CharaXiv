@@ -17,26 +17,37 @@ class Character(Base, AutoIDMixin, TimestampMixin):
     owner_id: Mapped[UUID] = mapped_column("owner_id", sqlalchemy.ForeignKey(User.id, ondelete="CASCADE"), sort_order=0)
     system: Mapped[types.system.System] = mapped_column("system", sqlalchemy.Enum(types.system.System), nullable=False, sort_order=1)
     name: Mapped[str] = mapped_column("name", sqlalchemy.String(255), nullable=False, sort_order=2)
-    public_data: Mapped[bytes] = mapped_column("public_data", sqlalchemy.LargeBinary(), nullable=False, sort_order=3)
-    secret_data: Mapped[bytes] = mapped_column("secret_data", sqlalchemy.LargeBinary(), nullable=False, sort_order=4)
+    data: Mapped[bytes] = mapped_column("data", sqlalchemy.LargeBinary(), nullable=False, sort_order=3)
+    omit: Mapped[typing.List["CharacterDataOmit"]] = relationship(lazy="immediate")
 
     tags: Mapped[typing.List["CharacterTag"]] = relationship(lazy="immediate")
     images: Mapped[typing.List["CharacterImage"]] = relationship(lazy="immediate")
 
 
+class CharacterDataOmit(Base):
+    __tablename__ = "character_data_omits"
+
+    character_id: Mapped[UUID] = mapped_column("character_id", sqlalchemy.ForeignKey(Character.id, ondelete="CASCADE"), primary_key=True, sort_order=0)
+    path: Mapped[str] = mapped_column("path", sqlalchemy.String(1024), primary_key=True, sort_order=1)
+
+
 class CharacterTag(Base):
     __tablename__ = "character_tags"
+    __table_args__ = (
+        sqlalchemy.UniqueConstraint("character_id", "index"),
+    )
 
     character_id: Mapped[UUID] = mapped_column("character_id", sqlalchemy.ForeignKey(Character.id, ondelete="CASCADE"), primary_key=True, sort_order=0)
     value: Mapped[str] = mapped_column("value", sqlalchemy.String(255), primary_key=True, sort_order=1)
-    index: Mapped[int] = mapped_column("index", sqlalchemy.Integer(), unique=True, nullable=False, sort_order=2)
+    index: Mapped[int] = mapped_column("index", sqlalchemy.Integer(), nullable=False, sort_order=2)
 
 
 class CharacterImage(Base, AutoIDMixin):
     __tablename__ = "character_images"
     __table_args__ = (
         sqlalchemy.UniqueConstraint("id", "character_id"),
+        sqlalchemy.UniqueConstraint("character_id", "index"),
     )
 
     character_id: Mapped[UUID] = mapped_column("character_id", sqlalchemy.ForeignKey(Character.id, ondelete="CASCADE"), sort_order=0)
-    index: Mapped[int] = mapped_column("index", sqlalchemy.Integer(), unique=True, nullable=False, sort_order=1)
+    index: Mapped[int] = mapped_column("index", sqlalchemy.Integer(), nullable=False, sort_order=1)

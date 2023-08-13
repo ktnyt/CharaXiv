@@ -1,9 +1,8 @@
 import typing
-
-from charaxiv.lib import id_token
+from uuid import UUID
 
 
 @typing.runtime_checkable
 class Protocol(typing.Protocol):
-    def __call__(self) -> id_token.IDToken:
+    async def __call__(self, character_id: UUID) -> UUID:
         ...

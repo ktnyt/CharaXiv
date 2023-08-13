@@ -17,13 +17,13 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette.requests import HTTPConnection, Request
 from starlette.responses import Response
 from starlette.routing import Route
-from starlette.status import (HTTP_200_OK, HTTP_201_CREATED,
-                              HTTP_204_NO_CONTENT, HTTP_405_METHOD_NOT_ALLOWED)
+from starlette.status import HTTP_200_OK, HTTP_405_METHOD_NOT_ALLOWED
 from starlette.testclient import TestClient
 from uuid6 import uuid7
 
 from charaxiv import combinators, integrations, lib, settings
 from charaxiv.application.endpoints.user_session import Endpoint, PostParams
+from charaxiv.application.response import ResponseContent
 
 
 @pytest.mark.parametrize("method", ["put", "patch"])
@@ -40,7 +40,7 @@ class SessionCheckEndpoint(HTTPEndpoint):
         request_user_id = request.query_params.get("user_id")
         session_user_id = request.session.get(settings.SESSION_USERID_KEY)
         assert request_user_id == session_user_id
-        return Response(status_code=HTTP_204_NO_CONTENT)
+        return Response(status_code=HTTP_200_OK)
 
 
 @dataclass
@@ -56,7 +56,7 @@ class UserLoginSideEffect:
 
 
 @pytest.mark.asyncio
-async def test_user_session__select_post_delete() -> None:
+async def test_user_session__get_post_delete() -> None:
     user_id = uuid7()
     email = "test@example.com"
     password = lib.password.generate()
@@ -93,8 +93,8 @@ async def test_user_session__select_post_delete() -> None:
     with TestClient(app) as client:
         # Login
         out = client.post("/", json=PostParams(email=email, password=password).model_dump())
-        assert out.status_code == HTTP_201_CREATED
-        assert out.json() == dict(error=None)
+        assert out.status_code == HTTP_200_OK
+        assert out.json() == ResponseContent().model_dump()
         assert manager.mock_calls == [
             mock.call.auth_backend.authenticate(integrations.mock.TypeIs(HTTPConnection)),
             mock.call.user_login(email=email, password=password),
@@ -103,7 +103,7 @@ async def test_user_session__select_post_delete() -> None:
 
         # Session should be persisted
         out = client.get(f"/session_check?user_id={user_id}")
-        assert out.status_code == HTTP_204_NO_CONTENT
+        assert out.status_code == HTTP_200_OK
         assert manager.mock_calls == [
             mock.call.auth_backend.authenticate(integrations.mock.TypeIs(HTTPConnection)),
         ]
@@ -112,10 +112,7 @@ async def test_user_session__select_post_delete() -> None:
         # Should be authenticated
         out = client.get("/")
         assert out.status_code == HTTP_200_OK
-        assert out.json() == dict(
-            content=dict(authenticated=True),
-            error=None,
-        )
+        assert out.json() == ResponseContent(error=None, value=dict(authenticated=True)).model_dump()
         assert manager.mock_calls == [
             mock.call.auth_backend.authenticate(integrations.mock.TypeIs(HTTPConnection)),
         ]
@@ -123,8 +120,8 @@ async def test_user_session__select_post_delete() -> None:
 
         # Logout
         out = client.delete("/")
-        assert out.status_code == HTTP_204_NO_CONTENT
-        assert out.json() == dict(error=None)
+        assert out.status_code == HTTP_200_OK
+        assert out.json() == ResponseContent().model_dump()
         assert manager.mock_calls == [
             mock.call.auth_backend.authenticate(integrations.mock.TypeIs(HTTPConnection)),
         ]
@@ -133,10 +130,7 @@ async def test_user_session__select_post_delete() -> None:
         # Should be unauthenticated
         out = client.get("/")
         assert out.status_code == HTTP_200_OK
-        assert out.json() == dict(
-            content=dict(authenticated=False),
-            error=None,
-        )
+        assert out.json() == ResponseContent(value=dict(authenticated=False)).model_dump()
         assert manager.mock_calls == [
             mock.call.auth_backend.authenticate(integrations.mock.TypeIs(HTTPConnection)),
         ]
@@ -144,7 +138,7 @@ async def test_user_session__select_post_delete() -> None:
 
         # Session should be reset
         out = client.get("/session_check")
-        assert out.status_code == HTTP_204_NO_CONTENT
+        assert out.status_code == HTTP_200_OK
         assert manager.mock_calls == [
             mock.call.auth_backend.authenticate(integrations.mock.TypeIs(HTTPConnection)),
         ]
@@ -152,8 +146,8 @@ async def test_user_session__select_post_delete() -> None:
 
         # Logout can be called without being logged in
         out = client.delete("/")
-        assert out.status_code == HTTP_204_NO_CONTENT
-        assert out.json() == dict(error=None)
+        assert out.status_code == HTTP_200_OK
+        assert out.json() == ResponseContent().model_dump()
         assert manager.mock_calls == [
             mock.call.auth_backend.authenticate(integrations.mock.TypeIs(HTTPConnection)),
         ]
@@ -162,7 +156,7 @@ async def test_user_session__select_post_delete() -> None:
         # Login with invalid credentials
         out = client.post("/", json=PostParams(email="test@example.org", password=password).model_dump())
         assert out.status_code == HTTP_200_OK
-        assert out.json() == dict(error="UserVerificationFailed")
+        assert out.json() == ResponseContent(error="UserVerificationFailed").model_dump()
         assert manager.mock_calls == [
             mock.call.auth_backend.authenticate(integrations.mock.TypeIs(HTTPConnection)),
             mock.call.user_login(email="test@example.org", password=password),
@@ -172,7 +166,7 @@ async def test_user_session__select_post_delete() -> None:
         invalid_password = lib.password.generate()
         out = client.post("/", json=PostParams(email=email, password=invalid_password).model_dump())
         assert out.status_code == HTTP_200_OK
-        assert out.json() == dict(error="UserVerificationFailed")
+        assert out.json() == ResponseContent(error="UserVerificationFailed").model_dump()
         assert manager.mock_calls == [
             mock.call.auth_backend.authenticate(integrations.mock.TypeIs(HTTPConnection)),
             mock.call.user_login(email="test@example.com", password=invalid_password),

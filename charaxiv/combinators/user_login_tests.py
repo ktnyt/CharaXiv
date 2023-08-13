@@ -2,29 +2,21 @@ import contextlib
 from unittest import mock
 
 import pytest
-from argon2 import PasswordHasher
-from uuid6 import uuid7
 
-from charaxiv import lib, protocols, types
+from charaxiv import protocols, types
 from charaxiv.combinators.user_login import (Combinator,
                                              UserVerificationException)
 
 
 @pytest.mark.asyncio
-async def test_user_login(password_hasher: PasswordHasher) -> None:
+async def test_user_login() -> None:
     # Setup data
-    user_id = uuid7()
-    email = "test@example.com"
-    username = "username"
-    password = lib.password.generate()
-    hashedpw = password_hasher.hash(password)
-    group = types.user.Group.ADMIN
-    user = types.user.User(
-        id=user_id,
-        email=email,
-        username=username,
-        password=hashedpw,
-        group=group,
+    user = types.user.User.model_construct(
+        id=mock.sentinel.user_id,
+        email=mock.sentinel.email,
+        username=mock.sentinel.username,
+        password=mock.sentinel.hashedpw,
+        group=mock.sentinel.group,
     )
 
     # Setup mocks
@@ -42,27 +34,23 @@ async def test_user_login(password_hasher: PasswordHasher) -> None:
     )
 
     # Execute combinator
-    output = await combinator(email=email, password=password)
+    output = await combinator(email=mock.sentinel.email, password=mock.sentinel.password)
 
     # Assert output (if available)
-    assert output == user_id
+    assert output == mock.sentinel.user_id
 
     # Assert depndency calls
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.db_user_select_by_email(email=email),
-        mock.call.password_verify(hash=hashedpw, password=password),
+        mock.call.db_user_select_by_email(email=mock.sentinel.email),
+        mock.call.password_verify(hash=mock.sentinel.hashedpw, password=mock.sentinel.password),
         mock.call.context_manager.__aexit__(None, None, None),
     ]
 
 
 @pytest.mark.asyncio
 async def test_user_login__db_user_with_email_not_found() -> None:
-    # Setup data
-    email = "test@example.com"
-    password = lib.password.generate()
-
     # Setup mocks
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
@@ -79,32 +67,26 @@ async def test_user_login__db_user_with_email_not_found() -> None:
 
     # Execute combinator
     with pytest.raises(UserVerificationException):
-        await combinator(email=email, password=password)
+        await combinator(email=mock.sentinel.email, password=mock.sentinel.password)
 
     # Assert depndency calls
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.db_user_select_by_email(email=email),
+        mock.call.db_user_select_by_email(email=mock.sentinel.email),
         mock.call.context_manager.__aexit__(UserVerificationException, mock.ANY, mock.ANY),
     ]
 
 
 @pytest.mark.asyncio
-async def test_user_login__password_verify_failed(password_hasher: PasswordHasher) -> None:
+async def test_user_login__password_verify_failed() -> None:
     # Setup data
-    user_id = uuid7()
-    email = "test@example.com"
-    username = "username"
-    password = lib.password.generate()
-    hashedpw = password_hasher.hash(password)
-    group = types.user.Group.ADMIN
-    user = types.user.User(
-        id=user_id,
-        email=email,
-        username=username,
-        password=hashedpw,
-        group=group,
+    user = types.user.User.model_construct(
+        id=mock.sentinel.user_id,
+        email=mock.sentinel.email,
+        username=mock.sentinel.username,
+        password=mock.sentinel.hashedpw,
+        group=mock.sentinel.group,
     )
 
     # Setup mocks
@@ -123,13 +105,13 @@ async def test_user_login__password_verify_failed(password_hasher: PasswordHashe
 
     # Execute combinator
     with pytest.raises(UserVerificationException):
-        await combinator(email=email, password=password)
+        await combinator(email=mock.sentinel.email, password=mock.sentinel.password)
 
     # Assert depndency calls
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.db_user_select_by_email(email=email),
-        mock.call.password_verify(hash=hashedpw, password=password),
+        mock.call.db_user_select_by_email(email=mock.sentinel.email),
+        mock.call.password_verify(hash=mock.sentinel.hashedpw, password=mock.sentinel.password),
         mock.call.context_manager.__aexit__(UserVerificationException, mock.ANY, mock.ANY),
     ]

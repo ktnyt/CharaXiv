@@ -40,7 +40,7 @@ def default_validate_error_response(e: ValidationError) -> Response:
     return Response(status_code=400, content="Bad Request")
 
 
-def validate(
+def validate_body(
         Model: type[BaseModel],
         custom_response: typing.Callable[[ValidationError], Response] = default_validate_error_response,
 ) -> typing.Callable[[typing.Callable[..., typing.Awaitable[Response]]], typing.Callable[..., typing.Awaitable[Response]]]:
@@ -48,7 +48,7 @@ def validate(
         async def wrapper(request: Request, *args: typing.Any, **kwargs: typing.Any) -> Response:
             try:
                 raw_dict = await request.json()
-                params = Model(**raw_dict)
+                params = Model.model_validate(raw_dict)
             except JSONDecodeError:
                 return PlainTextResponse("Bad Request", status_code=HTTP_400_BAD_REQUEST)
             except ValidationError as e:

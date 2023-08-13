@@ -1,13 +1,11 @@
 {
   // Backend Settings
   "[python]": {
-    "editor.defaultFormatter": "ms-python.python",
+    "editor.defaultFormatter": "ms-python.autopep8",
     "editor.codeActionsOnSave": {
       "source.organizeImports": true
     }
   },
-
-  "python.formatting.provider": "autopep8",
 
   "python.autoComplete.extraPaths": [
     "${workspaceFolder}/.venv/lib/**/site-packages"
@@ -45,19 +43,17 @@
     }
   ],
 
-  "python.linting.pylintEnabled": false,
-  "python.linting.flake8Enabled": true,
-  "python.linting.enabled": true,
-
   "python.testing.pytestEnabled": true,
   "python.testing.autoTestDiscoverOnSaveEnabled": true,
   "python.testing.pytestArgs": ["charaxiv"],
   "python.testing.unittestEnabled": false,
 
+  "mypy-type-checker.args": [
+    "--cache-dir=${workspaceFolder}/.vscode/.mypy_cache"
+  ],
+
   "coverage-gutters.showGutterCoverage": true,
   "copy-github-permalink.branch": "origin/main",
-  "python.linting.mypyEnabled": true,
-  "python.linting.mypyPath": "mypy",
 
   // Frontend Settings
   "eslint.enable": true,

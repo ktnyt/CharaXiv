@@ -7,11 +7,12 @@ from injector import InstanceProvider
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.routing import Route
-from starlette.status import HTTP_201_CREATED, HTTP_405_METHOD_NOT_ALLOWED
+from starlette.status import HTTP_200_OK, HTTP_405_METHOD_NOT_ALLOWED
 from starlette.testclient import TestClient
 
 from charaxiv import combinators, integrations
 from charaxiv.application.endpoints.user_register import Endpoint, PostParams
+from charaxiv.application.response import ResponseContent
 
 
 @pytest.mark.parametrize("method", ["get", "put", "patch", "delete"])
@@ -23,7 +24,7 @@ def test_user_register__405(method: str) -> None:
         assert out.status_code == HTTP_405_METHOD_NOT_ALLOWED
 
 
-def test_user_register__post__201() -> None:
+def test_user_register__post__200() -> None:
     email = "text@example.com"
 
     manager = mock.Mock()
@@ -39,8 +40,8 @@ def test_user_register__post__201() -> None:
     )
     with TestClient(app) as client:
         out = client.post("/", json=PostParams(email=email).model_dump())
-        assert out.status_code == HTTP_201_CREATED
-        assert out.json() == dict(error=None)
+        assert out.status_code == HTTP_200_OK
+        assert out.json() == ResponseContent().model_dump()
         assert manager.mock_calls == [
             mock.call.user_register(email=email),
         ]

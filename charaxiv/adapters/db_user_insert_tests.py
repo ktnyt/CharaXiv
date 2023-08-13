@@ -1,9 +1,8 @@
 import pytest
-import sqlalchemy
 from argon2 import PasswordHasher
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from charaxiv import lib, repositories
+from charaxiv import adapters, lib, types
 from charaxiv.adapters.db_user_insert import Adapter
 
 
@@ -13,18 +12,21 @@ async def test_db_user_insert(database_session: AsyncSession, password_hasher: P
     username = "username"
     password = lib.password.generate()
     hashedpw = password_hasher.hash(password)
+    group = types.user.Group.ADMIN
 
     adapter = Adapter(session=database_session)
-    await adapter(
+    user_id = await adapter(
         email=email,
         username=username,
         password=hashedpw,
+        group=group,
     )
 
-    user_model = (await database_session.execute(
-        sqlalchemy.select(repositories.database.models.User)
-        .filter(repositories.database.models.User.email == email)
-    )).scalar_one()
-
-    assert password_hasher.verify(user_model.password, password)
-    assert user_model.username == username
+    user = await adapters.db_user_select_by_id.Adapter(session=database_session)(id=user_id)
+    assert user == types.user.User(
+        id=user_id,
+        email=email,
+        username=username,
+        password=hashedpw,
+        group=group,
+    )

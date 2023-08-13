@@ -5,7 +5,6 @@ from uuid import UUID
 from injector import inject, singleton
 
 from charaxiv import protocols, types
-from charaxiv.lib.id_token import IDToken
 
 
 @singleton
@@ -16,7 +15,7 @@ class Combinator:
     object_dump: protocols.object_dump.Protocol
     db_character_insert: protocols.db_character_insert.Protocol
 
-    async def __call__(self, /, *, owner_id: UUID, system: types.system.System, data: typing.Any) -> IDToken:
+    async def __call__(self, /, *, owner_id: UUID, system: types.system.System, data: typing.Any, omit: typing.List[str]) -> UUID:
         async with self.transaction_atomic():
             character_id = await self.db_character_insert(
                 owner_id=owner_id,
@@ -24,4 +23,4 @@ class Combinator:
                 name="",
                 data=self.object_dump(data),
             )
-            return IDToken.from_uuid(character_id)
+            return character_id

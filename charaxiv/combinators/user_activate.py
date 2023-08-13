@@ -3,7 +3,7 @@ from datetime import timedelta
 
 from injector import inject, singleton
 
-from charaxiv import combinators, protocols
+from charaxiv import combinators, protocols, types
 
 UserWithEmailExistsException = combinators.user_register.UserWithEmailExistsException
 
@@ -31,8 +31,9 @@ class Combinator:
     db_registration_select_by_token: protocols.db_registration_select_by_token.Protocol
     db_user_with_email_exists: protocols.db_user_with_email_exists.Protocol
     db_user_with_username_exists: protocols.db_user_with_username_exists.Protocol
-    timezone_now: protocols.timezone_now.Protocol
     db_registration_delete_by_token: protocols.db_registration_delete_by_token.Protocol
+    timezone_now: protocols.timezone_now.Protocol
+    datetime_diff_gt: protocols.datetime_diff_gt.Protocol
     password_hash: protocols.password_hash.Protocol
     db_user_insert: protocols.db_user_insert.Protocol
 
@@ -50,7 +51,8 @@ class Combinator:
 
             await self.db_registration_delete_by_token(token=token)
 
-            if registration.created_at + timedelta(days=1) < self.timezone_now():
+            current_time = self.timezone_now()
+            if self.datetime_diff_gt(registration.created_at, current_time, timedelta(days=1)):
                 raise RegistrationExpiredException(token=token)
 
             hashedpw = self.password_hash(password=password)
@@ -58,4 +60,5 @@ class Combinator:
                 email=registration.email,
                 username=username,
                 password=hashedpw,
+                group=types.user.Group.BASE,
             )

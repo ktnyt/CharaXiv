@@ -655,6 +655,7 @@ def rename_main(args: argparse.Namespace) -> int:
     newpattern = fr"{typing.cast(str, args.newpattern)}"
     scopes = typing.cast(typing.List[str], args.scope)
     no_dry = typing.cast(bool, args.no_dry)
+    no_replace = typing.cast(bool, args.no_replace)
 
     root = pathlib.Path(package)
 
@@ -710,37 +711,40 @@ def rename_main(args: argparse.Namespace) -> int:
         print("no files to be renamed")
     print()
 
-    print("modified lines:")
-    for file in path_walk(root):
-        if str(file.parent).endswith("__pycache__"):
-            continue
+    if not no_replace:
+        print("modified lines:")
+        for file in path_walk(root):
+            if str(file.parent).endswith("__pycache__"):
+                continue
 
-        with open(file) as f:
-            changed_lines: typing.List[typing.Tuple[int, str, str]] = []
-            lines: typing.List[str] = []
+            with open(file) as f:
+                changed_lines: typing.List[typing.Tuple[int, str, str]] = []
+                lines: typing.List[str] = []
 
-            for i, line in enumerate(f):
-                original_line = line.rstrip()
-                replaced_line = original_line
-                for before, after in modified:
-                    replaced_line = replaced_line.replace(before.stem, after.stem)
-                if replaced_line != original_line:
-                    changed_lines.append((i, original_line, replaced_line))
-                lines.append(replaced_line)
+                stems = set([(before.stem, after.stem) for (before, after) in modified])
 
-            if len(changed_lines) > 0:
-                print(file)
-                for i, before_line, after_line in changed_lines:
-                    delete = red(f"- {before_line}")
-                    insert = green(f"+ {after_line}")
-                    print(f"{i: 4}  {delete}")
-                    print(f"{i: 4}  {insert}")
-                print()
+                for i, line in enumerate(f):
+                    original_line = line.rstrip()
+                    replaced_line = original_line
+                    for before_stem, after_stem in stems:
+                        replaced_line = replaced_line.replace(before_stem, after_stem)
+                    if replaced_line != original_line:
+                        changed_lines.append((i, original_line, replaced_line))
+                    lines.append(replaced_line)
 
-        if no_dry and len(changed_lines) > 0:
-            with open(file, 'w') as f:
-                for line in lines:
-                    print(line.rstrip(), file=f)
+                if len(changed_lines) > 0:
+                    print(file)
+                    for i, before_line, after_line in changed_lines:
+                        delete = red(f"- {before_line}")
+                        insert = green(f"+ {after_line}")
+                        print(f"{i: 4}  {delete}")
+                        print(f"{i: 4}  {insert}")
+                    print()
+
+            if no_dry and len(changed_lines) > 0:
+                with open(file, 'w') as f:
+                    for line in lines:
+                        print(line.rstrip(), file=f)
 
     if no_dry:
         return reshim_main(args)
@@ -799,6 +803,7 @@ if __name__ == "__main__":
     rename_parser.add_argument("--package", type=str, default=os.environ.get("PACKAGE_NAME", ""), help="package to generate files in")
     rename_parser.add_argument("--scope", type=str, action="extend", nargs="*", default=[], help="scope of module to rename")
     rename_parser.add_argument("--no-dry", action="store_true", help="execute rename")
+    rename_parser.add_argument("--no-replace", action="store_true", help="do not replace occurences in files")
     rename_parser.set_defaults(handler=rename_main)
 
     help_parser = subparsers.add_parser("help", help="command help")

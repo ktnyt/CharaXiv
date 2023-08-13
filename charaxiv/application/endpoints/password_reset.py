@@ -6,7 +6,7 @@ from starlette.responses import Response
 from starlette.status import HTTP_200_OK, HTTP_201_CREATED
 
 from charaxiv import combinators, integrations, lib
-from charaxiv.application.response import AppResponse
+from charaxiv.application.response import AppResponse, ResponseContent
 
 
 class PostParams(BaseModel, strict=True):
@@ -23,36 +23,30 @@ class PutParams(BaseModel, strict=True):
 class Endpoint(HTTPEndpoint):
     @lib.decorators.method_decorator(
         integrations.starlette.use_injector,
-        integrations.starlette.validate(PostParams),
+        integrations.starlette.validate_body(PostParams),
         integrations.starlette.raises(
             combinators.user_password_reset_request.UserWithEmailNotFoundException,
-            AppResponse(content=dict(error="UserWithEmailNotFound")),
+            AppResponse(ResponseContent(error="UserWithEmailNotFound")),
         ),
     )
     async def post(self, request: Request, injector: Injector, params: PostParams) -> Response:
         exec = injector.get(combinators.user_password_reset_request.Combinator)
         await exec(email=params.email)
-        return AppResponse(
-            content=dict(error=None),
-            status_code=HTTP_201_CREATED,
-        )
+        return AppResponse(ResponseContent())
 
     @lib.decorators.method_decorator(
         integrations.starlette.use_injector,
-        integrations.starlette.validate(PutParams),
+        integrations.starlette.validate_body(PutParams),
         integrations.starlette.raises(
             combinators.user_password_reset.PasswordResetRequestNotFoundException,
-            AppResponse(content=dict(error="PasswordResetRequestNotFound")),
+            AppResponse(ResponseContent(error="PasswordResetRequestNotFound")),
         ),
         integrations.starlette.raises(
             combinators.user_password_reset.PasswordResetRequestExpiredException,
-            AppResponse(content=dict(error="PasswordResetRequestExpired")),
+            AppResponse(ResponseContent(error="PasswordResetRequestExpired")),
         ),
     )
     async def put(self, request: Request, injector: Injector, params: PutParams) -> Response:
         exec = injector.get(combinators.user_password_reset.Combinator)
         await exec(token=params.token, password=params.password)
-        return AppResponse(
-            content=dict(error=None),
-            status_code=HTTP_200_OK,
-        )
+        return AppResponse(ResponseContent())

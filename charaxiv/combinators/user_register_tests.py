@@ -1,5 +1,4 @@
 import contextlib
-import secrets
 from unittest import mock
 
 import pytest
@@ -11,10 +10,6 @@ from charaxiv.combinators.user_register import (Combinator,
 
 @pytest.mark.asyncio
 async def test_user_register() -> None:
-    # Setup data
-    token = secrets.token_urlsafe(32)
-    email = "test@example.com"
-
     # Setup mocks
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock()
@@ -22,7 +17,7 @@ async def test_user_register() -> None:
     manager.db_user_with_email_exists = mock.AsyncMock(spec=protocols.db_user_with_email_exists.Protocol, side_effect=[False])
     manager.db_registration_exists = mock.AsyncMock(spec=protocols.db_registration_exists.Protocol, side_effect=[False])
     manager.db_registration_delete_by_email = mock.AsyncMock(spec=protocols.db_registration_delete_by_email.Protocol)
-    manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[token])
+    manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[mock.sentinel.token])
     manager.db_registration_insert = mock.AsyncMock(spec=protocols.db_registration_insert.Protocol)
     manager.user_registration_mail_send = mock.AsyncMock(spec=combinators.user_registration_mail_send.Combinator)
 
@@ -38,26 +33,23 @@ async def test_user_register() -> None:
     )
 
     # Execute combinator
-    await combinator(email=email)
+    await combinator(email=mock.sentinel.email)
 
     # Assert depndency calls
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.db_user_with_email_exists(email=email),
-        mock.call.db_registration_exists(email=email),
+        mock.call.db_user_with_email_exists(email=mock.sentinel.email),
+        mock.call.db_registration_exists(email=mock.sentinel.email),
         mock.call.secret_token_generate(),
-        mock.call.db_registration_insert(email=email, token=token),
-        mock.call.user_registration_mail_send(email=email, token=token),
+        mock.call.db_registration_insert(email=mock.sentinel.email, token=mock.sentinel.token),
+        mock.call.user_registration_mail_send(email=mock.sentinel.email, token=mock.sentinel.token),
         mock.call.context_manager.__aexit__(None, None, None),
     ]
 
 
 @pytest.mark.asyncio
 async def test_user_register__user_exists() -> None:
-    # Setup data
-    email = "test@example.com"
-
     # Setup mocks
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock()
@@ -82,29 +74,25 @@ async def test_user_register__user_exists() -> None:
 
     # Execute combinator
     with pytest.raises(UserWithEmailExistsException):
-        await combinator(email=email)
+        await combinator(email=mock.sentinel.email)
 
     # Assert depndency calls
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.db_user_with_email_exists(email=email),
+        mock.call.db_user_with_email_exists(email=mock.sentinel.email),
         mock.call.context_manager.__aexit__(UserWithEmailExistsException, mock.ANY, mock.ANY),
     ]
 
 
 @pytest.mark.asyncio
 async def test_user_register__db_registration_exists() -> None:
-    # Setup data
-    token = secrets.token_urlsafe(32)
-    email = "test@example.com"
-
     # Setup mocks
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
     manager.transaction_atomic = mock.Mock(spec=protocols.transaction_atomic.Protocol, side_effect=[manager.context_manager])
     manager.db_user_with_email_exists = mock.AsyncMock(spec=protocols.db_user_with_email_exists.Protocol, side_effect=[False])
-    manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[token])
+    manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[mock.sentinel.token])
     manager.db_registration_exists = mock.AsyncMock(spec=protocols.db_registration_exists.Protocol, side_effect=[True])
     manager.db_registration_delete_by_email = mock.AsyncMock(spec=protocols.db_registration_delete_by_email.Protocol)
     manager.db_registration_insert = mock.AsyncMock(spec=protocols.db_registration_insert.Protocol)
@@ -122,17 +110,17 @@ async def test_user_register__db_registration_exists() -> None:
     )
 
     # Execute combinator
-    await combinator(email=email)
+    await combinator(email=mock.sentinel.email)
 
     # Assert depndency calls
     assert manager.mock_calls == [
         mock.call.transaction_atomic(),
         mock.call.context_manager.__aenter__(),
-        mock.call.db_user_with_email_exists(email=email),
-        mock.call.db_registration_exists(email=email),
-        mock.call.db_registration_delete_by_email(email=email),
+        mock.call.db_user_with_email_exists(email=mock.sentinel.email),
+        mock.call.db_registration_exists(email=mock.sentinel.email),
+        mock.call.db_registration_delete_by_email(email=mock.sentinel.email),
         mock.call.secret_token_generate(),
-        mock.call.db_registration_insert(email=email, token=token),
-        mock.call.user_registration_mail_send(email=email, token=token),
+        mock.call.db_registration_insert(email=mock.sentinel.email, token=mock.sentinel.token),
+        mock.call.user_registration_mail_send(email=mock.sentinel.email, token=mock.sentinel.token),
         mock.call.context_manager.__aexit__(None, None, None),
     ]

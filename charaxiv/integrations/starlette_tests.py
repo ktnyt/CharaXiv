@@ -11,7 +11,7 @@ from starlette.applications import Starlette
 from starlette.endpoints import HTTPEndpoint
 from starlette.middleware import Middleware
 from starlette.requests import Request
-from starlette.responses import PlainTextResponse, Response
+from starlette.responses import JSONResponse, PlainTextResponse, Response
 from starlette.routing import Route
 from starlette.status import (HTTP_200_OK, HTTP_400_BAD_REQUEST,
                               HTTP_418_IM_A_TEAPOT)
@@ -20,7 +20,7 @@ from starlette.testclient import TestClient
 from charaxiv import lib
 from charaxiv.integrations.starlette import (AppUser, InjectorMiddleware,
                                              InstallableModuleType, raises,
-                                             use_injector, validate)
+                                             use_injector, validate_body)
 
 
 @dataclass
@@ -45,14 +45,14 @@ def test_charaxiv_user() -> None:
     assert charaxiv_user.display_name == username
 
 
-class Params(BaseModel, strict=True):
+class BodyParams(BaseModel, strict=True):
     number: int
 
 
-class ValidationEndpoint(HTTPEndpoint):
-    @lib.decorators.method_decorator(validate(Params))
-    async def post(self, request: Request, params: Params) -> Response:
-        return PlainTextResponse(f"number={params.number}")
+class BodyValidationEndpoint(HTTPEndpoint):
+    @lib.decorators.method_decorator(validate_body(BodyParams))
+    async def post(self, request: Request, params: BodyParams) -> Response:
+        return JSONResponse(content=params.model_dump())
 
 
 @pytest.mark.parametrize("json,expected_status_code", [
@@ -60,12 +60,14 @@ class ValidationEndpoint(HTTPEndpoint):
     (None, HTTP_400_BAD_REQUEST),
     (dict(number="1"), HTTP_400_BAD_REQUEST),
 ])
-def test_validate(json: typing.Any, expected_status_code: int) -> None:
-    app = Starlette(routes=[Route("/", endpoint=ValidationEndpoint)])
+def test_validate_body(json: typing.Any, expected_status_code: int) -> None:
+    app = Starlette(routes=[Route("/", endpoint=BodyValidationEndpoint)])
 
     with TestClient(app) as client:
         out = client.post("/", json=json)
         assert out.status_code == expected_status_code
+        if expected_status_code == HTTP_200_OK:
+            assert BodyParams.model_validate(out.json()) == BodyParams.model_validate(json)
 
 
 class RaisesEndpoint(HTTPEndpoint):

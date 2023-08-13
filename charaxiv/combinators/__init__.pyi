@@ -1,5 +1,5 @@
 from . import character_create_new as character_create_new
-from . import id_token_generate as id_token_generate
+from . import character_list_for_user as character_list_for_user
 from . import user_activate as user_activate
 from . import user_authenticate as user_authenticate
 from . import user_login as user_login
@@ -11,7 +11,7 @@ from . import user_registration_mail_send as user_registration_mail_send
 
 __all__ = [
     "character_create_new",
-    "id_token_generate",
+    "character_list_for_user",
     "user_activate",
     "user_authenticate",
     "user_login",

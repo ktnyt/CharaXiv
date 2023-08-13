@@ -6,7 +6,7 @@ from starlette.responses import Response
 from starlette.status import HTTP_201_CREATED
 
 from charaxiv import combinators, integrations, lib
-from charaxiv.application.response import AppResponse
+from charaxiv.application.response import AppResponse, ResponseContent
 
 
 class PostParams(BaseModel, strict=True):
@@ -20,22 +20,22 @@ class PostParams(BaseModel, strict=True):
 class Endpoint(HTTPEndpoint):
     @lib.decorators.method_decorator(
         integrations.starlette.use_injector,
-        integrations.starlette.validate(PostParams),
+        integrations.starlette.validate_body(PostParams),
         integrations.starlette.raises(
             combinators.user_activate.RegistrationNotFoundException,
-            AppResponse(content=dict(error="RegistrationNotFoundException"))
+            AppResponse(ResponseContent(error="RegistrationNotFoundException"))
         ),
         integrations.starlette.raises(
             combinators.user_activate.UserWithEmailExistsException,
-            AppResponse(content=dict(error="UserWithEmailExistsException"))
+            AppResponse(ResponseContent(error="UserWithEmailExistsException"))
         ),
         integrations.starlette.raises(
             combinators.user_activate.UserWithUsernameExistsException,
-            AppResponse(content=dict(error="UserWithUsernameExistsException"))
+            AppResponse(ResponseContent(error="UserWithUsernameExistsException"))
         ),
         integrations.starlette.raises(
             combinators.user_activate.RegistrationExpiredException,
-            AppResponse(content=dict(error="RegistrationExpiredException"))
+            AppResponse(ResponseContent(error="RegistrationExpiredException"))
         ),
     )
     async def post(self, request: Request, injector: Injector, params: PostParams) -> Response:
@@ -45,7 +45,4 @@ class Endpoint(HTTPEndpoint):
             username=params.username,
             password=params.password,
         )
-        return AppResponse(
-            content=dict(error=None),
-            status_code=HTTP_201_CREATED,
-        )
+        return AppResponse(ResponseContent())

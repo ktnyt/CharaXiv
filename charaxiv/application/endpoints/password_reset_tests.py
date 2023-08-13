@@ -8,8 +8,7 @@ from injector import InstanceProvider
 from starlette.applications import Starlette
 from starlette.middleware import Middleware
 from starlette.routing import Route
-from starlette.status import (HTTP_200_OK, HTTP_201_CREATED,
-                              HTTP_400_BAD_REQUEST,
+from starlette.status import (HTTP_200_OK, HTTP_400_BAD_REQUEST,
                               HTTP_405_METHOD_NOT_ALLOWED)
 from starlette.testclient import TestClient
 
@@ -17,6 +16,7 @@ from charaxiv import combinators, integrations, lib
 from charaxiv.application.endpoints.password_reset import (Endpoint,
                                                            PostParams,
                                                            PutParams)
+from charaxiv.application.response import ResponseContent
 
 
 @pytest.mark.parametrize("method", ["get", "patch", "delete"])
@@ -28,7 +28,7 @@ def test_password_reset__405(method: str) -> None:
         assert out.status_code == HTTP_405_METHOD_NOT_ALLOWED
 
 
-def test_password_reset__post__201() -> None:
+def test_password_reset__post__200() -> None:
     email = "text@example.com"
 
     manager = mock.Mock()
@@ -44,15 +44,15 @@ def test_password_reset__post__201() -> None:
     )
     with TestClient(app) as client:
         out = client.post("/", json=PostParams(email=email).model_dump())
-        assert out.status_code == HTTP_201_CREATED
-        assert out.json() == dict(error=None)
+        assert out.status_code == HTTP_200_OK
+        assert out.json() == ResponseContent().model_dump()
 
     assert manager.mock_calls == [
         mock.call.user_password_reset_request(email=email),
     ]
 
 
-def test_password_reset__put__201() -> None:
+def test_password_reset__put__200() -> None:
     token = secrets.token_urlsafe(32)
     password = lib.password.generate()
 
@@ -70,7 +70,7 @@ def test_password_reset__put__201() -> None:
     with TestClient(app) as client:
         out = client.put("/", json=PutParams(token=token, password=password).model_dump())
         assert out.status_code == HTTP_200_OK
-        assert out.json() == dict(error=None)
+        assert out.json() == ResponseContent().model_dump()
 
     assert manager.mock_calls == [
         mock.call.user_password_reset(token=token, password=password),
