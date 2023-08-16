@@ -13,12 +13,13 @@ from starlette.status import (HTTP_200_OK, HTTP_400_BAD_REQUEST,
 from starlette.testclient import TestClient
 
 from charaxiv import combinators, integrations, lib
-from charaxiv.application.endpoints.user_activate import Endpoint, PostParams
+from charaxiv.application.endpoints.user_index import (Endpoint, PostParams,
+                                                       PutParams)
 from charaxiv.application.response import ResponseContent
 
 
-@pytest.mark.parametrize("method", ["get", "put", "patch", "delete"])
-def test_user_activate__405(method: str) -> None:
+@pytest.mark.parametrize("method", ["get", "patch", "delete"])
+def test_user_index__405(method: str) -> None:
     app = Starlette(routes=[Route("/", endpoint=Endpoint)])
 
     with TestClient(app) as client:
@@ -26,7 +27,31 @@ def test_user_activate__405(method: str) -> None:
         assert out.status_code == HTTP_405_METHOD_NOT_ALLOWED
 
 
-def test_user_activate__post__200() -> None:
+def test_user_index__post__200() -> None:
+    email = "text@example.com"
+
+    manager = mock.Mock()
+    manager.user_register = mock.AsyncMock(spec=combinators.user_register.Combinator)
+
+    @contextlib.asynccontextmanager
+    async def request_lifespan() -> typing.AsyncGenerator[integrations.starlette.InstallableModuleType, None]:
+        yield lambda binder: binder.bind(combinators.user_register.Combinator, to=InstanceProvider(manager.user_register))
+
+    app = Starlette(
+        routes=[Route("/", endpoint=Endpoint)],
+        middleware=[Middleware(integrations.starlette.InjectorMiddleware, request_lifespan=request_lifespan)]
+    )
+    with TestClient(app) as client:
+        out = client.post("/", json=PostParams(email=email).model_dump())
+        assert out.status_code == HTTP_200_OK
+        assert out.json() == ResponseContent().model_dump()
+        assert manager.mock_calls == [
+            mock.call.user_register(email=email),
+        ]
+        manager.reset_mock()
+
+
+def test_user_index_put__200() -> None:
     token = secrets.token_urlsafe(32)
     username = "username"
     password = "I'mV3ry$trong"
@@ -44,7 +69,7 @@ def test_user_activate__post__200() -> None:
     )
 
     with TestClient(app) as client:
-        out = client.post("/", json=PostParams(
+        out = client.put("/", json=PutParams(
             token=token,
             username=username,
             password=password,
@@ -69,7 +94,7 @@ def test_user_activate__post__200() -> None:
     lib.password.generate(digit=False),
     lib.password.generate(symbol=False),
 ])
-def test_user_activate__post__weak_password(password: str) -> None:
+def test_user_index_put__weak_password(password: str) -> None:
     token = secrets.token_urlsafe(32)
     username = "username"
 
@@ -86,7 +111,7 @@ def test_user_activate__post__weak_password(password: str) -> None:
     )
 
     with TestClient(app) as client:
-        out = client.post("/", json=dict(
+        out = client.put("/", json=dict(
             token=token,
             username=username,
             password=password,

@@ -52,7 +52,7 @@ def test_user() -> None:
         "ORIGIN": settings.CHARAXIV_ORIGIN,
     }) as client:
         email = "test@example.com"
-        out = client.post("/api/register", json=dict(email=email))
+        out = client.post("/api/user", json=dict(email=email))
         assert out.status_code == HTTP_200_OK
 
         sent_email, token = user_registration_mail_send.data
@@ -62,7 +62,7 @@ def test_user() -> None:
         username = "username"
         password = lib.password.generate()
 
-        out = client.post("/api/activate", json=dict(token=token, username=username, password=password))
+        out = client.put("/api/user", json=dict(token=token, username=username, password=password))
         assert out.status_code == HTTP_200_OK
         assert out.json() == ResponseContent().model_dump()
 

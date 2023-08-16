@@ -1,15 +1,18 @@
 from injector import Injector
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, EmailStr, field_validator
 from starlette.endpoints import HTTPEndpoint
 from starlette.requests import Request
 from starlette.responses import Response
-from starlette.status import HTTP_201_CREATED
 
 from charaxiv import combinators, integrations, lib
 from charaxiv.application.response import AppResponse, ResponseContent
 
 
 class PostParams(BaseModel, strict=True):
+    email: EmailStr
+
+
+class PutParams(BaseModel, strict=True):
     token: str
     username: str
     password: str
@@ -21,6 +24,19 @@ class Endpoint(HTTPEndpoint):
     @lib.decorators.method_decorator(
         integrations.starlette.use_injector,
         integrations.starlette.validate_body(PostParams),
+        integrations.starlette.raises(
+            combinators.user_register.UserWithEmailExistsException,
+            AppResponse(ResponseContent(error="UserWithEmailExistsException")),
+        ),
+    )
+    async def post(self, request: Request, injector: Injector, params: PostParams) -> Response:
+        exec = injector.get(combinators.user_register.Combinator)
+        await exec(email=params.email)
+        return AppResponse(ResponseContent())
+
+    @lib.decorators.method_decorator(
+        integrations.starlette.use_injector,
+        integrations.starlette.validate_body(PutParams),
         integrations.starlette.raises(
             combinators.user_activate.RegistrationNotFoundException,
             AppResponse(ResponseContent(error="RegistrationNotFoundException"))
@@ -38,7 +54,7 @@ class Endpoint(HTTPEndpoint):
             AppResponse(ResponseContent(error="RegistrationExpiredException"))
         ),
     )
-    async def post(self, request: Request, injector: Injector, params: PostParams) -> Response:
+    async def put(self, request: Request, injector: Injector, params: PutParams) -> Response:
         exec = injector.get(combinators.user_activate.Combinator)
         await exec(
             token=params.token,
