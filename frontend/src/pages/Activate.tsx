@@ -1,4 +1,4 @@
-import { callActivate } from "@charaxiv/api/user";
+import api from "@charaxiv/api";
 import { Button } from "@charaxiv/components/Button";
 import { Input } from "@charaxiv/components/Input";
 import { Label } from "@charaxiv/components/Label";
@@ -29,22 +29,22 @@ export const ActivatePage: Component = () => {
     return null;
   }
 
-  const [rawUsername, rawUsernameSet] = createSignal<string>();
-  const [usernameTaken, usernameTakenSet] = createSignal(false);
+  const [usernameSignal, usernameSignalSet] = createSignal<string>();
+  const [usernameTakenSignal, usernameTakenSignalSet] = createSignal(false);
 
-  const debouncedUsername = createDebounce(rawUsername, 500);
+  const usernameSignalDebounced = createDebounce(usernameSignal, 500);
 
-  const [rawPassword, rawPasswordSet] = createSignal<string>();
+  const [passwordSignal, passwordSignalSet] = createSignal<string>();
 
-  const passwordHasLower = () => /[a-z]/.test(rawPassword() ?? "");
-  const passwordHasUpper = () => /[A-Z]/.test(rawPassword() ?? "");
-  const passwordHasDigit = () => /[0-9]/.test(rawPassword() ?? "");
+  const passwordHasLower = () => /[a-z]/.test(passwordSignal() ?? "");
+  const passwordHasUpper = () => /[A-Z]/.test(passwordSignal() ?? "");
+  const passwordHasDigit = () => /[0-9]/.test(passwordSignal() ?? "");
   const passwordHasOther = () =>
-    /[!"#$%&\"\(\)*+,-./:;<=>?@\[\]\\^_`{|}~]/.test(rawPassword() ?? "");
+    /[!"#$%&\"\(\)*+,-./:;<=>?@\[\]\\^_`{|}~]/.test(passwordSignal() ?? "");
   const passwordHasLength = () =>
-    (rawPassword() ?? "").length >= MINIMUM_PASSWORD_LENGTH;
+    (passwordSignal() ?? "").length >= MINIMUM_PASSWORD_LENGTH;
 
-  const passwordHasError = () =>
+  const passwordHasErrorSignal = () =>
     !(
       passwordHasLower() &&
       passwordHasUpper() &&
@@ -54,7 +54,9 @@ export const ActivatePage: Component = () => {
     );
 
   const formInvalid = () =>
-    rawUsername() === undefined || rawUsername() === "" || passwordHasError();
+    usernameSignal() === undefined ||
+    usernameSignal() === "" ||
+    passwordHasErrorSignal();
 
   const onSubmitActivationForm: JSX.DOMAttributes<HTMLFormElement>["onSubmit"] =
     async (event) => {
@@ -64,40 +66,36 @@ export const ActivatePage: Component = () => {
         return;
       }
 
-      const username = debouncedUsername()!;
-      const password = rawPassword()!;
-      const response = await callActivate(token, username, password);
-
-      switch (response.error) {
-        case null:
-          navigate("/");
-          return;
-
-        case "RegistrationNotFoundException":
+      const username = usernameSignalDebounced()!;
+      const password = passwordSignal()!;
+      try {
+        await api.user.put({ token, username, password });
+        navigate("/");
+      } catch (e) {
+        if (e instanceof api.user.RegistrationNotFoundError) {
           alert("無効な登録リンクです。再度新規登録をお試しください。");
           navigate("/register");
           return;
-
-        case "UserWithEmailExistsException":
+        }
+        if (e instanceof api.user.UserWithEmailExistsError) {
           alert(
             "メールアドレスがすでに登録されています。再度新規登録をお試しください。",
           );
           navigate("/register");
           return;
-
-        case "UserWithUsernameExistsException":
-          usernameTakenSet(true);
+        }
+        if (e instanceof api.user.UserWithUsernameExistsError) {
+          usernameTakenSignalSet(true);
           return;
-
-        case "RegistrationExpiredException":
+        }
+        if (e instanceof api.user.RegistrationExpiredError) {
           alert(
             "登録リンクの有効期限が切れています。再度新規登録をお試しください。",
           );
           navigate("/register");
           return;
-
-        default:
-          throw new Error(response.error);
+        }
+        throw e;
       }
     };
 
@@ -129,7 +127,7 @@ export const ActivatePage: Component = () => {
               <Label for="screenname" class="flex justify-between">
                 <span>ユーザー名</span>
                 <Switch>
-                  <Match when={usernameTaken() === true}>
+                  <Match when={usernameTakenSignal() === true}>
                     <span class="text-xs text-red-500">
                       このユーザ名は使用できません
                     </span>
@@ -138,11 +136,11 @@ export const ActivatePage: Component = () => {
               </Label>
               <Input
                 name="screenname"
-                color={usernameTaken() ? "red" : "default"}
-                value={rawUsername()}
+                color={usernameTakenSignal() ? "red" : "default"}
+                value={usernameSignal()}
                 onInput={(event) => {
-                  rawUsernameSet(event.currentTarget.value);
-                  usernameTakenSet(false);
+                  usernameSignalSet(event.currentTarget.value);
+                  usernameTakenSignalSet(false);
                 }}
               />
             </div>
@@ -154,19 +152,21 @@ export const ActivatePage: Component = () => {
                 type="password"
                 autocomplete="new-password"
                 color={
-                  rawPassword()
-                    ? passwordHasError()
+                  passwordSignal()
+                    ? passwordHasErrorSignal()
                       ? "red"
                       : "green"
                     : "default"
                 }
-                onInput={(event) => rawPasswordSet(event.currentTarget.value)}
+                onInput={(event) =>
+                  passwordSignalSet(event.currentTarget.value)
+                }
               />
               <span class="text-xs">
                 <span
                   class={clsx(
-                    rawPassword() && !passwordHasLower() && "text-red-500",
-                    rawPassword() && passwordHasLower() && "text-green-500",
+                    passwordSignal() && !passwordHasLower() && "text-red-500",
+                    passwordSignal() && passwordHasLower() && "text-green-500",
                   )}
                 >
                   小文字
@@ -174,8 +174,8 @@ export const ActivatePage: Component = () => {
                 、
                 <span
                   class={clsx(
-                    rawPassword() && !passwordHasUpper() && "text-red-500",
-                    rawPassword() && passwordHasUpper() && "text-green-500",
+                    passwordSignal() && !passwordHasUpper() && "text-red-500",
+                    passwordSignal() && passwordHasUpper() && "text-green-500",
                   )}
                 >
                   大文字
@@ -183,8 +183,8 @@ export const ActivatePage: Component = () => {
                 、
                 <span
                   class={clsx(
-                    rawPassword() && !passwordHasDigit() && "text-red-500",
-                    rawPassword() && passwordHasDigit() && "text-green-500",
+                    passwordSignal() && !passwordHasDigit() && "text-red-500",
+                    passwordSignal() && passwordHasDigit() && "text-green-500",
                   )}
                 >
                   数字
@@ -192,8 +192,8 @@ export const ActivatePage: Component = () => {
                 、
                 <span
                   class={clsx(
-                    rawPassword() && !passwordHasOther() && "text-red-500",
-                    rawPassword() && passwordHasOther() && "text-green-500",
+                    passwordSignal() && !passwordHasOther() && "text-red-500",
+                    passwordSignal() && passwordHasOther() && "text-green-500",
                   )}
                 >
                   記号
@@ -201,8 +201,8 @@ export const ActivatePage: Component = () => {
                 、
                 <span
                   class={clsx(
-                    rawPassword() && !passwordHasLength() && "text-red-500",
-                    rawPassword() && passwordHasLength() && "text-green-500",
+                    passwordSignal() && !passwordHasLength() && "text-red-500",
+                    passwordSignal() && passwordHasLength() && "text-green-500",
                   )}
                 >
                   {MINIMUM_PASSWORD_LENGTH}文字以上

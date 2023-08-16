@@ -26,7 +26,7 @@ class Endpoint(HTTPEndpoint):
         integrations.starlette.validate_body(PostParams),
         integrations.starlette.raises(
             combinators.user_register.UserWithEmailExistsException,
-            AppResponse(ResponseContent(error="UserWithEmailExistsException")),
+            AppResponse(ResponseContent(error="UserWithEmailExists")),
         ),
     )
     async def post(self, request: Request, injector: Injector, params: PostParams) -> Response:
@@ -39,19 +39,19 @@ class Endpoint(HTTPEndpoint):
         integrations.starlette.validate_body(PutParams),
         integrations.starlette.raises(
             combinators.user_activate.RegistrationNotFoundException,
-            AppResponse(ResponseContent(error="RegistrationNotFoundException"))
+            AppResponse(ResponseContent(error="RegistrationNotFound"))
         ),
         integrations.starlette.raises(
             combinators.user_activate.UserWithEmailExistsException,
-            AppResponse(ResponseContent(error="UserWithEmailExistsException"))
+            AppResponse(ResponseContent(error="UserWithEmailExists"))
         ),
         integrations.starlette.raises(
             combinators.user_activate.UserWithUsernameExistsException,
-            AppResponse(ResponseContent(error="UserWithUsernameExistsException"))
+            AppResponse(ResponseContent(error="UserWithUsernameExists"))
         ),
         integrations.starlette.raises(
             combinators.user_activate.RegistrationExpiredException,
-            AppResponse(ResponseContent(error="RegistrationExpiredException"))
+            AppResponse(ResponseContent(error="RegistrationExpired"))
         ),
     )
     async def put(self, request: Request, injector: Injector, params: PutParams) -> Response:

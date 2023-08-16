@@ -2,45 +2,40 @@ import { Button } from "@charaxiv/components/Button";
 import { Input } from "@charaxiv/components/Input";
 import { Component, createEffect, createSignal, Show } from "solid-js";
 import * as EmailValidator from "email-validator";
-import { callRegister } from "@charaxiv/api/user";
 import { useNavigate } from "@solidjs/router";
 import { UnauthenticatedLayout } from "@charaxiv/components/UnauthorizedLayout";
 import { Label } from "@charaxiv/components/Label";
+import api from "@charaxiv/api";
 
 export const RegisterPage: Component = () => {
   const navigate = useNavigate();
 
-  const [email, emailSet] = createSignal<string>();
-  const [emailFocus, emailFocusSet] = createSignal(false);
+  const [emailSignal, emailSignalSet] = createSignal<string>();
+  const [emailFocusSignal, emailFocusSignalSet] = createSignal(false);
 
-  const formInvalid = () => !EmailValidator.validate(email() ?? "");
+  const formInvalidSignal = () => !EmailValidator.validate(emailSignal() ?? "");
 
   const showEmailInvalidError = () => {
-    const currentEmail = email();
+    const currentEmail = emailSignal();
     return (
-      !emailFocus() &&
+      !emailFocusSignal() &&
       currentEmail !== undefined &&
       !EmailValidator.validate(currentEmail)
     );
   };
 
   const onSubmitRegistrationForm = async () => {
-    const registrantAddress = email();
-    if (registrantAddress && !formInvalid()) {
-      const response = await callRegister(registrantAddress);
-      switch (response.error) {
-        case null:
-          navigate(
-            `/register_sent?email=${encodeURIComponent(registrantAddress)}`,
-          );
-          return;
-
-        case "UserWithEmailExistsException":
+    const email = emailSignal();
+    if (email && !formInvalidSignal()) {
+      try {
+        await api.user.post({ email });
+        navigate(`/register_sent?email=${encodeURIComponent(email)}`);
+      } catch (e) {
+        if (e instanceof api.user.UserWithEmailExistsError) {
           alert("入力されたメールアドレスはすでに登録済みです。");
           return;
-
-        default:
-          throw new Error(response.error);
+        }
+        throw e;
       }
     }
   };
@@ -79,10 +74,10 @@ export const RegisterPage: Component = () => {
                 autocomplete="username"
                 required
                 color={showEmailInvalidError() ? "red" : "default"}
-                value={email()}
-                onInput={(event) => emailSet(event.currentTarget.value)}
-                onFocus={() => emailFocusSet(true)}
-                onBlur={() => emailFocusSet(false)}
+                value={emailSignal()}
+                onInput={(event) => emailSignalSet(event.currentTarget.value)}
+                onFocus={() => emailFocusSignalSet(true)}
+                onBlur={() => emailFocusSignalSet(false)}
               />
             </div>
 
@@ -91,7 +86,7 @@ export const RegisterPage: Component = () => {
               variant="default"
               color="green"
               fullWidth
-              disabled={formInvalid()}
+              disabled={formInvalidSignal()}
             >
               確認メール送信
             </Button>

@@ -4,11 +4,11 @@ from unittest import mock
 import pytest
 
 from charaxiv import protocols, settings, types
-from charaxiv.combinators.user_password_reset_mail_send import Combinator
+from charaxiv.combinators.password_reset_mail_send import Combinator
 
 
 @pytest.mark.asyncio
-async def test_user_password_reset_mail_send() -> None:
+async def test_password_reset_mail_send() -> None:
     # Setup data
     email = "test@example.com"
     token = secrets.token_urlsafe(32)

@@ -17,11 +17,22 @@ export const client = wretch(CHARAXIV_API_FQDN)
     dedupe(),
   ]);
 
-export type ResponseBase<T = undefined> = T extends undefined
-  ? {
-      error: string | null;
+export type ResponseBase<T = undefined> =
+  | {
+      error: null;
+      value: T;
     }
-  : {
-      content: T;
-      error: string | null;
+  | {
+      error: string;
+      value: null;
     };
+
+export class ApiError<T extends string> extends Error {
+  constructor(public label: T) {
+    super(label);
+  }
+
+  static {
+    this.prototype.name = "ApiError";
+  }
+}

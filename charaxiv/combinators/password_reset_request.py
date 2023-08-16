@@ -20,7 +20,7 @@ class Combinator:
     db_password_reset_request_delete_by_user_id: protocols.db_password_reset_request_delete_by_user_id.Protocol
     secret_token_generate: protocols.secret_token_generate.Protocol
     db_password_reset_request_create: protocols.db_password_reset_request_insert.Protocol
-    user_password_reset_mail_send: combinators.user_password_reset_mail_send.Combinator
+    password_reset_mail_send: combinators.password_reset_mail_send.Combinator
 
     async def __call__(self, /, *, email: str) -> None:
         async with self.transaction_atomic():
@@ -34,4 +34,4 @@ class Combinator:
             token = self.secret_token_generate()
 
             await self.db_password_reset_request_create(user_id=user.id, token=token)
-            await self.user_password_reset_mail_send(email=email, token=token)
+            await self.password_reset_mail_send(email=email, token=token)

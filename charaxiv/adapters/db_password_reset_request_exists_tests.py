@@ -9,7 +9,7 @@ from charaxiv.adapters.db_password_reset_request_exists import Adapter
 
 
 @pytest.mark.asyncio
-async def test_user_password_reset_exists(database_session: AsyncSession, password_hasher: PasswordHasher) -> None:
+async def test_password_reset_process_exists(database_session: AsyncSession, password_hasher: PasswordHasher) -> None:
     email = "test@example.com"
     username = "username"
     password = password_hasher.hash(lib.password.generate())

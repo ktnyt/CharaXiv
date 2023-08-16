@@ -1,9 +1,6 @@
-import { callAuthenticated } from "@charaxiv/api/user";
+import api from "@charaxiv/api";
 import { createResource, createRoot } from "solid-js";
 
 export const [authenticated, { refetch: refetchAuthenticated }] = createRoot(
-  () =>
-    createResource<boolean>(
-      async () => (await callAuthenticated()).content.authenticated,
-    ),
+  () => createResource<boolean>(async () => await api.session.get()),
 );

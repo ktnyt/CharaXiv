@@ -12,7 +12,7 @@ const PasswordResetRequestSentPage = lazy(
   () => import("./pages/PasswordResetRequestSent"),
 );
 const PasswordResetPage = lazy(() => import("./pages/PasswordReset"));
-const SheetPage = lazy(() => import("./pages/Sheet"));
+const CharacterPage = lazy(() => import("./pages/Character"));
 const NotFoundPage = lazy(() => import("./pages/NotFound"));
 
 const App: Component = () => {
@@ -32,7 +32,7 @@ const App: Component = () => {
           element={<PasswordResetRequestSentPage />}
         />
         <Route path="/password_reset" element={<PasswordResetPage />} />
-        <Route path="/sheet/:sheet_id" element={<SheetPage />} />
+        <Route path="/sheet/:sheet_id" element={<CharacterPage />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
     </Router>

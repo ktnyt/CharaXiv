@@ -3,7 +3,7 @@ from unittest import mock
 import pytest
 
 from charaxiv import combinators, protocols, types
-from charaxiv.combinators.user_password_reset_request import (
+from charaxiv.combinators.password_reset_request import (
     Combinator, UserWithEmailNotFoundException)
 
 
@@ -27,7 +27,7 @@ async def test_db_password_reset_request_request() -> None:
     manager.db_password_reset_request_delete_by_user_id = mock.AsyncMock(spec=protocols.db_password_reset_request_delete_by_user_id.Protocol)
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[mock.sentinel.token])
     manager.db_password_reset_request_create = mock.AsyncMock(spec=protocols.db_password_reset_request_insert.Protocol)
-    manager.user_password_reset_mail_send = mock.AsyncMock(spec=combinators.user_password_reset_mail_send.Combinator)
+    manager.password_reset_mail_send = mock.AsyncMock(spec=combinators.password_reset_mail_send.Combinator)
 
     # Instantiate combinator
     combinator = Combinator(
@@ -37,7 +37,7 @@ async def test_db_password_reset_request_request() -> None:
         db_password_reset_request_delete_by_user_id=manager.db_password_reset_request_delete_by_user_id,
         secret_token_generate=manager.secret_token_generate,
         db_password_reset_request_create=manager.db_password_reset_request_create,
-        user_password_reset_mail_send=manager.user_password_reset_mail_send,
+        password_reset_mail_send=manager.password_reset_mail_send,
     )
 
     # Execute combinator
@@ -51,7 +51,7 @@ async def test_db_password_reset_request_request() -> None:
         mock.call.db_password_reset_request_exists(user_id=user.id),
         mock.call.secret_token_generate(),
         mock.call.db_password_reset_request_create(user_id=user.id, token=mock.sentinel.token),
-        mock.call.user_password_reset_mail_send(email=user.email, token=mock.sentinel.token),
+        mock.call.password_reset_mail_send(email=user.email, token=mock.sentinel.token),
         mock.call.context_manager.__aexit__(None, None, None),
     ]
 
@@ -76,7 +76,7 @@ async def test_user_db_password_reset_request__db_user_with_email_not_found() ->
     manager.db_password_reset_request_delete_by_user_id = mock.AsyncMock(spec=protocols.db_password_reset_request_delete_by_user_id.Protocol, side_effect=Exception("should not be called"))
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=Exception("should not be called"))
     manager.db_password_reset_request_create = mock.AsyncMock(spec=protocols.db_password_reset_request_insert.Protocol, side_effect=Exception("should not be called"))
-    manager.user_password_reset_mail_send = mock.AsyncMock(spec=combinators.user_password_reset_mail_send.Combinator, side_effect=Exception("should not be called"))
+    manager.password_reset_mail_send = mock.AsyncMock(spec=combinators.password_reset_mail_send.Combinator, side_effect=Exception("should not be called"))
 
     # Instantiate combinator
     combinator = Combinator(
@@ -86,7 +86,7 @@ async def test_user_db_password_reset_request__db_user_with_email_not_found() ->
         db_password_reset_request_delete_by_user_id=manager.db_password_reset_request_delete_by_user_id,
         secret_token_generate=manager.secret_token_generate,
         db_password_reset_request_create=manager.db_password_reset_request_create,
-        user_password_reset_mail_send=manager.user_password_reset_mail_send,
+        password_reset_mail_send=manager.password_reset_mail_send,
     )
 
     # Execute combinator
@@ -122,7 +122,7 @@ async def test_user_db_password_reset_request__password_reset_request_exists() -
     manager.db_password_reset_request_delete_by_user_id = mock.AsyncMock(spec=protocols.db_password_reset_request_delete_by_user_id.Protocol)
     manager.secret_token_generate = mock.Mock(spec=protocols.secret_token_generate.Protocol, side_effect=[mock.sentinel.token])
     manager.db_password_reset_request_create = mock.AsyncMock(spec=protocols.db_password_reset_request_insert.Protocol)
-    manager.user_password_reset_mail_send = mock.AsyncMock(spec=combinators.user_password_reset_mail_send.Combinator)
+    manager.password_reset_mail_send = mock.AsyncMock(spec=combinators.password_reset_mail_send.Combinator)
 
     # Instantiate combinator
     combinator = Combinator(
@@ -132,7 +132,7 @@ async def test_user_db_password_reset_request__password_reset_request_exists() -
         db_password_reset_request_delete_by_user_id=manager.db_password_reset_request_delete_by_user_id,
         secret_token_generate=manager.secret_token_generate,
         db_password_reset_request_create=manager.db_password_reset_request_create,
-        user_password_reset_mail_send=manager.user_password_reset_mail_send,
+        password_reset_mail_send=manager.password_reset_mail_send,
     )
 
     # Execute combinator
@@ -147,6 +147,6 @@ async def test_user_db_password_reset_request__password_reset_request_exists() -
         mock.call.db_password_reset_request_delete_by_user_id(user_id=user.id),
         mock.call.secret_token_generate(),
         mock.call.db_password_reset_request_create(user_id=user.id, token=mock.sentinel.token),
-        mock.call.user_password_reset_mail_send(email=user.email, token=mock.sentinel.token),
+        mock.call.password_reset_mail_send(email=user.email, token=mock.sentinel.token),
         mock.call.context_manager.__aexit__(None, None, None),
     ]

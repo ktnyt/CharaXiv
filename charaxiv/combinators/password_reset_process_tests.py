@@ -5,14 +5,14 @@ from unittest import mock
 import pytest
 
 from charaxiv import protocols, types
-from charaxiv.combinators.user_password_reset import (
+from charaxiv.combinators.password_reset_process import (
     Combinator, PasswordResetRequestExpiredException,
     PasswordResetRequestNotFoundException,
     UserPasswordUpdateWithIdFailedException)
 
 
 @pytest.mark.asyncio
-async def test_user_password_reset() -> None:
+async def test_password_reset_process() -> None:
     # Setup data
     password_reset_request = types.password_reset.PasswordResetRequest.model_construct(
         user_id=mock.sentinel.user_id,
@@ -59,7 +59,7 @@ async def test_user_password_reset() -> None:
 
 
 @pytest.mark.asyncio
-async def test_user_password_reset__db_password_reset_request_not_found() -> None:
+async def test_password_reset_process__db_password_reset_request_not_found() -> None:
     # Setup mocks
     manager = mock.Mock()
     manager.context_manager = mock.AsyncMock(spec=contextlib.AbstractAsyncContextManager[None])
@@ -96,7 +96,7 @@ async def test_user_password_reset__db_password_reset_request_not_found() -> Non
 
 
 @ pytest.mark.asyncio
-async def test_user_password_reset__db_password_reset_request_expired() -> None:
+async def test_password_reset_process__db_password_reset_request_expired() -> None:
     # Setup data
     password_reset_request = types.password_reset.PasswordResetRequest.model_construct(
         user_id=mock.sentinel.user_id,
@@ -142,7 +142,7 @@ async def test_user_password_reset__db_password_reset_request_expired() -> None:
 
 
 @ pytest.mark.asyncio
-async def test_user_password_reset__db_user_password_update_with_id_failed() -> None:
+async def test_password_reset_process__db_user_password_update_with_id_failed() -> None:
     # Setup data
     password_reset_request = types.password_reset.PasswordResetRequest.model_construct(
         user_id=mock.sentinel.user_id,

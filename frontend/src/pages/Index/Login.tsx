@@ -1,4 +1,4 @@
-import { callLogin } from "@charaxiv/api/user";
+import api from "@charaxiv/api";
 import { Button } from "@charaxiv/components/Button";
 import { Input } from "@charaxiv/components/Input";
 import { Label } from "@charaxiv/components/Label";
@@ -8,14 +8,17 @@ import { refetchAuthenticated } from "@charaxiv/context/authenticated";
 import { Component, createSignal } from "solid-js";
 
 export const Login: Component = () => {
-  const [email, emailSet] = createSignal("");
-  const [password, passwordSet] = createSignal("");
+  const [emailSignal, emailSignalSet] = createSignal("");
+  const [passwordSignal, passwordsSignalSet] = createSignal("");
 
-  const formInvalid = () => email().length === 0 || password().length < 12;
+  const formInvalid = () =>
+    emailSignal().length === 0 || passwordSignal().length < 12;
 
   const onSubmitLoginForm = async () => {
     if (!formInvalid()) {
-      await callLogin(email(), password());
+      const email = emailSignal();
+      const password = passwordSignal();
+      await api.session.post({ email, password });
       await refetchAuthenticated();
     }
   };
@@ -36,8 +39,8 @@ export const Login: Component = () => {
             type="email"
             autocomplete="username"
             required
-            onInput={(event) => emailSet(event.currentTarget.value)}
-            onChange={(event) => emailSet(event.currentTarget.value)}
+            onInput={(event) => emailSignalSet(event.currentTarget.value)}
+            onChange={(event) => emailSignalSet(event.currentTarget.value)}
           />
         </div>
 
@@ -48,8 +51,8 @@ export const Login: Component = () => {
             type="password"
             autocomplete="current-password"
             required
-            onInput={(event) => passwordSet(event.currentTarget.value)}
-            onChange={(event) => passwordSet(event.currentTarget.value)}
+            onInput={(event) => passwordsSignalSet(event.currentTarget.value)}
+            onChange={(event) => passwordsSignalSet(event.currentTarget.value)}
           />
         </div>
 

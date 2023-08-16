@@ -25,12 +25,12 @@ class Endpoint(HTTPEndpoint):
         integrations.starlette.use_injector,
         integrations.starlette.validate_body(PostParams),
         integrations.starlette.raises(
-            combinators.user_password_reset_request.UserWithEmailNotFoundException,
+            combinators.password_reset_request.UserWithEmailNotFoundException,
             AppResponse(ResponseContent(error="UserWithEmailNotFound")),
         ),
     )
     async def post(self, request: Request, injector: Injector, params: PostParams) -> Response:
-        exec = injector.get(combinators.user_password_reset_request.Combinator)
+        exec = injector.get(combinators.password_reset_request.Combinator)
         await exec(email=params.email)
         return AppResponse(ResponseContent())
 
@@ -38,15 +38,15 @@ class Endpoint(HTTPEndpoint):
         integrations.starlette.use_injector,
         integrations.starlette.validate_body(PutParams),
         integrations.starlette.raises(
-            combinators.user_password_reset.PasswordResetRequestNotFoundException,
+            combinators.password_reset_process.PasswordResetRequestNotFoundException,
             AppResponse(ResponseContent(error="PasswordResetRequestNotFound")),
         ),
         integrations.starlette.raises(
-            combinators.user_password_reset.PasswordResetRequestExpiredException,
+            combinators.password_reset_process.PasswordResetRequestExpiredException,
             AppResponse(ResponseContent(error="PasswordResetRequestExpired")),
         ),
     )
     async def put(self, request: Request, injector: Injector, params: PutParams) -> Response:
-        exec = injector.get(combinators.user_password_reset.Combinator)
+        exec = injector.get(combinators.password_reset_process.Combinator)
         await exec(token=params.token, password=params.password)
         return AppResponse(ResponseContent())

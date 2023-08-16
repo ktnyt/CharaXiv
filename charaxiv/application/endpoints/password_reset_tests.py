@@ -32,11 +32,11 @@ def test_password_reset__post__200() -> None:
     email = "text@example.com"
 
     manager = mock.Mock()
-    manager.user_password_reset_request = mock.AsyncMock(spec=combinators.user_password_reset_request.Combinator)
+    manager.password_reset_request = mock.AsyncMock(spec=combinators.password_reset_request.Combinator)
 
     @contextlib.asynccontextmanager
     async def request_lifespan() -> typing.AsyncGenerator[integrations.starlette.InstallableModuleType, None]:
-        yield lambda binder: binder.bind(combinators.user_password_reset_request.Combinator, to=InstanceProvider(manager.user_password_reset_request))
+        yield lambda binder: binder.bind(combinators.password_reset_request.Combinator, to=InstanceProvider(manager.password_reset_request))
 
     app = Starlette(
         routes=[Route("/", endpoint=Endpoint)],
@@ -48,7 +48,7 @@ def test_password_reset__post__200() -> None:
         assert out.json() == ResponseContent().model_dump()
 
     assert manager.mock_calls == [
-        mock.call.user_password_reset_request(email=email),
+        mock.call.password_reset_request(email=email),
     ]
 
 
@@ -57,11 +57,11 @@ def test_password_reset__put__200() -> None:
     password = lib.password.generate()
 
     manager = mock.Mock()
-    manager.user_password_reset = mock.AsyncMock(spec=combinators.user_password_reset.Combinator)
+    manager.password_reset_process = mock.AsyncMock(spec=combinators.password_reset_process.Combinator)
 
     @contextlib.asynccontextmanager
     async def request_lifespan() -> typing.AsyncGenerator[integrations.starlette.InstallableModuleType, None]:
-        yield lambda binder: binder.bind(combinators.user_password_reset.Combinator, to=InstanceProvider(manager.user_password_reset))
+        yield lambda binder: binder.bind(combinators.password_reset_process.Combinator, to=InstanceProvider(manager.password_reset_process))
 
     app = Starlette(
         routes=[Route("/", endpoint=Endpoint)],
@@ -73,7 +73,7 @@ def test_password_reset__put__200() -> None:
         assert out.json() == ResponseContent().model_dump()
 
     assert manager.mock_calls == [
-        mock.call.user_password_reset(token=token, password=password),
+        mock.call.password_reset_process(token=token, password=password),
     ]
 
 
@@ -88,11 +88,11 @@ def test_password_reset__put__400(password: str) -> None:
     token = secrets.token_urlsafe(32)
 
     manager = mock.Mock()
-    manager.user_password_reset = mock.AsyncMock(spec=combinators.user_password_reset.Combinator)
+    manager.password_reset_process = mock.AsyncMock(spec=combinators.password_reset_process.Combinator)
 
     @contextlib.asynccontextmanager
     async def request_lifespan() -> typing.AsyncGenerator[integrations.starlette.InstallableModuleType, None]:
-        yield lambda binder: binder.bind(combinators.user_password_reset.Combinator, to=InstanceProvider(manager.user_password_reset))
+        yield lambda binder: binder.bind(combinators.password_reset_process.Combinator, to=InstanceProvider(manager.password_reset_process))
 
     app = Starlette(
         routes=[Route("/", endpoint=Endpoint)],
