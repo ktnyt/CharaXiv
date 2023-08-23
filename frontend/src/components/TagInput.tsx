@@ -64,8 +64,8 @@ const Tag: Component<TagProps> = (props) => {
       class={clsx(
         "flex flex-row rounded-sm align-center text-base leading-4 proportional-nums cursor-grab transition",
         selected()
-          ? "bg-nord-100 text-nord-1000 dark:bg-nord-900 dark:text-nord-0"
-          : "bg-nord-150 text-nord-1000 dark:bg-nord-850 dark:text-nord-0",
+          ? "bg-nord-150 text-nord-1000 dark:bg-nord-850 dark:text-nord-0"
+          : "bg-nord-100 text-nord-1000 dark:bg-nord-900 dark:text-nord-0",
       )}
       onClick={(event) => event.stopPropagation()}
     >
@@ -77,8 +77,8 @@ const Tag: Component<TagProps> = (props) => {
           class={clsx(
             "flex justify-center items-center h-6 rounded-sm aspect-square transition",
             selected()
-              ? "bg-nord-100 text-nord-800 hover:bg-nord-150 dark:bg-nord-900 dark:text-nord-200 dark:hover:bg-nord-850"
-              : "bg-nord-150 text-nord-800 hover:bg-nord-200 dark:bg-nord-850 dark:text-nord-200 dark:hover:bg-nord-800",
+              ? "bg-nord-150 text-nord-800 hover:bg-nord-200 dark:bg-nord-850 dark:text-nord-200 dark:hover:bg-nord-800"
+              : "bg-nord-100 text-nord-800 hover:bg-nord-150 dark:bg-nord-900 dark:text-nord-200 dark:hover:bg-nord-850",
           )}
           onClick={props.delete}
         >
@@ -150,12 +150,14 @@ export const TagInput: Component<TagInputProps> = (props) => {
   const [selected, selectedSet] = createSignal<number[]>([]);
 
   const tagDragStart = (index: number) => (event: PointerEvent) => {
+    event.preventDefault();
     const { clientX: x, clientY: y } = getEventCoords(event);
     const origin = { x, y };
     drag = { index, origin, stuck: true };
   };
 
   const tagDragMove = (event: PointerEvent) => {
+    event.preventDefault();
     if (drag) {
       const { clientX: x, clientY: y } = getEventCoords(event);
       const cursor = { x, y };
@@ -168,7 +170,8 @@ export const TagInput: Component<TagInputProps> = (props) => {
     }
   };
 
-  const tagDragEnd = () => {
+  const tagDragEnd = (event: PointerEvent) => {
+    event.preventDefault();
     coordSet();
     valuesSet(renderValues());
     orderSet(seq(count()));

@@ -13,12 +13,6 @@ export const Header: ParentComponent = (props) => (
       <Logo class="ml-2 hidden sm:inline-block h-4" />
     </A>
 
-    <div class="flex flex-row justify-around space-x-2">
-      {props.children}
-
-      <IconButton variant="textual" color="default">
-        <i class="fas fa-moon" />
-      </IconButton>
-    </div>
+    <div class="flex flex-row justify-around space-x-2">{props.children}</div>
   </header>
 );

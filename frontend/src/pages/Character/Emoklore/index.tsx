@@ -3,15 +3,17 @@ import { Button } from "@charaxiv/components/Button";
 import { Header } from "@charaxiv/components/Header";
 import { IconButton } from "@charaxiv/components/IconButton";
 import { Input } from "@charaxiv/components/Input";
+import { Markdown } from "@charaxiv/components/Markdown";
 import { Section } from "@charaxiv/components/Section";
 import { Skeleton } from "@charaxiv/components/Skeleton";
 import { TagInput } from "@charaxiv/components/TagInput";
 import { Sheet } from "@charaxiv/types/common/sheet";
 import { EmokloreData } from "@charaxiv/types/systems/emoklore";
 import { Component, createSignal, Show } from "solid-js";
+import { EmotionPicker } from "./ResonancePicker";
 
 export type EmokloreProps = {
-  sheet: Sheet<EmokloreData>;
+  // sheet: Sheet<EmokloreData>;
 };
 
 export const Emoklore: Component<EmokloreProps> = () => {
@@ -29,38 +31,20 @@ export const Emoklore: Component<EmokloreProps> = () => {
   ]);
   const toggleLoading = () => loadingSet((prev) => !prev);
   return (
-    <Article class="space-y-2">
-      <Header>
-        <IconButton
-          variant="outline"
-          color="default"
-          onClick={() => toggleLoading()}
-        >
-          <i class="fas fa-arrows-rotate" />
-        </IconButton>
+    <div class="grid grid-cols-[minmax(320px,_480px)] sm:grid-cols-[minmax(320px,_480px)_minmax(320px,_400px)] sm:gap-x-4 mt-4">
+      <div>
+        <Section class="flex flex-col w-full">
+          <div class="flex flex-col w-full">
+            <div class="flex justify-center items-center w-full aspect-square">
+              <div class="flex justify-center items-center w-full h-full transition animate-pulse bg-nord-200 text-nord-300 dark:bg-nord-800 dark:text-nord-700">
+                <span class="inline-block text-8xl">
+                  <i class="fas fa-image" />
+                </span>
+              </div>
+            </div>
 
-        <IconButton variant="outline" color="default">
-          <i class="fas fa-link" />
-        </IconButton>
-
-        <IconButton variant="outline" color="blue">
-          <i class="fas fa-palette" />
-        </IconButton>
-
-        <IconButton variant="default" color="blue">
-          <i class="fas fa-code" />
-        </IconButton>
-      </Header>
-
-      <div class="flex flex-col md:flex-row justify-around w-full md:max-w-3xl">
-        <Section class="flex flex-col flex-grow w-full min-w-[320px] md:max-w-[430px] min-h-screen">
-          <div class="flex justify-center items-center w-full aspect-square">
-            <Skeleton.Image />
-          </div>
-
-          <div class="flex flex-col m-2 space-y-2">
-            <div class="flex flex-row justify-between w-full space-x-2">
-              <IconButton variant="default" color="default">
+            <div class="grid grid-cols-[32px_32px_1fr_32px] m-2 gap-2">
+              <IconButton>
                 <i class="fas fa-chevron-left" />
               </IconButton>
 
@@ -68,47 +52,41 @@ export const Emoklore: Component<EmokloreProps> = () => {
                 <i class="fas fa-trash-alt" />
               </IconButton>
 
-              <Button variant="outline" color="blue" class="flex-grow">
+              <Button variant="outline" color="blue">
                 画像を追加
               </Button>
 
-              <div class="hidden">
-                <IconButton variant="outline" color="default">
-                  <i class="fas fa-download" />
-                </IconButton>
-              </div>
-
-              <div>
-                <IconButton variant="default" color="default">
-                  <i class="fas fa-chevron-right" />
-                </IconButton>
-              </div>
-            </div>
-
-            <div>
-              <Show
-                when={!loading()}
-                fallback={
-                  <div class="w-full">
-                    <Skeleton.Text class="w-48 h-12" />
-                  </div>
-                }
-              >
-                <Input class="h-12 text-3xl" placeholder="名前" />
-              </Show>
-            </div>
-
-            <div>
-              <TagInput
-                values={values()}
-                update={(values) => valuesSet(values)}
-              />
+              <IconButton>
+                <i class="fas fa-chevron-right" />
+              </IconButton>
             </div>
           </div>
-        </Section>
 
-        <Section class="w-full min-w-[320px] md:max-w-[320px] min-h-screen"></Section>
+          <div class="flex flex-col space-y-4 m-2">
+            <div class="flex flex-col space-y-1">
+              <Input placeholder="名前" borderless class="h-[44px] text-3xl" />
+              <Input placeholder="よみがな" borderless class="text-base" />
+            </div>
+            <TagInput
+              values={values()}
+              update={(values) => valuesSet(values)}
+            />
+            <Markdown text="# Public Memo" />
+            <Markdown text="# Secret Memo" />
+          </div>
+        </Section>
       </div>
-    </Article>
+
+      <div>
+        <Section class="flex flex-col w-full">
+          <div class="flex flex-col w-full">
+            <h2 class="text-4xl font-bold mb-4">共鳴感情</h2>
+            <EmotionPicker />
+          </div>
+        </Section>
+      </div>
+    </div>
   );
 };
+
+export default Emoklore;

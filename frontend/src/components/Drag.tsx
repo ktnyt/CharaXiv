@@ -1,4 +1,4 @@
-import { createSignal, JSX, onCleanup, onMount } from "solid-js";
+import { Component, createSignal, JSX, onCleanup, onMount } from "solid-js";
 import { delegateEvent, delegateJSXEvent } from "./utils";
 
 export type DragChildProps<T extends HTMLElement> = {
@@ -8,7 +8,16 @@ export type DragChildProps<T extends HTMLElement> = {
 
 export type PointerEvent = MouseEvent | TouchEvent;
 
-export const getEventCoords = (event: PointerEvent) => {
+export type EventCoords = {
+  clientX: number;
+  clientY: number;
+  pageX: number;
+  pageY: number;
+  screenX: number;
+  screenY: number;
+};
+
+export const getEventCoords = (event: PointerEvent): EventCoords => {
   if ("touches" in event) {
     const { clientX, clientY, pageX, pageY, screenX, screenY } =
       event.touches[0];
@@ -39,7 +48,6 @@ export const Drag = <T extends HTMLElement, U extends JSX.Element>(
 
   const onMouseDown: JSX.EventHandler<T, MouseEvent> = (event) => {
     if (!disabled()) {
-      event.preventDefault();
       draggingSet(true);
       onDragStart(event);
     }
@@ -48,7 +56,6 @@ export const Drag = <T extends HTMLElement, U extends JSX.Element>(
   const onTouchStart: JSX.EventHandler<T, TouchEvent> = (event) => {
     if (!disabled()) {
       if (event.touches.length === 1) {
-        event.preventDefault();
         draggingSet(true);
         onDragStart(event);
       }
@@ -57,21 +64,18 @@ export const Drag = <T extends HTMLElement, U extends JSX.Element>(
 
   const handleMouseMove = (event: MouseEvent) => {
     if (!disabled() && dragging()) {
-      event.preventDefault();
       onDragMove(event);
     }
   };
 
   const handleTouchMove = (event: TouchEvent) => {
     if (!disabled() && dragging() && event.touches.length === 1) {
-      event.preventDefault();
       onDragMove(event);
     }
   };
 
   const handleRelease = (event: PointerEvent) => {
     if (!disabled() && dragging()) {
-      event.preventDefault();
       draggingSet(false);
       onDragEnd(event);
     }

@@ -9,13 +9,12 @@ export const Logo: Component<LogoProps> = (props) => (
     class={clsx("inline-block text-nord-1000 dark:text-nord-0", props.class)}
   >
     <svg
-      id="_イヤー_2"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 764.31 106.16"
-      class="w-full h-full"
+      class="h-full"
       preserveAspectRatio="xMidYMid"
     >
-      <g id="_イヤー_1-2">
+      <g>
         <g>
           <path
             fill="currentColor"

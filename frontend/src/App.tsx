@@ -32,7 +32,7 @@ const App: Component = () => {
           element={<PasswordResetRequestSentPage />}
         />
         <Route path="/password_reset" element={<PasswordResetPage />} />
-        <Route path="/sheet/:sheet_id" element={<CharacterPage />} />
+        <Route path="/c/:character_id" element={<CharacterPage />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
     </Router>
