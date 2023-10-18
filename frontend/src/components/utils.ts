@@ -26,15 +26,48 @@ export const delegateEvent =
     if (handler) handler(event);
   };
 
-export const notNull =
-  <T, U>(callback: (value: NonNullable<T>) => U) =>
-  (value: T) => {
-    if (value === null || value === undefined) return value;
+type Nullable<T> = T | null | undefined;
+
+export function defined<T, U>(
+  callback: (value: NonNullable<T>) => Nullable<U>,
+): (value: T) => Nullable<U>;
+export function defined<T, U>(
+  callback: (value: NonNullable<T>) => Nullable<U>,
+  value: T,
+): U;
+export function defined<T, U>(
+  callback: (value: NonNullable<T>) => Nullable<U>,
+  value?: T,
+): ((value: T) => Nullable<U>) | Nullable<U> {
+  if (value) return defined(callback)(value);
+
+  return (value: T) => {
+    if (value === null) return null;
+    if (value === undefined) return undefined;
     return callback(value);
   };
+}
 
 export const swapElement = <T>(array: T[], index: number, value: T) => [
   ...array.slice(0, index),
   value,
   ...array.slice(index + 1),
 ];
+
+export const sequence = (min: number, max?: number): number[] =>
+  max === undefined
+    ? sequence(0, min)
+    : [...new Array(max - min)].map((_, index) => index + min);
+
+export const inspect = <T>(value: T): T => {
+  console.log(value);
+  return value;
+};
+
+export const clamp = (value: number, min: number, max: number): number =>
+  Math.max(min, Math.min(value, max));
+
+export const pick =
+  (cond: boolean) =>
+  <T>(t: T, f: T): T =>
+    cond ? t : f;

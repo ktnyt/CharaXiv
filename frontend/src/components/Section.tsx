@@ -6,6 +6,6 @@ export type SectionProps = ComponentProps<"section">;
 export const Section: Component<SectionProps> = (props) => (
   <section
     {...props}
-    class={clsx("transition bg-nord-0 dark:bg-nord-1000", props.class)}
+    class={clsx("bg-nord-0 transition dark:bg-nord-1000", props.class)}
   />
 );

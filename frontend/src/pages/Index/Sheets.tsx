@@ -2,6 +2,13 @@ import { callSheetCreate, callSheetList } from "@charaxiv/api/sheet";
 import { Article } from "@charaxiv/components/Article";
 import { Button } from "@charaxiv/components/Button";
 import { Header } from "@charaxiv/components/Header";
+import {
+  Icon,
+  RegularImage,
+  SolidBorderAll,
+  SolidList,
+  SolidUserPlus,
+} from "@charaxiv/components/Icon";
 import { IconButton } from "@charaxiv/components/IconButton";
 import { createLocalStorage } from "@charaxiv/hooks/createLocalStorage";
 import { useNavigate } from "@solidjs/router";
@@ -33,14 +40,14 @@ export const Sheets: Component = () => {
             disabled={display() === "list"}
             onClick={() => setDisplay("list")}
           >
-            <i class="fas fa-list" />
+            <Icon of={SolidList} />
           </IconButton>
           <IconButton
             class="rounded-l-none disabled:bg-nord-300 disabled:text-nord-1000 disabled:opacity-100"
             disabled={display() === "grid"}
             onClick={() => setDisplay("grid")}
           >
-            <i class="fas fa-border-all" />
+            <Icon of={SolidBorderAll} />
           </IconButton>
         </div>
 
@@ -49,14 +56,14 @@ export const Sheets: Component = () => {
           color="blue"
           onClick={() => onClickSheetCreate()}
         >
-          <i class="fas fa-user-plus" />
+          <Icon of={SolidUserPlus} />
         </IconButton>
       </Header>
 
       <Show
         when={sheetList.loading || sheetList()!.length > 0}
         fallback={
-          <div class="flex justify-center items-center w-full h-full">
+          <div class="flex h-full w-full items-center justify-center">
             <Button
               color="blue"
               variant="default"
@@ -68,20 +75,22 @@ export const Sheets: Component = () => {
           </div>
         }
       >
-        <div class="flex justify-center w-full p-4">
-          <div class="flex flex-row rounded overflow-clip w-full max-w-[600px] shadow">
+        <div class="flex w-full justify-center p-4">
+          <div class="flex w-full max-w-[600px] flex-row overflow-clip rounded shadow">
             <Index each={sheetList()!}>
               {(sheet) => (
-                <div class="relative flex flex-row w-full h-[64px] bg-nord-0">
-                  <div class="flex justify-center items-center h-full aspect-square p-2 bg-nord-100">
-                    <i class="text-nord-500 text-3xl far fa-image" />
+                <div class="relative flex h-[64px] w-full flex-row bg-nord-0">
+                  <div class="flex aspect-square h-full items-center justify-center bg-nord-100 p-2">
+                    <span class="text-3xl text-nord-500">
+                      <Icon of={RegularImage} />
+                    </span>
                   </div>
-                  <div class="flex flex-col justify-center w-full h-full p-2">
+                  <div class="flex h-full w-full flex-col justify-center p-2">
                     <a
                       href={`/sheet/${sheet().id}`}
                       class="after:absolute after:inset-0"
                     >
-                      <h2>{sheet().content.name || "名無しさん"}</h2>
+                      <h2>{sheet().name || "名無しさん"}</h2>
                     </a>
                   </div>
                 </div>

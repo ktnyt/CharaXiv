@@ -2,15 +2,16 @@ import { A } from "@solidjs/router";
 import { ParentComponent } from "solid-js";
 import { IconButton } from "./IconButton";
 import { Logo } from "./Logo";
+import { Icon, SolidLayerGroup } from "./Icon";
 
 export const Header: ParentComponent = (props) => (
-  <header class="flex flex-row justify-between items-center w-screen h-12 px-2 bg-nord-0 text-nord-1000 transition dark:bg-nord-1000 dark:text-nord-0">
+  <header class="flex h-12 w-screen flex-row items-center justify-between bg-nord-0 px-2 text-nord-1000 transition dark:bg-nord-1000 dark:text-nord-0">
     <A
       href="/"
-      class="inline-block font-medium text-2xl leading-6 text-center align-center"
+      class="align-center inline-block text-center text-2xl font-medium leading-6"
     >
-      <i class="fas fa-layer-group" />
-      <Logo class="ml-2 hidden sm:inline-block h-4" />
+      <Icon of={SolidLayerGroup} />
+      <Logo class="ml-2 hidden h-4 sm:inline-block" />
     </A>
 
     <div class="flex flex-row justify-around space-x-2">{props.children}</div>

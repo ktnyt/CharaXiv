@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { Component } from "solid-js";
 import { InputBase, InputBaseProps } from "./InputBase";
+import { twMerge } from "tailwind-merge";
 
 export type InputColor =
   | "default"
@@ -21,9 +22,9 @@ export const Input: Component<InputProps> = (props) => {
   return (
     <InputBase
       {...props}
-      class={clsx(
-        "inline-flex w-full rounded p-2 text-base leading-4 bg-nord-500 bg-opacity-0 hover:bg-opacity-10 placeholder:text-nord-500 cursor-text select-none active:outline-none focus:outline-none transition",
-        "read-only:text-nord-500 read-only:bg-opacity-10 read-only:cursor-not-allowed",
+      class={twMerge(
+        "inline-flex w-full cursor-text select-none rounded bg-nord-500 bg-opacity-0 p-2 text-base leading-4 transition placeholder:text-nord-500 hover:bg-opacity-10 focus:outline-none active:outline-none",
+        "read-only:cursor-not-allowed read-only:bg-opacity-10 read-only:text-nord-500",
         props.borderless ? "border-none" : "border",
         "text-nord-1000 caret-nord-1000 dark:text-nord-0 dark:caret-nord-0",
         // prettier-ignore

@@ -1,115 +1,108 @@
 import {
+  Component,
   Index,
-  ParentProps,
+  JSX,
   children,
   createEffect,
   createSignal,
 } from "solid-js";
-import { Drag, EventCoords, getEventCoords } from "./Drag";
+
+import { Drag, EventCoords } from "./Drag";
 import { Tap } from "./Tap";
-import clsx from "clsx";
+import { clamp, defined } from "./utils";
+import { Viewport } from "@charaxiv/context/viewport";
 
-export type SlideSelectorProps<T> = ParentProps<{
-  value?: number;
-  commit?: (value: number) => void;
-}>;
+export type SlideSelectorProps = {
+  index?: number;
+  atCommit: (index: number) => void;
+  children: JSX.Element;
+};
 
-export const SlideSelector = <T extends unknown>(
-  props: SlideSelectorProps<T>,
-) => {
+export const SlideSelector: Component<SlideSelectorProps> = (props) => {
   const resolved = children(() => props.children);
   const childElements = resolved.toArray();
 
-  let value = props.value ?? 0;
-  let origin: EventCoords | undefined;
-  let handler: number | undefined;
+  let current = props.index ?? 0;
+  const [offsetGet, offsetSet] = createSignal(current * 32);
+  let origin: number | undefined;
+  let smooth = true;
+  const [changingGet, changingSet] = createSignal(false);
 
-  const [getDelta, setDelta] = createSignal((props.value ?? 0) * 32);
-  const [getActive, setActive] = createSignal(false);
-  createEffect(() => {
-    value = props.value ?? 0;
-    setDelta(value * 32);
-  });
+  createEffect(() => Viewport.scroll(!changingGet()));
 
-  const computeOpacity = (index: number) => {
-    const distance = Math.abs(index * 32 - getDelta());
-    return Math.floor(
-      distance < 16 ? 100 : 75 * (1 / (Math.sqrt(distance) / 10 + 1)),
-    );
+  const dragStartHandle = ({ pageX: coord }: EventCoords) => {
+    origin = coord;
+  };
+
+  const dragMoveHandle = ({ pageX: coord }: EventCoords) => {
+    if (origin) {
+      const delta = origin - coord;
+      origin = coord;
+      offsetSet((offset) => {
+        const index = Math.floor((offset + 16) / 32);
+        changingSet((dragging) => index !== current || dragging);
+        return offset + delta;
+      });
+    }
+  };
+
+  const dragEndHandle = () => {
+    origin = undefined;
+    smooth = true;
+    offsetSet((offset) => {
+      const index = Math.floor((offset + 16) / 32);
+      current = index;
+      props.atCommit(index);
+      return clamp(index, 0, childElements.length) * 32;
+    });
+    changingSet(false);
+  };
+
+  const computeTranslate = (offset: number) => {
+    if (offset < 0) return Math.sqrt(Math.abs(offset));
+    const max = (childElements.length - 1) * 32;
+    if (offset > max) return -(max + Math.sqrt(offset - max));
+    return -offset;
+  };
+
+  const tapHandle = (index: number) => {
+    origin = undefined;
+    offsetSet((offset) => {
+      if (index * 32 !== offset) props.atCommit(index);
+      current = index;
+      return index * 32;
+    });
+  };
+
+  const sliderItemStyle = (index: number): JSX.CSSProperties => {
+    const offset = offsetGet();
+    return {
+      transform: `translateX(${computeTranslate(offset)}px)`,
+      transition: origin === undefined ? "transform 0.3s" : "",
+      opacity: Math.floor((offset + 16) / 32) === index ? "100%" : "33%",
+    };
   };
 
   return (
     <Drag
-      onDragStart={(event) => {
-        event.preventDefault();
-        handler = setTimeout(() => {
-          origin = getEventCoords(event);
-          handler = undefined;
-          setActive(true);
-        }, 200);
-      }}
-      onDragMove={(event) => {
-        if (origin) {
-          event.preventDefault();
-          let delta = origin.pageX - getEventCoords(event).pageX + value * 32;
-          if (delta < 0) {
-            delta = -Math.sqrt(Math.abs(delta));
-          }
-          const max = childElements.length * 32;
-          if (delta > max) {
-            delta = max + Math.sqrt(delta - max);
-          }
-          setDelta(delta);
-        }
-      }}
-      onDragEnd={(event) => {
-        event.preventDefault();
-        if (handler) {
-          clearTimeout(handler);
-          handler = undefined;
-        }
-        if (origin) {
-          value += Math.floor(
-            (origin.pageX - getEventCoords(event).pageX + 16) / 32,
-          );
-          value = Math.min(Math.max(0, value), childElements.length - 1);
-          if (props.commit) {
-            props.commit(value);
-          }
-          origin = undefined;
-          setDelta(value * 32);
-          setActive(false);
-        }
-      }}
+      atStart={dragStartHandle}
+      atMove={dragMoveHandle}
+      atEnd={dragEndHandle}
     >
       {(dragProps) => (
         <div
-          class="flex justify-center w-full h-8 overflow-clip select-none"
+          class="flex h-8 w-full select-none justify-center overflow-clip"
           {...dragProps}
         >
-          <div class="flex w-8 h-8">
+          <div class="flex h-8 w-8">
             <div class="flex flex-row">
               <Index each={childElements}>
                 {(getChild, index) => (
-                  <Tap
-                    onTap={(e) => {
-                      value = index;
-                      if (props.commit) {
-                        props.commit(value);
-                      }
-                      setDelta(index * 32);
-                    }}
-                  >
+                  <Tap onTap={() => tapHandle(index)}>
                     {(tapProps) => (
                       <div
-                        class="flex justify-center align-middle w-8 h-8 leading-8"
-                        style={{
-                          transform: `translateX(${-getDelta()}px)`,
-                          transition: getActive()
-                            ? undefined
-                            : "transform 0.3s",
-                          opacity: `${computeOpacity(index)}%`,
-                        }}
+                        class="flex h-8 w-8 cursor-pointer justify-center align-middle leading-8"
+                        style={sliderItemStyle(index)}
                         {...tapProps}
                       >
                         {getChild()}

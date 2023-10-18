@@ -9,7 +9,7 @@ export const Label: Component<LabelProps> = (props) => {
     <label
       class={clsx(
         cls,
-        "inline-block mb-1 text-sm text-nord-800 dark:text-nord-200",
+        "mb-1 inline-block text-sm text-nord-800 dark:text-nord-200",
       )}
       {...others}
     />

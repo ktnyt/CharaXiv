@@ -26,7 +26,7 @@ export const Link: Component<LinkProps> = (props) => {
       {...props}
       class={clsx(
         props.class,
-        "inline-flex justify-center items-center py-1.5 h-8 rounded text-base leading-4 select-none cursor-pointer transition",
+        "inline-flex h-8 cursor-pointer select-none items-center justify-center rounded py-1.5 text-base leading-4 transition",
 
         // prettier-ignore
         clsx(
@@ -52,7 +52,7 @@ export const Link: Component<LinkProps> = (props) => {
           style("textual",  "purple") && "border-none bg-purple-500 bg-opacity-0 text-purple-500 hover:bg-opacity-20",
         ),
 
-        "disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed",
+        "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
 
         props.fullWidth && "w-full",
       )}

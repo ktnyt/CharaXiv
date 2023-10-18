@@ -11,6 +11,7 @@ class Character(BaseModel, strict=True):
     owner_id: UUID
     system: types.system.System
     name: str
+    ruby: str
     data: typing.Any
     omit: typing.List[str]
     tags: typing.List[str]

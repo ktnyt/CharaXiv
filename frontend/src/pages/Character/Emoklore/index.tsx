@@ -1,87 +1,88 @@
-import { Article } from "@charaxiv/components/Article";
-import { Button } from "@charaxiv/components/Button";
-import { Header } from "@charaxiv/components/Header";
-import { IconButton } from "@charaxiv/components/IconButton";
-import { Input } from "@charaxiv/components/Input";
-import { Markdown } from "@charaxiv/components/Markdown";
 import { Section } from "@charaxiv/components/Section";
-import { Skeleton } from "@charaxiv/components/Skeleton";
-import { TagInput } from "@charaxiv/components/TagInput";
-import { Sheet } from "@charaxiv/types/common/sheet";
-import { EmokloreData } from "@charaxiv/types/systems/emoklore";
-import { Component, createSignal, Show } from "solid-js";
-import { EmotionPicker } from "./ResonancePicker";
+import { Component, For, createEffect } from "solid-js";
+import { Profile } from "../Profile";
+import {
+  EMOKLORE_DATA_DEFAULTS,
+  EmokloreData,
+} from "@charaxiv/pages/Character/Emoklore/types";
+import { SlideSelector } from "@charaxiv/components/SlideSelector";
+import { EmotionPicker } from "./EmotionPicker";
+import { ReverbSection } from "./ReverbSection";
+import { createReducer } from "@charaxiv/hooks/createReducer";
+import { Character } from "@charaxiv/types/character";
+import { EmokloreReducer } from "./reducer";
+import { sequence } from "@charaxiv/components/utils";
+import { createDebounce } from "@charaxiv/hooks/createDebounce";
 
 export type EmokloreProps = {
-  // sheet: Sheet<EmokloreData>;
+  // sheet: Sheet<unknown>;
 };
 
-export const Emoklore: Component<EmokloreProps> = () => {
-  const [loading, loadingSet] = createSignal(true);
-  const [values, valuesSet] = createSignal([
-    "tag0",
-    "tag1",
-    "tag2",
-    "tag3",
-    "tag4",
-    "tag5",
-    "tag6",
-    "tag7",
-    "tag8",
-  ]);
-  const toggleLoading = () => loadingSet((prev) => !prev);
+export const Emoklore: Component<EmokloreProps> = (props) => {
+  const sheet: Character<EmokloreData> = {
+    id: "hoge",
+    owner: "nano",
+    system: "emoklore",
+    name: "",
+    ruby: "",
+    tags: [],
+    images: [],
+    public: "",
+    secret: "",
+    data: EMOKLORE_DATA_DEFAULTS,
+  };
+
+  const [state, dispatch] = createReducer(sheet, EmokloreReducer);
+  const debounced = createDebounce(state, 1000);
+
+  createEffect(() => {
+    console.log(debounced());
+  });
+
   return (
-    <div class="grid grid-cols-[minmax(320px,_480px)] sm:grid-cols-[minmax(320px,_480px)_minmax(320px,_400px)] sm:gap-x-4 mt-4">
+    <div class="mt-4 grid grid-cols-[minmax(320px,_480px)] sm:grid-cols-[minmax(320px,_480px)_minmax(320px,_400px)] sm:gap-x-4">
+      <Profile base={state()} dispatch={dispatch} />
+
       <div>
-        <Section class="flex flex-col w-full">
-          <div class="flex flex-col w-full">
-            <div class="flex justify-center items-center w-full aspect-square">
-              <div class="flex justify-center items-center w-full h-full transition animate-pulse bg-nord-200 text-nord-300 dark:bg-nord-800 dark:text-nord-700">
-                <span class="inline-block text-8xl">
-                  <i class="fas fa-image" />
-                </span>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-[32px_32px_1fr_32px] m-2 gap-2">
-              <IconButton>
-                <i class="fas fa-chevron-left" />
-              </IconButton>
-
-              <IconButton variant="outline" color="red">
-                <i class="fas fa-trash-alt" />
-              </IconButton>
-
-              <Button variant="outline" color="blue">
-                画像を追加
-              </Button>
-
-              <IconButton>
-                <i class="fas fa-chevron-right" />
-              </IconButton>
-            </div>
-          </div>
-
-          <div class="flex flex-col space-y-4 m-2">
-            <div class="flex flex-col space-y-1">
-              <Input placeholder="名前" borderless class="h-[44px] text-3xl" />
-              <Input placeholder="よみがな" borderless class="text-base" />
-            </div>
-            <TagInput
-              values={values()}
-              update={(values) => valuesSet(values)}
+        <Section class="flex w-full flex-col">
+          <div class="flex w-full flex-col">
+            <h2>共鳴感情</h2>
+            <EmotionPicker
+              emotions={state().data.emotions}
+              atUpdate={(emotions) => dispatch({ type: "emotions", emotions })}
             />
-            <Markdown text="# Public Memo" />
-            <Markdown text="# Secret Memo" />
           </div>
-        </Section>
-      </div>
 
-      <div>
-        <Section class="flex flex-col w-full">
-          <div class="flex flex-col w-full">
-            <h2 class="text-4xl font-bold mb-4">共鳴感情</h2>
-            <EmotionPicker />
+          <div class="flex w-full flex-col">
+            <h2>共鳴値</h2>
+            <SlideSelector
+              index={state().data.resonance}
+              atCommit={(resonance) =>
+                dispatch({ type: "resonance", resonance })
+              }
+            >
+              <For each={sequence(11)}>{(value) => <div>{value}</div>}</For>
+            </SlideSelector>
+          </div>
+
+          <div class="flex w-full flex-col">
+            <h2>残響</h2>
+            <ReverbSection
+              reverbs={state().data.reverbs}
+              atUpdate={(reverbs) => dispatch({ type: "reverbs", reverbs })}
+            />
+          </div>
+
+          <div class="flex w-full flex-col">
+            <h2>能力値</h2>
+          </div>
+
+          <div class="flex w-full flex-col">
+            <h2>パラメータ</h2>
+          </div>
+
+          <div class="flex w-full flex-col">
+            <h2>技能</h2>
           </div>
         </Section>
       </div>

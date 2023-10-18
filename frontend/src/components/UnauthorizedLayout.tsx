@@ -5,15 +5,15 @@ import { Logo } from "./Logo";
 import { Section } from "./Section";
 
 export const UnauthenticatedLayout: ParentComponent = (props) => (
-  <Article class="flex justify-center items-start">
-    <Section class="flex flex-col sm:flex-row flex-wrap justify-center items-center sm:divide-x p-2 rounded shadow divide-nord-300 dark:divide-nord-700">
-      <div class="flex flex-col w-[300px] text-center py-8">
-        <Logo class="h-8 m-2" />
+  <Article class="flex items-start justify-center">
+    <Section class="flex flex-col flex-wrap items-center justify-center divide-nord-300 rounded p-2 shadow dark:divide-nord-700 sm:flex-row sm:divide-x">
+      <div class="flex w-[300px] flex-col py-8 text-center">
+        <Logo class="m-2 h-8" />
         <span class="text-sm">{CATCH_COPY}</span>
       </div>
 
-      <div class="flex justify-center w-[300px] p-2">
-        <div class="flex flex-col space-y-2 justify-center w-[90%]">
+      <div class="flex w-[300px] justify-center p-2">
+        <div class="flex w-[90%] flex-col justify-center space-y-2">
           {props.children}
         </div>
       </div>

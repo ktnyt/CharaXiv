@@ -11,7 +11,7 @@ import {
 import { createThrottle } from "../hooks/createThrottle";
 import { Drag, getEventCoords } from "./Drag";
 import { Ruler } from "./Ruler";
-import { notNull, swapElement } from "./utils";
+import { defined, swapElement } from "./utils";
 
 const THRESHOLD = 50;
 const signedSqrt = (n: number) => Math.sign(n) * Math.sqrt(Math.abs(n));
@@ -87,7 +87,7 @@ export const InteractiveFlex: ParentComponent<InteractiveFlex> = (props) => {
                 onDragMove={(event) => {
                   const { pageX, pageY } = getEventCoords(event);
                   dragDataSet(
-                    notNull((prev) => {
+                    defined((prev) => {
                       const offset = {
                         x: pageX - prev.origin.x,
                         y: pageY - prev.origin.y,

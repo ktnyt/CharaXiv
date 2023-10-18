@@ -26,7 +26,7 @@ export const Login: Component = () => {
   return (
     <UnauthenticatedLayout>
       <form
-        class="flex flex-col space-y-2 justify-center items-center"
+        class="flex flex-col items-center justify-center space-y-2"
         onSubmit={(event) => {
           event.preventDefault();
           onSubmitLoginForm();

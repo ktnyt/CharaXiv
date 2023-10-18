@@ -24,7 +24,7 @@ export const Button: Component<ButtonProps> = (props) => {
     <button
       {...props}
       class={clsx(
-        "inline-flex justify-center items-center px-2 py-1.5 h-8 rounded text-base leading-4 select-none cursor-pointer transition active:outline-none focus:outline-none ",
+        "inline-flex h-8 cursor-pointer select-none items-center justify-center rounded px-2 py-1.5 text-base leading-4 transition focus:outline-none active:outline-none ",
 
         // prettier-ignore
         clsx(
@@ -50,7 +50,7 @@ export const Button: Component<ButtonProps> = (props) => {
           style("textual",  "purple") && "border-none bg-purple-500 bg-opacity-0 text-purple-500 hover:bg-opacity-20",
         ),
 
-        "disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed",
+        "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
 
         props.fullWidth && "w-full",
         props.class,

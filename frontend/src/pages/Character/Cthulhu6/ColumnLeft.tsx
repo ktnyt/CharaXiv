@@ -1,9 +1,16 @@
 import { Button } from "@charaxiv/components/Button";
+import {
+  Icon,
+  SolidChevronLeft,
+  SolidChevronRight,
+  SolidImage,
+  SolidTrashAlt,
+} from "@charaxiv/components/Icon";
 import { IconButton } from "@charaxiv/components/IconButton";
 import { Input } from "@charaxiv/components/Input";
 import { Markdown } from "@charaxiv/components/Markdown";
 import { Section } from "@charaxiv/components/Section";
-import { TagInput } from "@charaxiv/components/TagInput";
+import { TagEditor } from "@charaxiv/components/TagEditor";
 import { createSignal } from "solid-js";
 
 export const ColumnLeft = () => {
@@ -20,23 +27,23 @@ export const ColumnLeft = () => {
   ]);
   return (
     <div>
-      <Section class="flex flex-col w-full">
-        <div class="flex flex-col w-full">
-          <div class="flex justify-center items-center w-full aspect-square">
-            <div class="flex justify-center items-center w-full h-full transition animate-pulse bg-nord-200 text-nord-300 dark:bg-nord-800 dark:text-nord-700">
+      <Section class="flex w-full flex-col">
+        <div class="flex w-full flex-col">
+          <div class="flex aspect-square w-full items-center justify-center">
+            <div class="flex h-full w-full animate-pulse items-center justify-center bg-nord-200 text-nord-300 transition dark:bg-nord-800 dark:text-nord-700">
               <span class="inline-block text-8xl">
-                <i class="fas fa-image" />
+                <Icon of={SolidImage} />
               </span>
             </div>
           </div>
 
-          <div class="grid grid-cols-[32px_32px_1fr_32px] m-2 gap-2">
+          <div class="m-2 grid grid-cols-[32px_32px_1fr_32px] gap-2">
             <IconButton>
-              <i class="fas fa-chevron-left" />
+              <Icon of={SolidChevronLeft} />
             </IconButton>
 
             <IconButton variant="outline" color="red">
-              <i class="fas fa-trash-alt" />
+              <Icon of={SolidTrashAlt} />
             </IconButton>
 
             <Button variant="outline" color="blue">
@@ -44,17 +51,17 @@ export const ColumnLeft = () => {
             </Button>
 
             <IconButton>
-              <i class="fas fa-chevron-right" />
+              <Icon of={SolidChevronRight} />
             </IconButton>
           </div>
         </div>
 
-        <div class="flex flex-col space-y-4 m-2">
+        <div class="m-2 flex flex-col space-y-4">
           <div class="flex flex-col space-y-1">
             <Input placeholder="名前" borderless class="h-[44px] text-3xl" />
             <Input placeholder="よみがな" borderless class="text-base" />
           </div>
-          <TagInput values={values()} update={(values) => valuesSet(values)} />
+          <TagEditor values={values()} update={(values) => valuesSet(values)} />
           <Markdown text="# Public Memo" />
           <Markdown text="# Secret Memo" />
         </div>

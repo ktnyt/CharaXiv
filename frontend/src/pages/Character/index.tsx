@@ -1,9 +1,23 @@
 import { Article } from "@charaxiv/components/Article";
 import { Header } from "@charaxiv/components/Header";
+import {
+  BrandMarkdown,
+  Icon,
+  RegularCopy,
+  SolidArrowUpFromBracket,
+  SolidClipboard,
+  SolidCopy,
+  SolidDove,
+  SolidLink,
+  SolidPalette,
+} from "@charaxiv/components/Icon";
 import { IconButton } from "@charaxiv/components/IconButton";
+import { Select } from "@charaxiv/components/Select";
+import { MarkdownMode, MarkdownModeToggle } from "@charaxiv/context/markdown";
 import { useParams } from "@solidjs/router";
-import { Component, Match, Switch, createResource, lazy } from "solid-js";
+import { Component, Match, Switch, lazy } from "solid-js";
 const Cthulhu6 = lazy(() => import("./Cthulhu6"));
+const Emoklore = lazy(() => import("./Emoklore"));
 
 export const SheetPage: Component = () => {
   const params = useParams<{ character_id: string }>();
@@ -12,25 +26,30 @@ export const SheetPage: Component = () => {
   //   callSheetGet(params.sheet_id),
   // );
 
-  const sheet = { system: "cthulhu6" };
+  const sheet = { system: "emoklore" };
 
   return (
     <Article>
       <Header>
-        <IconButton variant="outline" color="default">
-          <i class="fas fa-link" />
-        </IconButton>
-
-        <IconButton variant="outline" color="blue">
-          <i class="fas fa-palette" />
+        <IconButton
+          variant="outline"
+          color={MarkdownMode() ? "green" : "default"}
+          onClick={MarkdownModeToggle}
+        >
+          <Icon of={BrandMarkdown} />
         </IconButton>
 
         <IconButton variant="default" color="blue">
-          <i class="fas fa-dove" />
+          <Icon of={SolidArrowUpFromBracket} />
         </IconButton>
+
+        <Select />
       </Header>
 
       <Switch>
+        <Match when={sheet.system === "emoklore"}>
+          <Emoklore />
+        </Match>
         <Match when={sheet.system === "cthulhu6"}>
           <Cthulhu6 />
         </Match>

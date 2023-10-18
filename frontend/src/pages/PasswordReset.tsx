@@ -76,9 +76,9 @@ export const PasswordResetPage: Component = () => {
 
   return (
     <UnauthenticatedLayout>
-      <div class="flex flex-col space-y-2 justify-center items-center">
+      <div class="flex flex-col items-center justify-center space-y-2">
         <div class="w-full pt-2 pb-4">
-          <h2 class="text-3xl text-center sm:text-left">パスワード再設定</h2>
+          <h2 class="text-center text-3xl sm:text-left">パスワード再設定</h2>
         </div>
 
         <div class="w-full">
