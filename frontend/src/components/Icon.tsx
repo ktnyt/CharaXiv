@@ -33,7 +33,7 @@ export type IconType =
   | "fa-solid fa-arrow-left"
   | "fa-solid fa-arrow-right"
   | "fa-solid fa-arrow-up"
-  | "fa-soild fa-arrow-up-from-bracket"
+  | "fa-solid fa-arrow-up-from-bracket"
   | "fa-solid fa-arrows-alt"
   | "fa-solid fa-arrows-alt-h"
   | "fa-solid fa-arrows-alt-v"
@@ -1034,7 +1034,7 @@ export const SolidArrowLeft: IconType = "fa-solid fa-arrow-left";
 export const SolidArrowRight: IconType = "fa-solid fa-arrow-right";
 export const SolidArrowUp: IconType = "fa-solid fa-arrow-up";
 export const SolidArrowUpFromBracket: IconType =
-  "fa-soild fa-arrow-up-from-bracket";
+  "fa-solid fa-arrow-up-from-bracket";
 export const SolidArrowsAlt: IconType = "fa-solid fa-arrows-alt";
 export const SolidArrowsAltH: IconType = "fa-solid fa-arrows-alt-h";
 export const SolidArrowsAltV: IconType = "fa-solid fa-arrows-alt-v";

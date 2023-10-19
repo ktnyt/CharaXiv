@@ -26,6 +26,11 @@ export const SheetPage: Component = () => {
   //   callSheetGet(params.sheet_id),
   // );
 
+  const systems = [
+    { value: "emoklore", label: "エモクロアTRPG" },
+    { value: "cthulhu6", label: "CoC第6版" },
+  ];
+
   const sheet = { system: "emoklore" };
 
   return (
@@ -43,7 +48,11 @@ export const SheetPage: Component = () => {
           <Icon of={SolidArrowUpFromBracket} />
         </IconButton>
 
-        <Select />
+        <Select
+          value={sheet.system}
+          options={systems}
+          atSelect={(value) => {}}
+        />
       </Header>
 
       <Switch>

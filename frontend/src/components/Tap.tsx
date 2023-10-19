@@ -74,5 +74,5 @@ export const Tap = <T extends HTMLElement, U extends JSX.Element>(
       onTouchEnd,
       onTouchCancel,
     }),
-  );
+  )();
 };
