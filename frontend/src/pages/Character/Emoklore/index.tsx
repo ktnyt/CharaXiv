@@ -13,6 +13,8 @@ import { Character } from "@charaxiv/types/character";
 import { EmokloreReducer } from "./reducer";
 import { sequence } from "@charaxiv/components/utils";
 import { createDebounce } from "@charaxiv/hooks/createDebounce";
+import { VariablesSection } from "./VariablesSection";
+import { ParameterSection } from "./ParametersSection";
 
 export type EmokloreProps = {
   // sheet: Sheet<unknown>;
@@ -49,7 +51,7 @@ export const Emoklore: Component<EmokloreProps> = (props) => {
             <h2>共鳴感情</h2>
             <EmotionPicker
               emotions={state().data.emotions}
-              atUpdate={(emotions) => dispatch({ type: "emotions", emotions })}
+              atUpdate={(value) => dispatch({ type: "emotions", value })}
             />
           </div>
 
@@ -57,9 +59,7 @@ export const Emoklore: Component<EmokloreProps> = (props) => {
             <h2>共鳴値</h2>
             <SlideSelector
               index={state().data.resonance}
-              atCommit={(resonance) =>
-                dispatch({ type: "resonance", resonance })
-              }
+              atCommit={(value) => dispatch({ type: "resonance", value })}
             >
               <For each={sequence(11)}>{(value) => <div>{value}</div>}</For>
             </SlideSelector>
@@ -69,16 +69,21 @@ export const Emoklore: Component<EmokloreProps> = (props) => {
             <h2>残響</h2>
             <ReverbSection
               reverbs={state().data.reverbs}
-              atUpdate={(reverbs) => dispatch({ type: "reverbs", reverbs })}
+              atUpdate={(value) => dispatch({ type: "reverbs", value })}
             />
           </div>
 
           <div class="flex w-full flex-col">
             <h2>能力値</h2>
+            <VariablesSection
+              variables={state().data.status.variables}
+              atUpdate={(value) => dispatch({ type: "variables", value })}
+            />
           </div>
 
           <div class="flex w-full flex-col">
             <h2>パラメータ</h2>
+            <ParameterSection variables={state().data.status.variables} />
           </div>
 
           <div class="flex w-full flex-col">

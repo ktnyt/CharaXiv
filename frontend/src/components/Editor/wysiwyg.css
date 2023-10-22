@@ -1,0 +1,47 @@
+.ql-editor,
+.ql-toolbar {
+  color: #2f3541;
+  padding: 4px 8px;
+}
+
+.ql-editor {
+  min-height: 10rem;
+}
+
+.ql-editor ul,
+.ql-editor ol {
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.ql-editor li.ql-indent-1:not(.ql-direction-rtl) {
+  padding-left: 2.5em;
+}
+
+.ql-editor li.ql-indent-2:not(.ql-direction-rtl) {
+  padding-left: 3.5em;
+}
+
+.ql-editor li.ql-indent-3:not(.ql-direction-rtl) {
+  padding-left: 4.5em;
+}
+
+.ql-editor li.ql-indent-4:not(.ql-direction-rtl) {
+  padding-left: 5.5em;
+}
+
+.ql-editor li.ql-indent-5:not(.ql-direction-rtl) {
+  padding-left: 6.5em;
+}
+
+.ql-editor li.ql-indent-6:not(.ql-direction-rtl) {
+  padding-left: 7.5em;
+}
+
+.ql-editor li.ql-indent-7:not(.ql-direction-rtl) {
+  padding-left: 8.5em;
+}
+
+.ql-editor li.ql-indent-8:not(.ql-direction-rtl) {
+  padding-left: 9.5em;
+}

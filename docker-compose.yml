@@ -3,7 +3,7 @@ services:
   backend:
     build:
       dockerfile_inline: |
-        FROM python:3.11.1-bullseye
+        FROM python:3.12.0
 
         RUN apt-get update && apt-get install -y sqlite3 && \
             apt-get clean && \
@@ -41,7 +41,7 @@ services:
     init: true
 
   frontend:
-    image: node:18.8.0-bullseye
+    image: node:20.8.1
     working_dir: /app
     volumes:
       - ./frontend:/app:cached
@@ -56,7 +56,7 @@ services:
     init: true
 
   nginx:
-    image: nginx:1.23.1-alpine
+    image: nginx:1.25.2
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:cached
     depends_on:

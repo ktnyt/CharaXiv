@@ -1,44 +1,35 @@
-import { Component, createEffect, onMount } from "solid-js";
-import Toast from "@toast-ui/editor";
-import "@toast-ui/editor/dist/toastui-editor.css";
-import "./styles.css";
+import { Component, Show, createEffect, createSignal } from "solid-js";
+import { Wysiwyg } from "./Wysiwyg";
+import { Markdown } from "./Markdown";
 
 export type EditorProps = {
   value?: string;
-  advanced?: boolean;
+  wysiwyg?: boolean;
   readonly?: boolean;
   atChange?: (markdown: string) => void;
 };
 
 export const Editor: Component<EditorProps> = (props) => {
-  let editor!: Toast;
-  let ref!: HTMLDivElement;
-
-  onMount(() => {
-    editor = new Toast({
-      el: ref,
-      language: "ja-JP",
-      initialEditType: "wysiwyg",
-      toolbarItems: [
-        ["heading", "quote", "ul", "ol"],
-        ["bold", "italic", "strike"],
-        ["hr"],
-      ],
-      autofocus: false,
-      hideModeSwitch: true,
-      viewer: props.readonly ?? false,
-      initialValue: props.value,
-      events: {
-        change: () => {
-          if (props.atChange) props.atChange(editor.getMarkdown());
-        },
-      },
-    });
+  const wysiwyg = () => (props.readonly ?? false) || (props.wysiwyg ?? false);
+  const [markdown, setMarkdown] = createSignal(props.value ?? "");
+  createEffect(() => {
+    if (props.atChange) props.atChange(markdown());
   });
 
-  createEffect(() =>
-    editor.changeMode(props.advanced ?? false ? "markdown" : "wysiwyg", true),
+  return (
+    <Show
+      when={wysiwyg()}
+      fallback={
+        <Markdown
+          markdown={markdown()}
+          atChange={(markdown) => setMarkdown(markdown)}
+        />
+      }
+    >
+      <Wysiwyg
+        markdown={markdown()}
+        atChange={(markdown) => setMarkdown(markdown)}
+      />
+    </Show>
   );
-
-  return <div class="flex w-full flex-col" ref={ref}></div>;
 };

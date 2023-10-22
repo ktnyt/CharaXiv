@@ -1,20 +1,24 @@
 import { Character } from "@charaxiv/types/character";
-import { EmokloreData, Emotions, Reverb } from "./types";
+import { EmokloreData, Emotions, Reverb, Variables } from "./types";
 import { ProfileAction, ProfileReducer } from "../Profile/reducer";
 
 export type EmokloreAction =
   | ProfileAction
   | {
       type: "emotions";
-      emotions: Partial<Emotions>;
+      value: Partial<Emotions>;
     }
   | {
       type: "resonance";
-      resonance: number;
+      value: number;
     }
   | {
       type: "reverbs";
-      reverbs: Reverb[];
+      value: Reverb[];
+    }
+  | {
+      type: "variables";
+      value: Variables;
     };
 
 export const EmokloreReducer =
@@ -26,7 +30,7 @@ export const EmokloreReducer =
           ...state,
           data: {
             ...state.data,
-            emotions: action.emotions,
+            emotions: action.value,
           },
         };
 
@@ -35,7 +39,7 @@ export const EmokloreReducer =
           ...state,
           data: {
             ...state.data,
-            resonance: action.resonance,
+            resonance: action.value,
           },
         };
 
@@ -44,7 +48,19 @@ export const EmokloreReducer =
           ...state,
           data: {
             ...state.data,
-            reverbs: action.reverbs,
+            reverbs: action.value,
+          },
+        };
+
+      case "variables":
+        return {
+          ...state,
+          data: {
+            ...state.data,
+            status: {
+              ...state.data.status,
+              variables: action.value,
+            },
           },
         };
 

@@ -89,11 +89,11 @@ export const Profile = <T extends unknown>(
           />
           <div>
             <h2>公開メモ</h2>
-            <Editor advanced={MarkdownMode()} atChange={publicChangeHandle} />
+            <Editor wysiwyg={!MarkdownMode()} atChange={publicChangeHandle} />
           </div>
           <div>
             <h2>秘匿メモ</h2>
-            <Editor advanced={MarkdownMode()} atChange={secretChangeHandle} />
+            <Editor wysiwyg={!MarkdownMode()} atChange={secretChangeHandle} />
           </div>
         </div>
       </Section>
