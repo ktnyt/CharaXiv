@@ -71,3 +71,12 @@ export const pick =
   (cond: boolean) =>
   <T>(t: T, f: T): T =>
     cond ? t : f;
+
+export const transform = <T>(
+  array: Array<T>,
+  at: number,
+  f: (value: T) => T,
+): Array<T> => array.map((value, index) => (at === index ? f(value) : value));
+
+export const replace = <T>(array: Array<T>, at: number, by: T): Array<T> =>
+  array.map((value, index) => (at === index ? by : value));

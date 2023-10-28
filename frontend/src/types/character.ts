@@ -1,12 +1,17 @@
-export type Character<T> = {
-  id: string;
-  owner: string;
-  system: string;
+import { GameSystem } from "./GameSystem";
+
+export type Profile = {
   name: string;
   ruby: string;
   tags: string[];
   images: string[];
   public: string;
   secret: string;
-  data: T;
+};
+
+export type Character = {
+  id: string;
+  owner: string;
+  profile: Profile;
+  systems: Partial<Record<GameSystem, any>>;
 };

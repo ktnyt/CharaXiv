@@ -1,12 +1,11 @@
 import { Button } from "@charaxiv/components/Button";
 import { IconButton } from "@charaxiv/components/IconButton";
-import { Input, InputProps } from "@charaxiv/components/Input";
+import { Input } from "@charaxiv/components/Input";
 import { Section } from "@charaxiv/components/Section";
 import { TagEditor } from "@charaxiv/components/TagEditor";
-import { Character } from "@charaxiv/types/character";
-import { JSX } from "solid-js";
-import { Dispatcher } from "@charaxiv/hooks/createReducer";
-import { ProfileAction } from "./reducer";
+import { Component } from "solid-js";
+import { createReducer } from "@charaxiv/hooks/createReducer";
+import { ProfileReducer } from "./reducer";
 import {
   Icon,
   SolidChevronLeft,
@@ -15,27 +14,26 @@ import {
   SolidTrashAlt,
 } from "@charaxiv/components/Icon";
 import { Editor } from "@charaxiv/components/Editor";
-import { MarkdownMode } from "@charaxiv/context/markdown";
+import { UserSettingsCtx } from "@charaxiv/context/UserSettings";
+import { Profile } from "@charaxiv/types/character";
 
-export type ProfileProps<T> = {
-  base: Character<T>;
-  dispatch: Dispatcher<ProfileAction>;
+export type ProfileColumnProps = {
+  init: Profile;
+  atUpdate: (profile: Profile) => void;
 };
 
-export const Profile = <T extends unknown>(
-  props: ProfileProps<T>,
-): JSX.Element => {
-  const nameInputHandle = (value: string) =>
-    props.dispatch({ type: "name", value });
+export const ProfileColumn: Component<ProfileColumnProps> = (props) => {
+  const [state, dispatch] = createReducer(props.init, ProfileReducer, {
+    debug: true,
+    callback: (profile) => props.atUpdate(profile),
+  });
 
-  const rubyInputHandle = (value: string) =>
-    props.dispatch({ type: "ruby", value });
-
+  const nameInputHandle = (value: string) => dispatch({ type: "name", value });
+  const rubyInputHandle = (value: string) => dispatch({ type: "ruby", value });
   const publicChangeHandle = (value: string) =>
-    props.dispatch({ type: "public", value });
-
+    dispatch({ type: "public", value });
   const secretChangeHandle = (value: string) =>
-    props.dispatch({ type: "secret", value });
+    dispatch({ type: "secret", value });
 
   return (
     <div>
@@ -72,28 +70,41 @@ export const Profile = <T extends unknown>(
           <div class="flex flex-col space-y-1">
             <Input
               placeholder="名前"
+              value={state().name}
               borderless
               class="h-[44px] text-3xl placeholder:text-3xl"
               onInput={(event) => nameInputHandle(event.currentTarget.value)}
             />
             <Input
               placeholder="よみがな"
+              value={state().ruby}
               borderless
               class="text-base placeholder:text-base"
               onInput={(event) => rubyInputHandle(event.currentTarget.value)}
             />
           </div>
+
           <TagEditor
-            tags={props.base.tags}
-            atUpdate={(value) => props.dispatch({ type: "tags", value })}
+            tags={state().tags}
+            atUpdate={(value) => dispatch({ type: "tags", value })}
           />
+
           <div>
             <h2>公開メモ</h2>
-            <Editor wysiwyg={!MarkdownMode()} atChange={publicChangeHandle} />
+            <Editor
+              value={state().public}
+              wysiwyg={UserSettingsCtx.editMode === "wysiwyg"}
+              atChange={publicChangeHandle}
+            />
           </div>
+
           <div>
             <h2>秘匿メモ</h2>
-            <Editor wysiwyg={!MarkdownMode()} atChange={secretChangeHandle} />
+            <Editor
+              value={state().secret}
+              wysiwyg={UserSettingsCtx.editMode === "wysiwyg"}
+              atChange={secretChangeHandle}
+            />
           </div>
         </div>
       </Section>

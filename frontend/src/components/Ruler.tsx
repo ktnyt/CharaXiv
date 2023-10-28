@@ -7,7 +7,7 @@ import {
   onMount,
   splitProps,
 } from "solid-js";
-import { subscribe, unsubscribe } from "../context/resizeObserver";
+import { subscribe, unsubscribe } from "../context/ResizeObserver";
 import { createRef } from "../hooks/createRef";
 
 export type RulerProps<T extends HTMLElement, U extends JSX.Element> = {

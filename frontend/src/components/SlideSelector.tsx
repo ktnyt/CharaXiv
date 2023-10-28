@@ -10,7 +10,7 @@ import {
 import { Drag, EventCoords } from "./Drag";
 import { Tap } from "./Tap";
 import { clamp, defined } from "./utils";
-import { Viewport } from "@charaxiv/context/viewport";
+import { Viewport } from "@charaxiv/context/Viewport";
 import clsx from "clsx";
 
 export type SlideSelectorProps = {
@@ -21,12 +21,66 @@ export type SlideSelectorProps = {
 };
 
 export const SlideSelector: Component<SlideSelectorProps> = (props) => {
+  let ref!: HTMLDivElement;
+
   const resolved = children(() => props.children);
   const childElements = resolved.toArray();
 
   let current = props.index ?? 0;
-  const [offsetGet, offsetSet] = createSignal(current * 32);
   let origin: number | undefined;
+
+  const [offsetGet, offsetSet] = createSignal(current * 32);
+  const [changingGet, changingSet] = createSignal(false);
+
+  createEffect(() => {
+    if (!origin) offsetSet(() => (props.index ?? 0) * 32);
+  });
+  createEffect(() => Viewport.scroll(!changingGet()));
+
+  const dragStartHandle = ({ pageX: coord }: EventCoords) => {
+    origin = coord;
+  };
+
+  const dragMoveHandle = ({ pageX: coord }: EventCoords) => {
+    if (origin) {
+      const delta = origin - coord;
+      origin = coord;
+      offsetSet((offset) => {
+        const index = clamp(
+          Math.floor((offset + 16) / 32),
+          0,
+          childElements.length - 1,
+        );
+        if (props.atCommit) props.atCommit(index);
+        changingSet((dragging) => index !== current || dragging);
+        return offset + delta;
+      });
+    }
+  };
+
+  const dragEndHandle = () => {
+    origin = undefined;
+    offsetSet((offset) => {
+      const index = clamp(
+        Math.floor((offset + 16) / 32),
+        0,
+        childElements.length - 1,
+      );
+      current = index;
+      if (props.atCommit) props.atCommit(index);
+      return index * 32;
+    });
+    changingSet(false);
+  };
+
+  const tapHandle = (index: number) => {
+    origin = undefined;
+    offsetSet((offset) => {
+      if (index * 32 !== offset && props.atCommit) props.atCommit(index);
+      current = index;
+      return index * 32;
+    });
+  };
 
   const computeTranslate = (offset: number) => {
     if (offset < 0) return Math.sqrt(Math.abs(offset));
@@ -44,48 +98,6 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
     };
   };
 
-  createEffect(() => offsetSet(() => (props.index ?? 0) * 32));
-
-  const [changingGet, changingSet] = createSignal(false);
-
-  createEffect(() => Viewport.scroll(!changingGet()));
-
-  const dragStartHandle = ({ pageX: coord }: EventCoords) => {
-    origin = coord;
-  };
-
-  const dragMoveHandle = ({ pageX: coord }: EventCoords) => {
-    if (origin) {
-      const delta = origin - coord;
-      origin = coord;
-      offsetSet((offset) => {
-        const index = Math.floor((offset + 16) / 32);
-        changingSet((dragging) => index !== current || dragging);
-        return offset + delta;
-      });
-    }
-  };
-
-  const dragEndHandle = () => {
-    origin = undefined;
-    offsetSet((offset) => {
-      const index = Math.floor((offset + 16) / 32);
-      current = index;
-      if (props.atCommit) props.atCommit(index);
-      return clamp(index, 0, childElements.length) * 32;
-    });
-    changingSet(false);
-  };
-
-  const tapHandle = (index: number) => {
-    origin = undefined;
-    offsetSet((offset) => {
-      if (index * 32 !== offset && props.atCommit) props.atCommit(index);
-      current = index;
-      return index * 32;
-    });
-  };
-
   return (
     <Drag
       atStart={dragStartHandle}
@@ -95,6 +107,7 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
     >
       {(dragProps) => (
         <div
+          ref={ref}
           class="flex h-8 w-full select-none justify-center overflow-clip"
           {...dragProps}
         >

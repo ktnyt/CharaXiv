@@ -12,7 +12,10 @@ export const Twemoji: Component<TwemojiProps> = (props) => {
     twemoji.parse(ref);
   });
   return (
-    <span ref={ref} class="inline-block h-4 w-4">
+    <span
+      ref={ref}
+      class="inline-block h-4 w-4 align-text-bottom text-[32px] leading-8"
+    >
       {props.children}
     </span>
   );

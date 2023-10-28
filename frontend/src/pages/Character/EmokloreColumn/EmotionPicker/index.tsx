@@ -7,9 +7,10 @@ import {
   Emotions,
   EMOTION_KEY_LABEL,
   EmotionKey,
-} from "@charaxiv/pages/Character/Emoklore/types";
+} from "@charaxiv/pages/Character/EmokloreColumn/types";
 import { ModalContent } from "./ModalContent";
 import { emotionColor, emotionText } from "../helpers";
+import { H1 } from "@charaxiv/components/Heading";
 
 export type EmotionPickerProps = {
   emotions: Partial<Emotions>;
@@ -40,10 +41,12 @@ export const EmotionPicker: Component<EmotionPickerProps> = (props) => {
     };
 
   return (
-    <div class="flex w-full flex-col">
+    <div class="flex w-full flex-col gap-2">
+      <H1>共鳴感情</H1>
+
       <For each={EMOTION_KEYS}>
         {(emotionKey) => (
-          <div class="w-full">
+          <div class="w-full px-6">
             <Button
               variant={props.emotions[emotionKey] ? "outline" : "default"}
               color={emotionColor(props.emotions[emotionKey])}

@@ -72,7 +72,7 @@ export const VARIABLE_EMOJI: Record<VariableKey, string> = {
   運勢: "🎲",
 };
 
-export type Variables = Record<VariableKey, 1 | 2 | 3 | 4 | 5 | 6>;
+export type Variables = Record<VariableKey, number>;
 
 export type Status = {
   variables: Variables;
@@ -101,24 +101,25 @@ export const EX_SKILLS = ["霊感", "奥義", "射撃", "蘇生", "強運"];
 
 export type SkillBase = {
   name: string;
-  base?: VariableKey;
   bases: VariableKey[];
 };
 
-export type Skill = SkillBase &
-  (
-    | {
-        type: "single";
-        level: number;
-      }
-    | {
-        type: "multi";
-        genres: {
-          label: string;
-          level: number;
-        }[];
-      }
-  );
+export type SingleSkill = SkillBase & {
+  type: "single";
+  level: number;
+};
+
+export type SkillGenre = {
+  label: string;
+  level: number;
+};
+
+export type MultiSkill = SkillBase & {
+  type: "multi";
+  genres: SkillGenre[];
+};
+
+export type Skill = SingleSkill | MultiSkill;
 
 export type CustomSkill = SkillBase & {
   level: number;

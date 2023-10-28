@@ -1,7 +1,7 @@
 import { Component, Index, Show, createEffect, createSignal } from "solid-js";
 import { Drag, EventCoords } from "../Drag";
 import { Tag } from "./Tag";
-import { Viewport } from "@charaxiv/context/viewport";
+import { Viewport } from "@charaxiv/context/Viewport";
 import { reinsert } from "./helpers";
 import { defined } from "../utils";
 import { Overlay } from "../Overlay";

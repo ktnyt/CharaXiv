@@ -1,9 +1,8 @@
 import { Character } from "@charaxiv/types/character";
-import { EmokloreData, Emotions, Reverb, Variables } from "./types";
-import { ProfileAction, ProfileReducer } from "../Profile/reducer";
+import { EmokloreData, Emotions, Reverb, Skills, Variables } from "./types";
+import { ProfileAction, ProfileReducer } from "../ProfileColumn/reducer";
 
 export type EmokloreAction =
-  | ProfileAction
   | {
       type: "emotions";
       value: Partial<Emotions>;
@@ -19,52 +18,50 @@ export type EmokloreAction =
   | {
       type: "variables";
       value: Variables;
+    }
+  | {
+      type: "skills";
+      value: Skills;
     };
 
 export const EmokloreReducer =
   (action: EmokloreAction) =>
-  (state: Character<EmokloreData>): Character<EmokloreData> => {
+  (state: EmokloreData): EmokloreData => {
     switch (action.type) {
       case "emotions":
         return {
           ...state,
-          data: {
-            ...state.data,
-            emotions: action.value,
-          },
+          emotions: action.value,
         };
 
       case "resonance":
         return {
           ...state,
-          data: {
-            ...state.data,
-            resonance: action.value,
-          },
+          resonance: action.value,
         };
 
       case "reverbs":
         return {
           ...state,
-          data: {
-            ...state.data,
-            reverbs: action.value,
-          },
+          reverbs: action.value,
         };
 
       case "variables":
         return {
           ...state,
-          data: {
-            ...state.data,
-            status: {
-              ...state.data.status,
-              variables: action.value,
-            },
+          status: {
+            ...state.status,
+            variables: action.value,
           },
         };
 
+      case "skills":
+        return {
+          ...state,
+          skills: action.value,
+        };
+
       default:
-        return ProfileReducer(action)(state);
+        return state;
     }
   };

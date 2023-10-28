@@ -1,4 +1,4 @@
-import { Character } from "@charaxiv/types/character";
+import { Profile } from "@charaxiv/types/character";
 
 export type ProfileAction =
   | {
@@ -28,7 +28,7 @@ export type ProfileAction =
 
 export const ProfileReducer =
   ({ type: actionType, value }: ProfileAction) =>
-  <T>(state: Character<T>): Character<T> => {
+  (state: Profile): Profile => {
     switch (actionType) {
       case "name":
         return { ...state, name: value };

@@ -12,24 +12,17 @@ export type EditorProps = {
 export const Editor: Component<EditorProps> = (props) => {
   const wysiwyg = () => (props.readonly ?? false) || (props.wysiwyg ?? false);
   const [markdown, setMarkdown] = createSignal(props.value ?? "");
-  createEffect(() => {
-    if (props.atChange) props.atChange(markdown());
-  });
+  const atChange = (markdown: string) => {
+    if (props.atChange) props.atChange(markdown);
+    setMarkdown(markdown);
+  };
 
   return (
     <Show
       when={wysiwyg()}
-      fallback={
-        <Markdown
-          markdown={markdown()}
-          atChange={(markdown) => setMarkdown(markdown)}
-        />
-      }
+      fallback={<Markdown markdown={markdown()} atChange={atChange} />}
     >
-      <Wysiwyg
-        markdown={markdown()}
-        atChange={(markdown) => setMarkdown(markdown)}
-      />
+      <Wysiwyg markdown={markdown()} atChange={atChange} />
     </Show>
   );
 };
