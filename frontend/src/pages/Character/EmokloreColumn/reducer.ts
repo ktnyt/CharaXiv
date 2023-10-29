@@ -1,6 +1,5 @@
 import { Character } from "@charaxiv/types/character";
-import { EmokloreData, Emotions, Reverb, Skills, Variables } from "./types";
-import { ProfileAction, ProfileReducer } from "../ProfileColumn/reducer";
+import { EmokloreData, Emotions, Reverb, Skills, Status } from "./types";
 
 export type EmokloreAction =
   | {
@@ -16,8 +15,8 @@ export type EmokloreAction =
       value: Reverb[];
     }
   | {
-      type: "variables";
-      value: Variables;
+      type: "status";
+      value: Status;
     }
   | {
       type: "skills";
@@ -46,13 +45,10 @@ export const EmokloreReducer =
           reverbs: action.value,
         };
 
-      case "variables":
+      case "status":
         return {
           ...state,
-          status: {
-            ...state.status,
-            variables: action.value,
-          },
+          status: state.status,
         };
 
       case "skills":

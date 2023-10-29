@@ -16,7 +16,6 @@ import { Input } from "@charaxiv/components/Input";
 import { Button } from "@charaxiv/components/Button";
 import { randomElement } from "@charaxiv/components/utils";
 import { Modal } from "@charaxiv/components/Modal";
-import { Variable } from "./Variable";
 import { VariableList } from "./VariableList";
 
 export type StatusSectionType = {
