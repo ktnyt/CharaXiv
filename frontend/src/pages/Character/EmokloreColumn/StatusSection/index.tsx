@@ -92,7 +92,7 @@ export const StatusSection: Component<StatusSectionType> = (props) => {
               consumed() < points() && "text-yellow-500",
             )}
           >
-            <span class="justify-self-end pr-2">{consumed()} / 30</span>
+            <span class="justify-self-end pr-2">{consumed()} / 25</span>
             <span class="text-center">+</span>
             <Input
               value={untrack(() =>

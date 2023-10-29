@@ -48,7 +48,7 @@ export const EmokloreReducer =
       case "status":
         return {
           ...state,
-          status: state.status,
+          status: action.value,
         };
 
       case "skills":

@@ -215,6 +215,29 @@ const EMOKLORE_SKILLS_DEFAULTS: Skills = {
       ],
     },
     {
+      name: '生存系',
+      groups: [
+        {
+          name: '生存',
+          base: '身体',
+          skills: [{ type: "single", name: '耐久', bases: ['身体'], level: 0 }],
+        },
+        {
+          name: '自我',
+          base: '精神',
+          skills: [{ type: "single", name: '根性', bases: ['精神'], level: 0 }],
+        },
+        {
+          name: '手当て',
+          base: '知力',
+          skills: [
+            { type: "single", name: '医術', bases: ['器用', '知力'], level: 0 },
+            { type: "single", name: '蘇生', bases: ['知力', '精神'], level: 0 },
+          ],
+        },
+      ],
+    },
+    {
       name: '情報系',
       groups: [
         {
@@ -258,29 +281,6 @@ const EMOKLORE_SKILLS_DEFAULTS: Skills = {
           base: '器用',
           skills: [
             { type: "multi", name: '射撃', bases: ['器用', '五感'], genres: [] },
-          ],
-        },
-      ],
-    },
-    {
-      name: '生存系',
-      groups: [
-        {
-          name: '生存',
-          base: '身体',
-          skills: [{ type: "single", name: '耐久', bases: ['身体'], level: 0 }],
-        },
-        {
-          name: '自我',
-          base: '精神',
-          skills: [{ type: "single", name: '根性', bases: ['精神'], level: 0 }],
-        },
-        {
-          name: '手当て',
-          base: '知力',
-          skills: [
-            { type: "single", name: '医術', bases: ['器用', '知力'], level: 0 },
-            { type: "single", name: '蘇生', bases: ['知力', '精神'], level: 0 },
           ],
         },
       ],
