@@ -13,9 +13,6 @@ import { useParams } from "@solidjs/router";
 import { Component, Match, Switch, createEffect, lazy } from "solid-js";
 import { EMOKLORE_DATA_DEFAULTS, EmokloreData } from "./EmokloreColumn/types";
 import { Character } from "@charaxiv/types/character";
-import { createReducer } from "@charaxiv/hooks/createReducer";
-import { EmokloreReducer } from "./EmokloreColumn/reducer";
-import { createDebounce } from "@charaxiv/hooks/createDebounce";
 import { ProfileColumn } from "./ProfileColumn";
 const Cthulhu6 = lazy(() => import("./Cthulhu6Column"));
 const EmokloreColumn = lazy(() => import("./EmokloreColumn"));
@@ -64,7 +61,8 @@ export const SheetPage: Component = () => {
           }
         />
       </Header>
-      <div class="mt-4 grid grid-cols-[minmax(320px,_480px)] sm:grid-cols-[minmax(320px,_480px)_minmax(320px,_400px)] sm:gap-x-4">
+
+      <div class="my-4 grid grid-cols-[minmax(320px,_480px)] sm:grid-cols-[minmax(320px,_480px)_minmax(320px,_400px)] sm:gap-x-4">
         <ProfileColumn
           init={sheet.profile}
           atUpdate={(profile) => console.log(profile)}

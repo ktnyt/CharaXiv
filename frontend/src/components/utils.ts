@@ -67,7 +67,7 @@ export const inspect = <T>(value: T): T => {
 export const clamp = (value: number, min: number, max: number): number =>
   Math.max(min, Math.min(value, max));
 
-export const pick =
+export const tern =
   (cond: boolean) =>
   <T>(t: T, f: T): T =>
     cond ? t : f;

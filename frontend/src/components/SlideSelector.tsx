@@ -91,10 +91,12 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
 
   const sliderItemStyle = (index: number): JSX.CSSProperties => {
     const offset = offsetGet();
+    const center = Math.floor((offset + 16) / 32);
+    const focus = clamp(center, 0, childElements.length - 1);
     return {
       transform: `translateX(${computeTranslate(offset)}px)`,
       transition: origin === undefined ? "transform 0.3s" : "",
-      opacity: Math.floor((offset + 16) / 32) === index ? "100%" : "33%",
+      opacity: focus === index ? "100%" : "33%",
     };
   };
 
