@@ -101,12 +101,12 @@ export const EX_SKILLS = ["霊感", "奥義", "射撃", "蘇生", "強運"];
 
 export type SkillBase = {
   name: string;
-  bases: VariableKey[];
 };
 
 export type SingleSkill = SkillBase & {
   type: "single";
   level: number;
+  bases: VariableKey[];
 };
 
 export type SkillGenre = {
@@ -117,12 +117,14 @@ export type SkillGenre = {
 export type MultiSkill = SkillBase & {
   type: "multi";
   genres: SkillGenre[];
+  bases: VariableKey[];
 };
 
 export type Skill = SingleSkill | MultiSkill;
 
 export type CustomSkill = SkillBase & {
   level: number;
+  base: VariableKey;
 };
 
 export type SkillGroup = {

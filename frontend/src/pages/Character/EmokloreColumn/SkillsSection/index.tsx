@@ -70,8 +70,8 @@ export const SkillsSection: Component<SkillsSectionProps> = (props) => {
         </span>
       </div>
 
-      <div class="grid grid-cols-1 gap-2 2xl:grid-cols-2">
-        <div class="flex flex-col gap-2 2xl:[&>:nth-child(n+5)]:hidden">
+      <div class="grid grid-cols-1 gap-4 2xl:grid-cols-2">
+        <div class="flex flex-col gap-4 2xl:[&>:nth-child(even)]:hidden">
           <List
             skills={props.skills}
             status={props.status}
@@ -79,7 +79,7 @@ export const SkillsSection: Component<SkillsSectionProps> = (props) => {
           />
         </div>
 
-        <div class="hidden flex-col gap-4 2xl:flex 2xl:[&>:nth-child(-n+4)]:hidden">
+        <div class="hidden flex-col gap-4 2xl:flex 2xl:[&>:nth-child(odd)]:hidden">
           <List
             skills={props.skills}
             status={props.status}

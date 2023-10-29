@@ -1,7 +1,8 @@
 import { Component, Index } from "solid-js";
-import { SkillCategory, Skills, Status } from "../types";
+import { CustomSkill, SkillCategory, Skills, Status } from "../types";
 import { replace } from "@charaxiv/components/utils";
 import { Category } from "./Category";
+import { CustomList } from "./CustomList";
 
 export type ListProps = {
   skills: Skills;
@@ -16,6 +17,12 @@ export const List: Component<ListProps> = (props) => {
       presets: replace(props.skills.presets, index, category),
     });
 
+  const updateCustomSkills = (custom: CustomSkill[]) =>
+    props.atUpdate({
+      ...props.skills,
+      custom,
+    });
+
   return (
     <>
       <Index each={props.skills.presets}>
@@ -27,6 +34,12 @@ export const List: Component<ListProps> = (props) => {
           />
         )}
       </Index>
+
+      <CustomList
+        skills={props.skills.custom}
+        status={props.status}
+        atUpdate={updateCustomSkills}
+      />
     </>
   );
 };

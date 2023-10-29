@@ -20,8 +20,8 @@ export const Single: Component<SingleProps> = (props) => {
   const nameLabel = (name: string) =>
     EX_SKILLS.includes(name) ? `★${name}` : name;
 
-  const updateLevel = (index: number) =>
-    props.atUpdate({ ...props.skill, level: index });
+  const updateLevel = (level: number) =>
+    props.atUpdate({ ...props.skill, level });
 
   return (
     <Show when={!props.hideInit || props.skill.level > 0}>
