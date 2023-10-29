@@ -80,3 +80,6 @@ export const transform = <T>(
 
 export const replace = <T>(array: Array<T>, at: number, by: T): Array<T> =>
   array.map((value, index) => (at === index ? by : value));
+
+export const randomElement = <T extends unknown>(values: T[]) =>
+  values[Math.floor(Math.random() * values.length)];

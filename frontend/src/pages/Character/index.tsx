@@ -14,6 +14,7 @@ import { Component, Match, Switch, createEffect, lazy } from "solid-js";
 import { EMOKLORE_DATA_DEFAULTS, EmokloreData } from "./EmokloreColumn/types";
 import { Character } from "@charaxiv/types/character";
 import { ProfileColumn } from "./ProfileColumn";
+import { twMerge } from "tailwind-merge";
 const Cthulhu6 = lazy(() => import("./Cthulhu6Column"));
 const EmokloreColumn = lazy(() => import("./EmokloreColumn"));
 
@@ -62,7 +63,15 @@ export const SheetPage: Component = () => {
         />
       </Header>
 
-      <div class="my-4 grid grid-cols-[minmax(320px,_480px)] sm:grid-cols-[minmax(320px,_480px)_minmax(320px,_400px)] sm:gap-x-4">
+      <div
+        class={twMerge(
+          "grid sm:my-4 sm:gap-x-4",
+          "grid-cols-[minmax(320px,_480px)]",
+          "sm:grid-cols-[minmax(320px,_480px)_minmax(320px,_400px)]",
+          "xl:grid-cols-[480px_minmax(672px,_832px)]",
+          "2xl:grid-cols-[480px_minmax(1024px,_1264px)]",
+        )}
+      >
         <ProfileColumn
           init={sheet.profile}
           atUpdate={(profile) => console.log(profile)}
