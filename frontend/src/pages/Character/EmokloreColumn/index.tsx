@@ -31,7 +31,7 @@ export const EmokloreColumn: Component<EmokloreColumnProps> = (props) => {
         "2xl:grid-cols-[1fr_2fr]",
       )}
     >
-      <Section class="flex w-full flex-col p-2">
+      <Section class="flex w-full flex-col gap-4 p-2">
         <EmotionPicker
           emotions={state().emotions}
           atUpdate={(value) => dispatch({ type: "emotions", value })}
@@ -39,7 +39,7 @@ export const EmokloreColumn: Component<EmokloreColumnProps> = (props) => {
 
         <div class="flex w-full flex-col">
           <H1>共鳴値</H1>
-          <div class="px-2">
+          <div class="px-16">
             <SlideSelector
               index={state().resonance}
               atCommit={(value) => dispatch({ type: "resonance", value })}
