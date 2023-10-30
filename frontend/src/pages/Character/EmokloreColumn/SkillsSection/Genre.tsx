@@ -2,9 +2,10 @@ import { Component, For } from "solid-js";
 import { SkillGenre, Status, VariableKey } from "../types";
 import { Input } from "@charaxiv/components/Input";
 import { SlideSelector } from "@charaxiv/components/SlideSelector";
-import { sequence } from "@charaxiv/components/utils";
+import { atConfirm, sequence } from "@charaxiv/components/utils";
 import { Button } from "@charaxiv/components/Button";
 import { Icon, SolidTrashAlt } from "@charaxiv/components/Icon";
+import { Sequence } from "@charaxiv/components/Sequence";
 
 export type GenreProps = {
   name: string;
@@ -39,11 +40,22 @@ export const Genre: Component<GenreProps> = (props) => {
       <SlideSelector
         index={props.status.variables[props.base] + props.genre.level}
       >
-        <For each={sequence(0, 10)}>{(value) => <span>{value}</span>}</For>
+        <Sequence max={10} />
       </SlideSelector>
 
       <div>
-        <Button variant="textual" color="red" onClick={props.atDelete}>
+        <Button
+          variant="textual"
+          color="red"
+          onClick={() =>
+            atConfirm(
+              `この操作は元に戻せません。\n本当に${props.name}技能「${
+                props.genre.label || "無名の技能"
+              }」を削除しますか？`,
+              props.atDelete,
+            )
+          }
+        >
           <Icon of={SolidTrashAlt} />
         </Button>
       </div>

@@ -15,7 +15,10 @@ export const Variable: Component<VariableProps> = (props) => {
     <>
       <Twemoji>{VARIABLE_EMOJI[props.key]}</Twemoji>
       <span class="text-center font-semibold">{props.key}</span>
-      <SlideSelector index={props.value - 1} atCommit={props.atUpdate}>
+      <SlideSelector
+        index={props.value - 1}
+        atCommit={(index) => props.atUpdate(index + 1)}
+      >
         <Sequence min={1} max={6} />
       </SlideSelector>
     </>

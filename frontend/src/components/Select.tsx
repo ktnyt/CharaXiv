@@ -41,7 +41,7 @@ export const Select = <T extends unknown>(
       </Tap>
       <Show when={open()}>
         <Modal atClose={() => openSet(false)}>
-          <div class="flex max-h-[90vw] w-[90vw] flex-col gap-2 divide-x divide-nord-500 rounded bg-nord-100 p-2 dark:bg-nord-900">
+          <div class="flex max-h-[90vw] w-[90vw] max-w-xs flex-col gap-2 divide-x divide-nord-500 rounded bg-nord-100 p-2 dark:bg-nord-900">
             <For each={props.options}>
               {(option, index) => (
                 <Button

@@ -62,5 +62,6 @@
     "javascriptreact",
     "typescript",
     "typescriptreact"
-  ]
+  ],
+  "editor.formatOnSave": true
 }

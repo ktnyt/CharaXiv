@@ -1,5 +1,5 @@
 import { Component, For, Show } from "solid-js";
-import { EX_SKILLS, SingleSkill, Status, VARIABLE_EMOJI } from "../types";
+import { SingleSkill, Status, VARIABLE_EMOJI } from "../types";
 import { SlideSelector } from "@charaxiv/components/SlideSelector";
 import { sequence } from "@charaxiv/components/utils";
 import { maxVariableKey } from "../helpers";
@@ -17,8 +17,7 @@ export type SingleProps = {
 export const Single: Component<SingleProps> = (props) => {
   const variableKey = () => maxVariableKey(props.status, props.skill.bases);
 
-  const nameLabel = (name: string) =>
-    EX_SKILLS.includes(name) ? `★${name}` : name;
+  const nameLabel = (name: string) => (props.skill.exskill ? `★${name}` : name);
 
   const updateLevel = (level: number) =>
     props.atUpdate({ ...props.skill, level });
@@ -26,7 +25,7 @@ export const Single: Component<SingleProps> = (props) => {
   return (
     <Show when={!props.hideInit || props.skill.level > 0}>
       <div class="grid grid-cols-[100px_1fr_32px_32px]">
-        <span class="align-baseline font-semibold leading-8">
+        <span class="align-baseline leading-8">
           {nameLabel(props.skill.name)}
         </span>
 

@@ -1,14 +1,8 @@
-import { Component, For, Index, Show, createSignal, untrack } from "solid-js";
-import {
-  Status,
-  VARIABLE_EMOJI,
-  VARIABLE_KEYS,
-  VariableKey,
-  Variables,
-} from "../types";
+import { Component, Show, createSignal, untrack } from "solid-js";
+import { Status, VARIABLE_KEYS, Variables } from "../types";
 import { Twemoji } from "@charaxiv/components/Twemoji";
 import { SlideSelector } from "@charaxiv/components/SlideSelector";
-import { H1 } from "@charaxiv/components/Heading";
+import { H1, H2 } from "@charaxiv/components/Heading";
 import { Sequence } from "@charaxiv/components/Sequence";
 import { Fragment } from "@charaxiv/components/Fragment";
 import clsx from "clsx";
@@ -117,7 +111,7 @@ export const StatusSection: Component<StatusSectionType> = (props) => {
         <Show when={randomModalGet()}>
           <Modal atClose={() => randomModalSet(false)}>
             <div class="flex w-72 flex-col gap-2 rounded bg-nord-0 p-2 shadow">
-              <H1>ランダムに決定</H1>
+              <H2>ランダムに決定</H2>
               <Button
                 variant="default"
                 color="blue"

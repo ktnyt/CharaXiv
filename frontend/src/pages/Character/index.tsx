@@ -10,8 +10,8 @@ import { Select } from "@charaxiv/components/Select";
 import { UserSettingsCtx } from "@charaxiv/context/UserSettings";
 import { GameSystems } from "@charaxiv/types/GameSystem";
 import { useParams } from "@solidjs/router";
-import { Component, Match, Switch, createEffect, lazy } from "solid-js";
-import { EMOKLORE_DATA_DEFAULTS, EmokloreData } from "./EmokloreColumn/types";
+import { Component, Match, Switch, lazy } from "solid-js";
+import { EMOKLORE_DATA_DEFAULTS } from "./EmokloreColumn/types";
 import { Character } from "@charaxiv/types/character";
 import { ProfileColumn } from "./ProfileColumn";
 import { twMerge } from "tailwind-merge";
@@ -32,7 +32,7 @@ export const SheetPage: Component = () => {
       public: "",
       secret: "",
     },
-    systems: { emoklore: EMOKLORE_DATA_DEFAULTS },
+    systems: {},
   };
 
   return (

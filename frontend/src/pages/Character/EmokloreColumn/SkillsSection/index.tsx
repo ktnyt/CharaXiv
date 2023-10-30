@@ -1,11 +1,10 @@
 import { Component, untrack } from "solid-js";
-import { EX_SKILLS, Skills, Status } from "../types";
+import { Skills, Status } from "../types";
 import { H1 } from "@charaxiv/components/Heading";
 import { List } from "./List";
 import { isMultiSkill, isSingleSkill } from "../helpers";
 import clsx from "clsx";
 import { Input } from "@charaxiv/components/Input";
-import { Button } from "@charaxiv/components/Button";
 
 export type SkillsSectionProps = {
   skills: Skills;
@@ -22,14 +21,17 @@ export const SkillsSection: Component<SkillsSectionProps> = (props) => {
       .flatMap(({ skills }) => skills)
       .flatMap((skill) =>
         isMultiSkill(skill)
-          ? skill.genres.map(({ level }) => ({ name: skill.name, level }))
+          ? skill.genres.map(({ level }) => ({
+              name: skill.name,
+              exskill: skill.exskill,
+              level,
+            }))
           : isSingleSkill(skill)
-          ? [{ name: skill.name, level: skill.level }]
+          ? [{ name: skill.name, exskill: skill.exskill, level: skill.level }]
           : [],
       )
       .map(
-        ({ name, level }) =>
-          SKILL_POINTS[level] * (EX_SKILLS.includes(name) ? 2 : 1),
+        ({ name, exskill, level }) => SKILL_POINTS[level] * (exskill ? 2 : 1),
       )
       .reduce((a, b) => a + b, 0);
 

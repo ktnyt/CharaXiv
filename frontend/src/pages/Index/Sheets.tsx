@@ -1,4 +1,4 @@
-import { callSheetCreate, callSheetList } from "@charaxiv/api/sheet";
+import { callSheetCreate, callSheetList } from "@charaxiv/api/character";
 import { Article } from "@charaxiv/components/Article";
 import { Button } from "@charaxiv/components/Button";
 import { Header } from "@charaxiv/components/Header";
@@ -90,7 +90,7 @@ export const Sheets: Component = () => {
                       href={`/sheet/${sheet().id}`}
                       class="after:absolute after:inset-0"
                     >
-                      <h2>{sheet().name || "名無しさん"}</h2>
+                      <h2>{sheet().profile.name || "名無しさん"}</h2>
                     </a>
                   </div>
                 </div>

@@ -25,8 +25,7 @@ export const ReverbSection: Component<ReverbSectionProps> = (props) => {
     ]);
   };
 
-  const reverbAddHandle: ButtonProps["onClick"] = (event) => {
-    event.preventDefault();
+  const reverbAddHandle = () =>
     props.atUpdate([
       ...props.reverbs,
       {
@@ -35,7 +34,6 @@ export const ReverbSection: Component<ReverbSectionProps> = (props) => {
         consumed: false,
       },
     ]);
-  };
 
   return (
     <div class="flex flex-col gap-2">

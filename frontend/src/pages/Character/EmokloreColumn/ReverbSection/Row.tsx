@@ -11,6 +11,7 @@ import {
   RegularSquare,
   SolidTrashAlt,
 } from "@charaxiv/components/Icon";
+import { atConfirm } from "@charaxiv/components/utils";
 
 export type RowProps = {
   scenario: string;
@@ -44,7 +45,7 @@ export const Row: Component<RowProps> = (props) => {
   };
 
   return (
-    <div class="grid w-full grid-cols-[32px,_1fr,_100px_32px]">
+    <div class="grid w-full grid-cols-[32px,_1fr,_100px_32px] gap-2">
       <IconButton variant="textual" onClick={reverbConsumeHandle}>
         <Either when={reverb.consumed}>
           <Icon of={RegularCheckSquare} />
@@ -70,7 +71,18 @@ export const Row: Component<RowProps> = (props) => {
         />
       </div>
 
-      <IconButton variant="outline" color="red" onClick={deleteHandle}>
+      <IconButton
+        variant="outline"
+        color="red"
+        onClick={() =>
+          atConfirm(
+            `この操作は元に戻せません。\n本当に独自技能「${
+              props.scenario || "無名の残響"
+            }」を削除しますか？`,
+            props.atDelete,
+          )
+        }
+      >
         <Icon of={SolidTrashAlt} />
       </IconButton>
     </div>

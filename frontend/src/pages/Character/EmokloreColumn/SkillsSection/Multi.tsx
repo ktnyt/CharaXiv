@@ -1,11 +1,5 @@
 import { Component, For, Index, Show } from "solid-js";
-import {
-  EX_SKILLS,
-  MultiSkill,
-  SkillGenre,
-  Status,
-  VARIABLE_EMOJI,
-} from "../types";
+import { MultiSkill, SkillGenre, Status, VARIABLE_EMOJI } from "../types";
 import { SlideSelector } from "@charaxiv/components/SlideSelector";
 import { replace, sequence } from "@charaxiv/components/utils";
 import { maxVariableKey } from "../helpers";
@@ -24,6 +18,8 @@ export type MultiProps = {
 
 export const Multi: Component<MultiProps> = (props) => {
   const variableKey = () => maxVariableKey(props.status, props.skill.bases);
+
+  const nameLabel = (name: string) => (props.skill.exskill ? `★${name}` : name);
 
   const updateGenre = (index: number) => (genre: SkillGenre) =>
     props.atUpdate({
@@ -47,8 +43,8 @@ export const Multi: Component<MultiProps> = (props) => {
     <div class="flex flex-col gap-2">
       <div class="flex flex-col">
         <div class="grid grid-cols-[1fr_32px_32px]">
-          <span class="align-baseline font-semibold leading-8">
-            {props.skill.name}
+          <span class="align-baseline leading-8">
+            {nameLabel(props.skill.name)}
           </span>
           <SlideSelector index={props.status.variables[variableKey()] - 1}>
             <Sequence min={1} max={6} />

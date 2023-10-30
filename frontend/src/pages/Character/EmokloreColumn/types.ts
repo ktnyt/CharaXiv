@@ -97,10 +97,9 @@ export const SKILL_CATEGORY_VALUES = [
 
 export type SkillCategoryValue = (typeof SKILL_CATEGORY_VALUES)[number];
 
-export const EX_SKILLS = ["霊感", "奥義", "射撃", "蘇生", "強運"];
-
 export type SkillBase = {
   name: string;
+  exskill: boolean;
 };
 
 export type SingleSkill = SkillBase & {
@@ -176,11 +175,11 @@ const EMOKLORE_SKILLS_DEFAULTS: Skills = {
           name: '調査',
           base: '器用',
           skills: [
-            { type: "single", name: '検索', bases: ['知力'], level: 0 },
-            { type: "single", name: '洞察', bases: ['知力'], level: 0 },
-            { type: "single", name: 'マッピング', bases: ['器用', '五感'], level: 0 },
-            { type: "single", name: '直感', bases: ['精神', '運勢'], level: 0 },
-            { type: "single", name: '鑑定', bases: ['五感', '知力'], level: 0 },
+            { type: "single", name: '検索', exskill: false, bases: ['知力'], level: 0 },
+            { type: "single", name: '洞察', exskill: false, bases: ['知力'], level: 0 },
+            { type: "single", name: 'マッピング', exskill: false, bases: ['器用', '五感'], level: 0 },
+            { type: "single", name: '直感', exskill: false, bases: ['精神', '運勢'], level: 0 },
+            { type: "single", name: '鑑定', exskill: false, bases: ['五感', '知力'], level: 0 },
           ],
         },
       ],
@@ -192,11 +191,11 @@ const EMOKLORE_SKILLS_DEFAULTS: Skills = {
           name: '知覚',
           base: '五感',
           skills: [
-            { type: "single", name: '観察眼', bases: ['五感'], level: 0 },
-            { type: "single", name: '聞き耳', bases: ['五感'], level: 0 },
-            { type: "single", name: '毒味', bases: ['五感'], level: 0 },
-            { type: "single", name: '危機察知', bases: ['五感', '運勢'], level: 0 },
-            { type: "single", name: '霊感', bases: ['精神', '運勢'], level: 0 },
+            { type: "single", name: '観察眼', exskill: false, bases: ['五感'], level: 0 },
+            { type: "single", name: '聞き耳', exskill: false, bases: ['五感'], level: 0 },
+            { type: "single", name: '毒味', exskill: false, bases: ['五感'], level: 0 },
+            { type: "single", name: '危機察知', exskill: false, bases: ['五感', '運勢'], level: 0 },
+            { type: "single", name: '霊感', exskill: true, bases: ['精神', '運勢'], level: 0 },
           ],
         },
       ],
@@ -208,10 +207,10 @@ const EMOKLORE_SKILLS_DEFAULTS: Skills = {
           name: '交渉',
           base: '魅力',
           skills: [
-            { type: "single", name: '社交術', bases: ['社会'], level: 0 },
-            { type: "single", name: 'ディベート', bases: ['知力'], level: 0 },
-            { type: "single", name: '魅了', bases: ['魅力'], level: 0 },
-            { type: "single", name: '心理', bases: ['精神', '知力'], level: 0 },
+            { type: "single", name: '社交術', exskill: false, bases: ['社会'], level: 0 },
+            { type: "single", name: 'ディベート', exskill: false, bases: ['知力'], level: 0 },
+            { type: "single", name: '魅了', exskill: false, bases: ['魅力'], level: 0 },
+            { type: "single", name: '心理', exskill: false, bases: ['精神', '知力'], level: 0 },
           ],
         },
       ],
@@ -222,19 +221,19 @@ const EMOKLORE_SKILLS_DEFAULTS: Skills = {
         {
           name: '生存',
           base: '身体',
-          skills: [{ type: "single", name: '耐久', bases: ['身体'], level: 0 }],
+          skills: [{ type: "single", name: '耐久', exskill: false, bases: ['身体'], level: 0 }],
         },
         {
           name: '自我',
           base: '精神',
-          skills: [{ type: "single", name: '根性', bases: ['精神'], level: 0 }],
+          skills: [{ type: "single", name: '根性', exskill: false, bases: ['精神'], level: 0 }],
         },
         {
           name: '手当て',
           base: '知力',
           skills: [
-            { type: "single", name: '医術', bases: ['器用', '知力'], level: 0 },
-            { type: "single", name: '蘇生', bases: ['知力', '精神'], level: 0 },
+            { type: "single", name: '医術', exskill: false, bases: ['器用', '知力'], level: 0 },
+            { type: "single", name: '蘇生', exskill: true, bases: ['知力', '精神'], level: 0 },
           ],
         },
       ],
@@ -245,14 +244,14 @@ const EMOKLORE_SKILLS_DEFAULTS: Skills = {
         {
           name: '知識',
           base: '知力',
-          skills: [{ type: "multi", name: '専門知識', bases: ['知力'], genres: [] }],
+          skills: [{ type: "multi", name: '専門知識', exskill: false, bases: ['知力'], genres: [] }],
         },
         {
           name: 'ニュース',
           base: '社会',
           skills: [
-            { type: "single", name: '事情通', bases: ['五感', '社会'], level: 0 },
-            { type: "multi", name: '業界', bases: ['社会', '魅力'], genres: [] },
+            { type: "single", name: '事情通', exskill: false, bases: ['五感', '社会'], level: 0 },
+            { type: "multi", name: '業界', exskill: false, bases: ['社会', '魅力'], genres: [] },
           ],
         },
       ],
@@ -264,25 +263,25 @@ const EMOKLORE_SKILLS_DEFAULTS: Skills = {
           name: '運動',
           base: '身体',
           skills: [
-            { type: "single", name: 'スピード', bases: ['身体'], level: 0 },
-            { type: "single", name: 'ストレングス', bases: ['身体'], level: 0 },
-            { type: "single", name: 'アクロバット', bases: ['身体', '器用'], level: 0 },
-            { type: "single", name: 'ダイブ', bases: ['身体'], level: 0 },
+            { type: "single", name: 'スピード', exskill: false, bases: ['身体'], level: 0 },
+            { type: "single", name: 'ストレングス', exskill: false, bases: ['身体'], level: 0 },
+            { type: "single", name: 'アクロバット', exskill: false, bases: ['身体', '器用'], level: 0 },
+            { type: "single", name: 'ダイブ', exskill: false, bases: ['身体'], level: 0 },
           ],
         },
         {
           name: '格闘',
           base: '身体',
           skills: [
-            { type: "multi", name: '武術', bases: ['身体'], genres: [] },
-            { type: "multi", name: '奥義', bases: ['身体', '精神', '器用'], genres: [] },
+            { type: "multi", name: '武術', exskill: false, bases: ['身体'], genres: [] },
+            { type: "multi", name: '奥義', exskill: true, bases: ['身体', '精神', '器用'], genres: [] },
           ],
         },
         {
           name: '投擲',
           base: '器用',
           skills: [
-            { type: "multi", name: '射撃', bases: ['器用', '五感'], genres: [] },
+            { type: "multi", name: '射撃', exskill: true, bases: ['器用', '五感'], genres: [] },
           ],
         },
       ],
@@ -294,18 +293,18 @@ const EMOKLORE_SKILLS_DEFAULTS: Skills = {
           name: '細工',
           base: '器用',
           skills: [
-            { type: "multi", name: '技工', bases: ['器用'], genres: [] },
-            { type: "multi", name: '芸術', bases: ['器用', '精神', '五感'], genres: [] },
-            { type: "multi", name: '操縦', bases: ['器用', '五感', '知力'], genres: [] },
-            { type: "single", name: '暗号', bases: ['知力'], level: 0 },
-            { type: "single", name: '電脳', bases: ['知力'], level: 0 },
-            { type: "single", name: '隠匿', bases: ['器用', '社会', '運勢'], level: 0 },
+            { type: "multi", name: '技工', exskill: false, bases: ['器用'], genres: [] },
+            { type: "multi", name: '芸術', exskill: false, bases: ['器用', '精神', '五感'], genres: [] },
+            { type: "multi", name: '操縦', exskill: false, bases: ['器用', '五感', '知力'], genres: [] },
+            { type: "single", name: '暗号', exskill: false, bases: ['知力'], level: 0 },
+            { type: "single", name: '電脳', exskill: false, bases: ['知力'], level: 0 },
+            { type: "single", name: '隠匿', exskill: false, bases: ['器用', '社会', '運勢'], level: 0 },
           ],
         },
         {
           name: '幸運',
           base: '運勢',
-          skills: [{ type: "single", name: '強運', bases: ['運勢'], level: 0 }],
+          skills: [{ type: "single", name: '強運', exskill: true, bases: ['運勢'], level: 0 }],
         },
       ],
     },

@@ -83,3 +83,7 @@ export const replace = <T>(array: Array<T>, at: number, by: T): Array<T> =>
 
 export const randomElement = <T extends unknown>(values: T[]) =>
   values[Math.floor(Math.random() * values.length)];
+
+export const atConfirm = (message: string, callback: () => void) => {
+  if (confirm(message)) callback();
+};
