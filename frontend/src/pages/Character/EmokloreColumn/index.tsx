@@ -11,6 +11,7 @@ import { SkillsSection } from "./SkillsSection";
 import { H1 } from "@charaxiv/components/Heading";
 import { Sequence } from "@charaxiv/components/Sequence";
 import { twMerge } from "tailwind-merge";
+import { Layout } from "../Layout";
 
 export type EmokloreColumnProps = {
   init: EmokloreData;
@@ -24,13 +25,7 @@ export const EmokloreColumn: Component<EmokloreColumnProps> = (props) => {
   });
 
   return (
-    <div
-      class={twMerge(
-        "grid w-full grid-cols-1 items-start",
-        "xl:grid-cols-2 xl:gap-4",
-        "2xl:grid-cols-[1fr_2fr]",
-      )}
-    >
+    <Layout>
       <Section class="flex w-full flex-col gap-4 p-2">
         <EmotionPicker
           emotions={state().emotions}
@@ -67,7 +62,7 @@ export const EmokloreColumn: Component<EmokloreColumnProps> = (props) => {
           atUpdate={(value) => dispatch({ type: "skills", value })}
         />
       </Section>
-    </div>
+    </Layout>
   );
 };
 

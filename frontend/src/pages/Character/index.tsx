@@ -4,19 +4,28 @@ import {
   BrandMarkdown,
   Icon,
   SolidArrowUpFromBracket,
+  SolidCheck,
 } from "@charaxiv/components/Icon";
 import { IconButton } from "@charaxiv/components/IconButton";
 import { Select } from "@charaxiv/components/Select";
 import { UserSettingsCtx } from "@charaxiv/context/UserSettings";
-import { GameSystems } from "@charaxiv/types/GameSystem";
+import { GameSystem, GameSystems } from "@charaxiv/types/GameSystem";
 import { useParams } from "@solidjs/router";
 import { Component, Match, Switch, lazy } from "solid-js";
 import { EMOKLORE_DATA_DEFAULTS } from "./EmokloreColumn/types";
-import { Character } from "@charaxiv/types/character";
+import { Character, Profile } from "@charaxiv/types/character";
 import { ProfileColumn } from "./ProfileColumn";
 import { twMerge } from "tailwind-merge";
+import { Overlay } from "@charaxiv/components/Overlay";
 const Cthulhu6 = lazy(() => import("./Cthulhu6Column"));
 const EmokloreColumn = lazy(() => import("./EmokloreColumn"));
+
+const syncProfile = (id: string, profile: Profile) => {};
+const syncSystem = <T extends unknown>(
+  id: string,
+  key: GameSystem,
+  data: T,
+) => {};
 
 export const SheetPage: Component = () => {
   const params = useParams<{ character_id: string }>();
@@ -90,6 +99,12 @@ export const SheetPage: Component = () => {
           </Match>
         </Switch>
       </div>
+
+      <Overlay class="pointer-events-none">
+        <div class="fixed bottom-0 right-0 m-1 flex h-4 w-4 items-center justify-center">
+          <Icon of={SolidCheck} class="fa-xs text-green-500" />
+        </div>
+      </Overlay>
     </Article>
   );
 };

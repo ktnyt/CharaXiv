@@ -1,4 +1,5 @@
-import { JSX } from "solid-js";
+import clsx from "clsx";
+import { Component, ComponentProps, splitProps } from "solid-js";
 
 export type IconType =
   | "fa-solid fa-address-book"
@@ -2026,6 +2027,11 @@ export const BrandYoast: IconType = "fa-brands fa-yoast";
 export const BrandYoutube: IconType = "fa-brands fa-youtube";
 export const BrandYoutubeSquare: IconType = "fa-brands fa-youtube-square";
 
-export const Icon = (props: { of: IconType }): JSX.Element => (
-  <i class={props.of} />
-);
+export type IconProps = {
+  of: IconType;
+} & ComponentProps<"i">;
+
+export const Icon: Component<IconProps> = (props) => {
+  const [split, rest] = splitProps(props, ["of", "class"]);
+  return <i class={clsx(split.of, split.class)} {...rest} />;
+};
