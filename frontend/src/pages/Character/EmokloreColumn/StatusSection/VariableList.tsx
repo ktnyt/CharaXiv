@@ -18,14 +18,19 @@ export const VariableList: Component<VariableListProps> = (props) => {
     });
 
   return (
-    <Index each={variableList()}>
-      {(item) => (
-        <Variable
-          key={item().key}
-          value={item().value}
-          atUpdate={updateVariable(item().key)}
-        />
-      )}
-    </Index>
+    <div class="grid grid-cols-[16px_50px_1fr_32px] items-center justify-center px-8">
+      <Index each={variableList()}>
+        {(item) => (
+          <>
+            <Variable
+              key={item().key}
+              value={item().value}
+              atUpdate={updateVariable(item().key)}
+            />
+            <div></div>
+          </>
+        )}
+      </Index>
+    </div>
   );
 };

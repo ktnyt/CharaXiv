@@ -17,6 +17,7 @@ import { Character, Profile } from "@charaxiv/types/character";
 import { ProfileColumn } from "./ProfileColumn";
 import { twMerge } from "tailwind-merge";
 import { Overlay } from "@charaxiv/components/Overlay";
+import { Layout } from "./Layout";
 const Cthulhu6 = lazy(() => import("./Cthulhu6Column"));
 const EmokloreColumn = lazy(() => import("./EmokloreColumn"));
 
@@ -86,18 +87,20 @@ export const SheetPage: Component = () => {
           atUpdate={(profile) => console.log(profile)}
         />
 
-        <Switch>
-          <Match when={UserSettingsCtx.gameSystem === "emoklore"}>
-            <EmokloreColumn
-              init={sheet.systems.emoklore ?? EMOKLORE_DATA_DEFAULTS}
-              atUpdate={(data) => console.log(data)}
-            />
-          </Match>
+        <Layout>
+          <Switch>
+            <Match when={UserSettingsCtx.gameSystem === "emoklore"}>
+              <EmokloreColumn
+                init={sheet.systems.emoklore ?? EMOKLORE_DATA_DEFAULTS}
+                atUpdate={(data) => console.log(data)}
+              />
+            </Match>
 
-          <Match when={UserSettingsCtx.gameSystem === "cthulhu6"}>
-            <Cthulhu6 />
-          </Match>
-        </Switch>
+            <Match when={UserSettingsCtx.gameSystem === "cthulhu6"}>
+              <Cthulhu6 />
+            </Match>
+          </Switch>
+        </Layout>
       </div>
 
       <Overlay class="pointer-events-none">

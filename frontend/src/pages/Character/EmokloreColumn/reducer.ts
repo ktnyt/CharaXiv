@@ -7,10 +7,6 @@ export type EmokloreAction =
       value: Partial<Emotions>;
     }
   | {
-      type: "resonance";
-      value: number;
-    }
-  | {
       type: "reverbs";
       value: Reverb[];
     }
@@ -31,12 +27,6 @@ export const EmokloreReducer =
         return {
           ...state,
           emotions: action.value,
-        };
-
-      case "resonance":
-        return {
-          ...state,
-          resonance: action.value,
         };
 
       case "reverbs":

@@ -10,8 +10,6 @@ import { StatusSection } from "./StatusSection";
 import { SkillsSection } from "./SkillsSection";
 import { H1 } from "@charaxiv/components/Heading";
 import { Sequence } from "@charaxiv/components/Sequence";
-import { twMerge } from "tailwind-merge";
-import { Layout } from "../Layout";
 
 export type EmokloreColumnProps = {
   init: EmokloreData;
@@ -25,24 +23,12 @@ export const EmokloreColumn: Component<EmokloreColumnProps> = (props) => {
   });
 
   return (
-    <Layout>
+    <>
       <Section class="flex w-full flex-col gap-4 p-2">
         <EmotionPicker
           emotions={state().emotions}
           atUpdate={(value) => dispatch({ type: "emotions", value })}
         />
-
-        <div class="flex w-full flex-col">
-          <H1>共鳴値</H1>
-          <div class="px-16">
-            <SlideSelector
-              index={state().resonance}
-              atCommit={(value) => dispatch({ type: "resonance", value })}
-            >
-              <Sequence max={10} />
-            </SlideSelector>
-          </div>
-        </div>
 
         <ReverbSection
           reverbs={state().reverbs}
@@ -62,7 +48,7 @@ export const EmokloreColumn: Component<EmokloreColumnProps> = (props) => {
           atUpdate={(value) => dispatch({ type: "skills", value })}
         />
       </Section>
-    </Layout>
+    </>
   );
 };
 

@@ -74,8 +74,41 @@ export const VARIABLE_EMOJI: Record<VariableKey, string> = {
 
 export type Variables = Record<VariableKey, number>;
 
+export const PARAMETER_KEYS = ["共鳴", "HP", "MP"] as const;
+
+export type ParameterKey = (typeof PARAMETER_KEYS)[number];
+
+export const PARAMETER_EMOJI: Record<ParameterKey, string> = {
+  共鳴: "🔔",
+  HP: "❤️",
+  MP: "🪄",
+};
+
+export type ParameterFormula = (variables: Variables) => number;
+
+export const PARAMETER_FORMULA: Record<ParameterKey, ParameterFormula> = {
+  共鳴: (variables) => 10,
+  HP: (variables) => variables["身体"] + 10,
+  MP: (variables) => variables["精神"] + variables["知力"],
+};
+
+export const PARAMETER_RANGE: Record<ParameterKey, [number, number]> = {
+  共鳴: [10, 10],
+  HP: [11, 16],
+  MP: [2, 12],
+};
+
+export const PARAMETER_DEFAULT_ZERO: Record<ParameterKey, boolean> = {
+  共鳴: true,
+  HP: false,
+  MP: false,
+};
+
+export type Parameters = Record<ParameterKey, number>;
+
 export type Status = {
   variables: Variables;
+  parameters: Partial<Parameters>;
   extra: number;
 };
 
@@ -146,7 +179,6 @@ export type Skills = {
 export type EmokloreData = {
   emotions: Partial<Emotions>;
   reverbs: Reverb[];
-  resonance: number;
   status: Status;
   skills: Skills;
 };
@@ -162,6 +194,7 @@ const EMOKLORE_STATUS_DEFAULTS: Status = {
     社会: 1,
     運勢: 1,
   },
+  parameters: {},
   extra: 0,
 };
 

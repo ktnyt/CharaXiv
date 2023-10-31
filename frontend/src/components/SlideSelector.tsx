@@ -24,7 +24,7 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
   let ref!: HTMLDivElement;
 
   const resolved = children(() => props.children);
-  const childElements = resolved.toArray();
+  const childElements = () => resolved.toArray();
 
   let current = props.index ?? 0;
   let origin: number | undefined;
@@ -49,7 +49,7 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
         const index = clamp(
           Math.floor((offset + 16) / 32),
           0,
-          childElements.length - 1,
+          childElements().length - 1,
         );
         if (props.atCommit) props.atCommit(index);
         changingSet((dragging) => index !== current || dragging);
@@ -64,7 +64,7 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
       const index = clamp(
         Math.floor((offset + 16) / 32),
         0,
-        childElements.length - 1,
+        childElements().length - 1,
       );
       current = index;
       if (props.atCommit) props.atCommit(index);
@@ -84,7 +84,7 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
 
   const computeTranslate = (offset: number) => {
     if (offset < 0) return Math.sqrt(Math.abs(offset));
-    const max = (childElements.length - 1) * 32;
+    const max = (childElements().length - 1) * 32;
     if (offset > max) return -(max + Math.sqrt(offset - max));
     return -offset;
   };
@@ -92,7 +92,7 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
   const sliderItemStyle = (index: number): JSX.CSSProperties => {
     const offset = offsetGet();
     const center = Math.floor((offset + 16) / 32);
-    const focus = clamp(center, 0, childElements.length - 1);
+    const focus = clamp(center, 0, childElements().length - 1);
     return {
       transform: `translateX(${computeTranslate(offset)}px)`,
       transition: origin === undefined ? "transform 0.3s" : "",
@@ -115,7 +115,7 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
         >
           <div class="flex h-8 w-8">
             <div class="flex flex-row">
-              <Index each={childElements}>
+              <Index each={childElements()}>
                 {(getChild, index) => (
                   <Tap onTap={() => tapHandle(index)} disabled={props.readonly}>
                     {(tapProps) => (

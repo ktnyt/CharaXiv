@@ -1,16 +1,13 @@
 import { Component, Show, createSignal, untrack } from "solid-js";
-import { Status, VARIABLE_KEYS, Variables } from "../types";
-import { Twemoji } from "@charaxiv/components/Twemoji";
-import { SlideSelector } from "@charaxiv/components/SlideSelector";
+import { Parameters, Status, VARIABLE_KEYS, Variables } from "../types";
 import { H1, H2 } from "@charaxiv/components/Heading";
-import { Sequence } from "@charaxiv/components/Sequence";
-import { Fragment } from "@charaxiv/components/Fragment";
 import clsx from "clsx";
 import { Input } from "@charaxiv/components/Input";
 import { Button } from "@charaxiv/components/Button";
 import { randomElement } from "@charaxiv/components/utils";
 import { Modal } from "@charaxiv/components/Modal";
 import { VariableList } from "./VariableList";
+import { ParameterList } from "./ParameterList";
 
 export type StatusSectionType = {
   status: Status;
@@ -20,6 +17,9 @@ export type StatusSectionType = {
 export const StatusSection: Component<StatusSectionType> = (props) => {
   const updateVariables = (variables: Variables) =>
     props.atUpdate({ ...props.status, variables });
+
+  const updateParameters = (parameters: Partial<Parameters>) =>
+    props.atUpdate({ ...props.status, parameters });
 
   const consumed = () =>
     VARIABLE_KEYS.filter((key) => key !== "運勢")
@@ -137,34 +137,16 @@ export const StatusSection: Component<StatusSectionType> = (props) => {
         </Show>
       </div>
 
-      <div class="grid max-w-xs grid-cols-[16px_50px_1fr] items-center justify-center px-8">
-        <VariableList
-          variables={props.status.variables}
-          atUpdate={updateVariables}
-        />
-        <Fragment>
-          <Twemoji>❤️</Twemoji>
-          <span class="text-center font-semibold">HP</span>
-          <SlideSelector index={props.status.variables["身体"] - 1} readonly>
-            <Sequence min={11} max={16} />
-          </SlideSelector>
-        </Fragment>
+      <VariableList
+        variables={props.status.variables}
+        atUpdate={updateVariables}
+      />
 
-        <Fragment>
-          <Twemoji>🪄</Twemoji>
-          <span class="text-center font-semibold">MP</span>
-          <SlideSelector
-            index={
-              props.status.variables["知力"] +
-              props.status.variables["精神"] -
-              2
-            }
-            readonly
-          >
-            <Sequence min={2} max={12} />
-          </SlideSelector>
-        </Fragment>
-      </div>
+      <ParameterList
+        parameters={props.status.parameters}
+        variables={props.status.variables}
+        atUpdate={updateParameters}
+      />
     </div>
   );
 };
