@@ -2,14 +2,11 @@ import { Section } from "@charaxiv/components/Section";
 import { Component } from "solid-js";
 import { EmotionPicker } from "./EmotionPicker";
 import { EmokloreData } from "./types";
-import { SlideSelector } from "@charaxiv/components/SlideSelector";
 import { createReducer } from "@charaxiv/hooks/createReducer";
 import { EmokloreReducer } from "./reducer";
 import { ReverbSection } from "./ReverbSection";
 import { StatusSection } from "./StatusSection";
 import { SkillsSection } from "./SkillsSection";
-import { H1 } from "@charaxiv/components/Heading";
-import { Sequence } from "@charaxiv/components/Sequence";
 
 export type EmokloreColumnProps = {
   init: EmokloreData;

@@ -1,24 +1,24 @@
 import { Component, Index } from "solid-js";
-import { VARIABLE_KEYS, BaseVariableKey, BaseVariables } from "../types";
+import { VARIABLE_KEYS, VariableKey, Variables } from "../types";
 import { Variable } from "./Variable";
 
 export type VariableListProps = {
-  variables: BaseVariables;
-  atUpdate: (variables: BaseVariables) => void;
+  variables: Variables;
+  atUpdate: (variables: Variables) => void;
 };
 
 export const VariableList: Component<VariableListProps> = (props) => {
   const variableList = () =>
     VARIABLE_KEYS.map((key) => ({ key, value: props.variables[key] }));
 
-  const updateVariable = (key: BaseVariableKey) => (value: number) =>
+  const updateVariable = (key: VariableKey) => (value: number) =>
     props.atUpdate({
       ...props.variables,
       [key]: value,
     });
 
   return (
-    <div class="grid grid-cols-[16px_50px_1fr] items-center justify-center gap-x-2 px-8">
+    <div class="grid grid-cols-[16px_50px_1fr] items-center justify-center gap-x-1 px-8">
       <Index each={variableList()}>
         {(item) => (
           <>

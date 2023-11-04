@@ -1,5 +1,5 @@
 import { Component, Show, createSignal, untrack } from "solid-js";
-import { Parameters, Status, VARIABLE_KEYS, Variables } from "../types";
+import { Mutables, Status, VARIABLE_KEYS, Variables } from "../types";
 import { H1, H2 } from "@charaxiv/components/Heading";
 import clsx from "clsx";
 import { Input } from "@charaxiv/components/Input";
@@ -18,8 +18,8 @@ export const StatusSection: Component<StatusSectionType> = (props) => {
   const updateVariables = (variables: Variables) =>
     props.atUpdate({ ...props.status, variables });
 
-  const updateParameters = (parameters: Partial<Parameters>) =>
-    props.atUpdate({ ...props.status, parameters });
+  const updateParameters = (parameters: Partial<Mutables>) =>
+    props.atUpdate({ ...props.status, mutables: parameters });
 
   const consumed = () =>
     VARIABLE_KEYS.filter((key) => key !== "運勢")
@@ -143,7 +143,7 @@ export const StatusSection: Component<StatusSectionType> = (props) => {
       />
 
       <ParameterList
-        parameters={props.status.parameters}
+        parameters={props.status.mutables}
         variables={props.status.variables}
         atUpdate={updateParameters}
       />

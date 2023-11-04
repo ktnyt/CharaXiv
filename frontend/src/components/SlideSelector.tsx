@@ -9,7 +9,7 @@ import {
 
 import { Drag, EventCoords } from "./Drag";
 import { Tap } from "./Tap";
-import { clamp, defined } from "./utils";
+import { clamp } from "./utils";
 import { Viewport } from "@charaxiv/context/Viewport";
 import clsx from "clsx";
 

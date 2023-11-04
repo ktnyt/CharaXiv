@@ -18,6 +18,7 @@ import { ProfileColumn } from "./ProfileColumn";
 import { twMerge } from "tailwind-merge";
 import { Overlay } from "@charaxiv/components/Overlay";
 import { Layout } from "./Layout";
+import { CTHULHU_DATA_DEFAULTS } from "./Cthulhu6Column/types";
 const Cthulhu6 = lazy(() => import("./Cthulhu6Column"));
 const EmokloreColumn = lazy(() => import("./EmokloreColumn"));
 
@@ -97,7 +98,10 @@ export const SheetPage: Component = () => {
             </Match>
 
             <Match when={UserSettingsCtx.gameSystem === "cthulhu6"}>
-              <Cthulhu6 />
+              <Cthulhu6
+                init={sheet.systems.cthulhu6 ?? CTHULHU_DATA_DEFAULTS}
+                atUpdate={(data) => console.log(data)}
+              />
             </Match>
           </Switch>
         </Layout>

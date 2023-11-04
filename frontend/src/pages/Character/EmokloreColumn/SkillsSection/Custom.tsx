@@ -4,7 +4,7 @@ import {
   Status,
   VARIABLE_EMOJI,
   VARIABLE_KEYS,
-  VariableKey,
+  BaseVariableKey,
 } from "../types";
 import { SlideSelector } from "@charaxiv/components/SlideSelector";
 import { Sequence } from "@charaxiv/components/Sequence";
@@ -38,7 +38,7 @@ export const Custom: Component<CustomProps> = (props) => {
   const updateLevel = (level: number) =>
     props.atUpdate({ ...props.skill, level });
 
-  const updateBase = (base: VariableKey) =>
+  const updateBase = (base: BaseVariableKey) =>
     props.atUpdate({ ...props.skill, base });
 
   return (

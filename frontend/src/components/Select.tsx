@@ -30,7 +30,7 @@ export const Select = <T extends unknown>(
             class="flex h-8 cursor-pointer flex-row items-center divide-x divide-nord-300 rounded border border-nord-300 dark:divide-nord-700 dark:border-nord-700"
             {...tapProps}
           >
-            <div class="w-32 px-2 text-center text-sm">
+            <div class="w-32 px-2 text-start text-sm">
               {props.renderSelect(props.options[props.index])}
             </div>
             <div class="flex h-5 w-8 items-center justify-center">

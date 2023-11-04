@@ -74,41 +74,35 @@ export const VARIABLE_EMOJI: Record<VariableKey, string> = {
 
 export type Variables = Record<VariableKey, number>;
 
-export const PARAMETER_KEYS = ["共鳴", "HP", "MP"] as const;
+export const MUTABLE_KEYS = ["共鳴", "HP", "MP"] as const;
 
-export type ParameterKey = (typeof PARAMETER_KEYS)[number];
+export type MutableKey = (typeof MUTABLE_KEYS)[number];
 
-export const PARAMETER_EMOJI: Record<ParameterKey, string> = {
+export const MUTABLE_EMOJI: Record<MutableKey, string> = {
   共鳴: "🔔",
   HP: "❤️",
   MP: "🪄",
 };
 
-export type ParameterFormula = (variables: Variables) => number;
+export type MutableFormula = (variables: Variables) => number;
 
-export const PARAMETER_FORMULA: Record<ParameterKey, ParameterFormula> = {
+export const MUTABLE_FORMULAE: Record<MutableKey, MutableFormula> = {
   共鳴: (variables) => 10,
   HP: (variables) => variables["身体"] + 10,
   MP: (variables) => variables["精神"] + variables["知力"],
 };
 
-export const PARAMETER_RANGE: Record<ParameterKey, [number, number]> = {
-  共鳴: [10, 10],
-  HP: [11, 16],
-  MP: [2, 12],
-};
-
-export const PARAMETER_DEFAULT_ZERO: Record<ParameterKey, boolean> = {
+export const MUTABLE_DEFAULT_ZERO: Record<MutableKey, boolean> = {
   共鳴: true,
   HP: false,
   MP: false,
 };
 
-export type Parameters = Record<ParameterKey, number>;
+export type Mutables = Partial<Record<MutableKey, number>>;
 
 export type Status = {
   variables: Variables;
-  parameters: Partial<Parameters>;
+  mutables: Mutables;
   extra: number;
 };
 
@@ -194,7 +188,7 @@ const EMOKLORE_STATUS_DEFAULTS: Status = {
     社会: 1,
     運勢: 1,
   },
-  parameters: {},
+  mutables: {},
   extra: 0,
 };
 
@@ -349,7 +343,6 @@ const EMOKLORE_SKILLS_DEFAULTS: Skills = {
 export const EMOKLORE_DATA_DEFAULTS: EmokloreData = {
   emotions: {},
   reverbs: [],
-  resonance: 0,
   status: EMOKLORE_STATUS_DEFAULTS,
   skills: EMOKLORE_SKILLS_DEFAULTS,
 };

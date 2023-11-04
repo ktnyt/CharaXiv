@@ -1,15 +1,30 @@
 import { Component, createSignal } from "solid-js";
 import { Section } from "@charaxiv/components/Section";
+import { StatusSection } from "./StatusSection";
+import { CthulhuData } from "./types";
+import { createReducer } from "@charaxiv/hooks/createReducer";
+import { CthulhuReducer } from "./reducer";
 
 export type Cthulhu6Props = {
-  // sheet: Sheet<Cthulhu6Data>;
+  init: CthulhuData;
+  atUpdate: (data: CthulhuData) => void;
 };
 
-export const Cthulhu6: Component<Cthulhu6Props> = () => {
+export const Cthulhu6: Component<Cthulhu6Props> = (props) => {
+  const [state, dispatch] = createReducer(props.init, CthulhuReducer, {
+    debug: true,
+    callback: (data) => props.atUpdate(data),
+  });
+
   return (
     <>
-      <Section class="flex h-10 w-full flex-col"></Section>
-      <Section class="flex h-10 w-full flex-col"></Section>
+      <Section class="flex w-full flex-col">
+        <StatusSection
+          status={state().status}
+          atUpdate={(value) => dispatch({ type: "status", value })}
+        />
+      </Section>
+      <Section class="flex w-full flex-col"></Section>
     </>
   );
 };

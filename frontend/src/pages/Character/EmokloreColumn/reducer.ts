@@ -1,4 +1,3 @@
-import { Character } from "@charaxiv/types/character";
 import { EmokloreData, Emotions, Reverb, Skills, Status } from "./types";
 
 export type EmokloreAction =

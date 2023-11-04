@@ -1,11 +1,11 @@
 import { Component } from "solid-js";
-import { VARIABLE_EMOJI, VariableKey } from "../types";
+import { VARIABLE_EMOJI, BaseVariableKey } from "../types";
 import { Twemoji } from "@charaxiv/components/Twemoji";
 import { SlideSelector } from "@charaxiv/components/SlideSelector";
 import { Sequence } from "@charaxiv/components/Sequence";
 
 export type VariableProps = {
-  key: VariableKey;
+  key: BaseVariableKey;
   value: number;
   atUpdate: (value: number) => void;
 };

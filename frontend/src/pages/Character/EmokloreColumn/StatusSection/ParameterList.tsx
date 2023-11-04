@@ -1,18 +1,18 @@
 import { Component, Index } from "solid-js";
-import { PARAMETER_KEYS, ParameterKey, Parameters, Variables } from "../types";
+import { MUTABLE_KEYS, MutableKey, Mutables, Variables } from "../types";
 import { Parameter } from "./Parameter";
 
 export type ParameterListProps = {
-  parameters: Partial<Parameters>;
+  parameters: Partial<Mutables>;
   variables: Variables;
-  atUpdate: (parameters: Partial<Parameters>) => void;
+  atUpdate: (parameters: Partial<Mutables>) => void;
 };
 
 export const ParameterList: Component<ParameterListProps> = (props) => {
   const parameterList = () =>
-    PARAMETER_KEYS.map((key) => ({ key, value: props.parameters[key] }));
+    MUTABLE_KEYS.map((key) => ({ key, value: props.parameters[key] }));
 
-  const updateParameter = (key: ParameterKey) => (value?: number) =>
+  const updateParameter = (key: MutableKey) => (value?: number) =>
     props.atUpdate({
       ...props.parameters,
       [key]: value,

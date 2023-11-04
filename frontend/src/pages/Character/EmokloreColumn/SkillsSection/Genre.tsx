@@ -1,5 +1,5 @@
 import { Component, For } from "solid-js";
-import { SkillGenre, Status, VariableKey } from "../types";
+import { SkillGenre, Status, BaseVariableKey } from "../types";
 import { Input } from "@charaxiv/components/Input";
 import { SlideSelector } from "@charaxiv/components/SlideSelector";
 import { atConfirm, sequence } from "@charaxiv/components/utils";
@@ -10,7 +10,7 @@ import { Sequence } from "@charaxiv/components/Sequence";
 export type GenreProps = {
   name: string;
   genre: SkillGenre;
-  base: VariableKey;
+  base: BaseVariableKey;
   status: Status;
   atUpdate: (genre: SkillGenre) => void;
   atDelete: () => void;

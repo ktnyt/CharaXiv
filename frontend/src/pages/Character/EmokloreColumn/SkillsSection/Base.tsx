@@ -1,5 +1,5 @@
 import { Component, For } from "solid-js";
-import { Status, VARIABLE_EMOJI, VariableKey } from "../types";
+import { Status, VARIABLE_EMOJI, BaseVariableKey } from "../types";
 import { Twemoji } from "@charaxiv/components/Twemoji";
 import { SlideSelector } from "@charaxiv/components/SlideSelector";
 import { sequence } from "@charaxiv/components/utils";
@@ -7,7 +7,7 @@ import { Sequence } from "@charaxiv/components/Sequence";
 
 export type BaseProps = {
   name: string;
-  base: VariableKey;
+  base: BaseVariableKey;
   status: Status;
 };
 

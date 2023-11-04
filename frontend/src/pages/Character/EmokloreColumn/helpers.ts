@@ -7,7 +7,7 @@ import {
   SingleSkill,
   Skill,
   Status,
-  VariableKey,
+  BaseVariableKey,
 } from "./types";
 
 export const emotionColor = (emotion?: EmotionType): ButtonColor =>
@@ -16,12 +16,14 @@ export const emotionColor = (emotion?: EmotionType): ButtonColor =>
 export const emotionText = (emotion?: EmotionType): string =>
   !emotion ? "未設定" : `${emotion}（${EMOTION_CATEGORY_MAP[emotion]}）`;
 
-export const maxVariableValue = (status: Status, keys: VariableKey[]): number =>
-  Math.max(...keys.map((key) => status.variables[key]));
+export const maxVariableValue = (
+  status: Status,
+  keys: BaseVariableKey[],
+): number => Math.max(...keys.map((key) => status.variables[key]));
 
 export const maxVariableIndex = (
   status: Status,
-  keys: VariableKey[],
+  keys: BaseVariableKey[],
 ): number => {
   const values = keys.map((key) => status.variables[key]);
   return values.indexOf(Math.max(...values));
@@ -29,8 +31,8 @@ export const maxVariableIndex = (
 
 export const maxVariableKey = (
   status: Status,
-  keys: VariableKey[],
-): VariableKey => keys[maxVariableIndex(status, keys)];
+  keys: BaseVariableKey[],
+): BaseVariableKey => keys[maxVariableIndex(status, keys)];
 
 export const isSingleSkill = (skill: Skill): skill is SingleSkill =>
   skill.type === "single";

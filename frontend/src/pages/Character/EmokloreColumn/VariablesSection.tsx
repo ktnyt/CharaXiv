@@ -1,5 +1,10 @@
 import { Component, For } from "solid-js";
-import { VARIABLE_EMOJI, VARIABLE_KEYS, VariableKey, Variables } from "./types";
+import {
+  VARIABLE_EMOJI,
+  VARIABLE_KEYS,
+  BaseVariableKey,
+  BaseVariables,
+} from "./types";
 import { Twemoji } from "@charaxiv/components/Twemoji";
 import { SlideSelector } from "@charaxiv/components/SlideSelector";
 import { sequence } from "@charaxiv/components/utils";
@@ -8,12 +13,12 @@ import { Sequence } from "@charaxiv/components/Sequence";
 import { Fragment } from "@charaxiv/components/Fragment";
 
 export type VariablesSectionType = {
-  variables: Variables;
-  atUpdate: (variables: Variables) => void;
+  variables: BaseVariables;
+  atUpdate: (variables: BaseVariables) => void;
 };
 
 export const VariablesSection: Component<VariablesSectionType> = (props) => {
-  const variableChangeHandle = (key: VariableKey) => (index: number) =>
+  const variableChangeHandle = (key: BaseVariableKey) => (index: number) =>
     props.atUpdate({ ...props.variables, [key]: index + 1 });
 
   return (
