@@ -11,18 +11,27 @@ export const VARIABLE_KEYS = [
 
 export type VariableKey = (typeof VARIABLE_KEYS)[number];
 
-export const VARIABLE_EMOJI: Record<VariableKey, string> = {
-  STR: "💪",
-  CON: "💎",
-  POW: "💭",
-  DEX: "🤸",
-  APP: "💖",
-  SIZ: "📐",
-  INT: "💡",
-  EDU: "📚",
+export const VARIABLE_LABEL: Record<VariableKey, string> = {
+  STR: "S\u{200B}T\u{200B}R",
+  CON: "C\u{200B}O\u{200B}N",
+  POW: "P\u{200B}O\u{200B}W",
+  DEX: "D\u{200B}E\u{200B}X",
+  APP: "A\u{200B}P\u{200B}P",
+  SIZ: "S\u{200B}I\u{200B}Z",
+  INT: "I\u{200B}N\u{200B}T",
+  EDU: "E\u{200B}D\u{200B}U",
 };
 
-export type Variables = Record<VariableKey, number>;
+export type VariableValue = {
+  base: number;
+  adj: number;
+  tmp: number;
+};
+
+export const computeVariable = (variable: VariableValue) =>
+  variable.base + variable.adj + variable.tmp;
+
+export type Variables = Record<VariableKey, VariableValue>;
 
 export type Range = { min: number; max: number };
 
@@ -30,26 +39,26 @@ export type Dice = Range[];
 
 export const D6: Range = { min: 1, max: 6 };
 
-export const VARIABLE_MIN: Record<VariableKey, number> = {
-  STR: 3,
-  CON: 3,
-  POW: 3,
-  DEX: 3,
-  APP: 3,
-  SIZ: 8,
-  INT: 8,
-  EDU: 6,
+export const VARIABLE_MIN: Record<VariableKey, VariableValue> = {
+  STR: { base: 3, adj: 0, tmp: 0 },
+  CON: { base: 3, adj: 0, tmp: 0 },
+  POW: { base: 3, adj: 0, tmp: 0 },
+  DEX: { base: 3, adj: 0, tmp: 0 },
+  APP: { base: 3, adj: 0, tmp: 0 },
+  SIZ: { base: 8, adj: 0, tmp: 0 },
+  INT: { base: 8, adj: 0, tmp: 0 },
+  EDU: { base: 6, adj: 0, tmp: 0 },
 };
 
-export const VARIABLE_MAX: Record<VariableKey, number> = {
-  STR: 18,
-  CON: 18,
-  POW: 18,
-  DEX: 18,
-  APP: 18,
-  SIZ: 18,
-  INT: 18,
-  EDU: 21,
+export const VARIABLE_MAX: Record<VariableKey, VariableValue> = {
+  STR: { base: 18, adj: 0, tmp: 0 },
+  CON: { base: 18, adj: 0, tmp: 0 },
+  POW: { base: 18, adj: 0, tmp: 0 },
+  DEX: { base: 18, adj: 0, tmp: 0 },
+  APP: { base: 18, adj: 0, tmp: 0 },
+  SIZ: { base: 18, adj: 0, tmp: 0 },
+  INT: { base: 18, adj: 0, tmp: 0 },
+  EDU: { base: 21, adj: 0, tmp: 0 },
 };
 
 export const VARIABLE_DICE: Record<VariableKey, Dice> = {
@@ -90,16 +99,18 @@ export const PARAMETER_EDITABLE: Record<ParameterKey, boolean> = {
 export type ParameterFormula = (variables: Variables) => number;
 
 export const PARAMETER_FORMULA: Record<ParameterKey, ParameterFormula> = {
-  初期SAN: (variables) => variables["POW"] * 5,
-  不定SAN: (variables) => variables["POW"] * 4,
-  幸運: (variables) => variables["POW"] * 5,
-  アイデア: (variables) => variables["INT"] * 5,
-  知識: (variables) => variables["EDU"] * 5,
-  // 最大HP: (variables) => Math.floor((variables["CON"] + variables["SIZ"]) / 2),
-  // 最大MP: (variables) => variables["POW"],
-  職業P: (variables) => variables["EDU"] * 20,
-  趣味P: (variables) => variables["INT"] * 10,
+  初期SAN: (variables) => computeVariable(variables["POW"]) * 5,
+  不定SAN: (variables) => computeVariable(variables["POW"]) * 4,
+  幸運: (variables) => computeVariable(variables["POW"]) * 5,
+  アイデア: (variables) => computeVariable(variables["INT"]) * 5,
+  知識: (variables) => computeVariable(variables["EDU"]) * 5,
+  // 最大HP: (variables) => Math.floor((variableValue(variables["CON"]) + variableValue(variables["SIZ"])) / 2),
+  // 最大MP: (variables) => variableValue(variables["POW"]),
+  職業P: (variables) => computeVariable(variables["EDU"]) * 20,
+  趣味P: (variables) => computeVariable(variables["INT"]) * 10,
 };
+
+export const PARAMETER_STEP: Record<ParameterKey, number> = {};
 
 export const MUTABLE_KEYS = ["HP", "MP", "SAN"] as const;
 
@@ -112,14 +123,14 @@ export type Status = {
 
 const CTHULHU_STATUS_DEFAULTS: Status = {
   variables: {
-    STR: 11,
-    CON: 11,
-    POW: 11,
-    DEX: 11,
-    APP: 11,
-    SIZ: 13,
-    INT: 13,
-    EDU: 14,
+    STR: { base: 11, adj: 0, tmp: 0 },
+    CON: { base: 11, adj: 0, tmp: 0 },
+    POW: { base: 11, adj: 0, tmp: 0 },
+    DEX: { base: 11, adj: 0, tmp: 0 },
+    APP: { base: 11, adj: 0, tmp: 0 },
+    SIZ: { base: 13, adj: 0, tmp: 0 },
+    INT: { base: 13, adj: 0, tmp: 0 },
+    EDU: { base: 14, adj: 0, tmp: 0 },
   },
   parameters: {},
 };

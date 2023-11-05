@@ -15,13 +15,11 @@ export const StatusSection: Component<StatusSectionType> = (props) => {
   const updateVariables = (variables: Variables) =>
     props.atUpdate({ ...props.status, variables });
 
-  const updateParameters = (parameters: Parameters) => {};
-
   const [randomModalGet, randomModalSet] = createSignal(false);
 
   return (
-    <div class="flex flex-col gap-2">
-      <div class="flex flex-row justify-between">
+    <div class="flex w-full flex-col items-center gap-2">
+      <div class="flex w-full flex-row justify-between">
         <div>
           <H1>能力値</H1>
         </div>
@@ -54,7 +52,6 @@ export const StatusSection: Component<StatusSectionType> = (props) => {
       <ParameterList
         parameters={props.status.parameters}
         variables={props.status.variables}
-        atUpdate={updateParameters}
       />
     </div>
   );

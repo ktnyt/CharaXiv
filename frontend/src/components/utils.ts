@@ -54,10 +54,16 @@ export const swapElement = <T>(array: T[], index: number, value: T) => [
   ...array.slice(index + 1),
 ];
 
-export const sequence = (min: number, max?: number): number[] =>
-  max === undefined
-    ? sequence(0, min)
-    : [...new Array(max - min)].map((_, index) => index + min);
+export const sequence = (
+  min: number,
+  max?: number,
+  step?: number,
+): number[] => {
+  if (step === undefined) return sequence(min, max, 1);
+  if (max === undefined) return sequence(0, min, step);
+  const n = Math.floor((max - min) / step);
+  return [...new Array(n)].map((_, index) => min + index * step);
+};
 
 export const inspect = <T>(value: T): T => {
   console.log(value);

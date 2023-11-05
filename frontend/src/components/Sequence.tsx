@@ -6,10 +6,11 @@ export type SequenceProps = {
   class?: ComponentProps<"div">["class"];
   min?: number;
   max: number;
+  step?: number;
 };
 
 export const Sequence: Component<SequenceProps> = (props) => {
-  const values = () => sequence(props.min ?? 0, props.max + 1);
+  const values = () => sequence(props.min ?? 0, props.max + 1, props.step ?? 1);
   return (
     <For each={values()}>
       {(value) => (

@@ -1,6 +1,5 @@
-import { Component, createEffect } from "solid-js";
+import { Component } from "solid-js";
 import {
-  MutableKey,
   PARAMETER_FORMULA,
   ParameterKey,
   VARIABLE_MAX,
@@ -16,16 +15,16 @@ export type ParameterProps = {
 };
 
 export const Parameter: Component<ParameterProps> = (props) => {
-  const min = PARAMETER_FORMULA[props.key](VARIABLE_MIN);
-  const max = PARAMETER_FORMULA[props.key](VARIABLE_MAX);
+  const min = () => PARAMETER_FORMULA[props.key](VARIABLE_MIN);
+  const max = () => PARAMETER_FORMULA[props.key](VARIABLE_MAX);
   const value = () => PARAMETER_FORMULA[props.key](props.variables);
 
   return (
     <>
       <span class="text-center font-semibold">{props.key}</span>
 
-      <SlideSelector index={value() - min} readonly>
-        <Sequence min={min} max={max} class="text-sm" />
+      <SlideSelector index={value() - min()} readonly>
+        <Sequence min={min()} max={max()} class="text-sm" />
       </SlideSelector>
     </>
   );

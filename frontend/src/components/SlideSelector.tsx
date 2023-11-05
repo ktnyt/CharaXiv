@@ -5,6 +5,8 @@ import {
   children,
   createEffect,
   createSignal,
+  onCleanup,
+  onMount,
 } from "solid-js";
 
 import { Drag, EventCoords } from "./Drag";
@@ -12,9 +14,16 @@ import { Tap } from "./Tap";
 import { clamp } from "./utils";
 import { Viewport } from "@charaxiv/context/Viewport";
 import clsx from "clsx";
+import { createThrottle } from "@charaxiv/hooks/createThrottle";
+import {
+  ResizeObserverCallback,
+  subscribe,
+  unsubscribe,
+} from "@charaxiv/context/ResizeObserver";
 
 export type SlideSelectorProps = {
   index?: number;
+  factor?: number;
   atCommit?: (index: number) => void;
   readonly?: boolean;
   children: JSX.Element;
@@ -23,8 +32,17 @@ export type SlideSelectorProps = {
 export const SlideSelector: Component<SlideSelectorProps> = (props) => {
   let ref!: HTMLDivElement;
 
+  const [factorGet, factorSet] = createSignal(props.factor ?? 1);
+
   const resolved = children(() => props.children);
   const childElements = () => resolved.toArray();
+
+  const resize: ResizeObserverCallback = (entry) => {
+    const ratio = (childElements().length * 32) / entry.contentRect.width;
+    factorSet(Math.pow(ratio, 0.5));
+  };
+  onMount(() => subscribe(ref, resize));
+  onCleanup(() => unsubscribe(ref, resize));
 
   let current = props.index ?? 0;
   let origin: number | undefined;
@@ -32,8 +50,13 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
   const [offsetGet, offsetSet] = createSignal(current * 32);
   const [changingGet, changingSet] = createSignal(false);
 
+  const throttledOffset = createThrottle(offsetGet, 1000 / 60);
+
   createEffect(() => {
-    if (!origin) offsetSet(() => (props.index ?? 0) * 32);
+    if (!origin) {
+      const index = clamp(props.index ?? 0, 0, childElements().length - 1);
+      offsetSet(() => index * 32);
+    }
   });
   createEffect(() => Viewport.scroll(!changingGet()));
 
@@ -43,7 +66,7 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
 
   const dragMoveHandle = ({ pageX: coord }: EventCoords) => {
     if (origin) {
-      const delta = origin - coord;
+      const delta = (origin - coord) * factorGet();
       origin = coord;
       offsetSet((offset) => {
         const index = clamp(
@@ -60,16 +83,14 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
 
   const dragEndHandle = () => {
     origin = undefined;
-    offsetSet((offset) => {
-      const index = clamp(
-        Math.floor((offset + 16) / 32),
-        0,
-        childElements().length - 1,
-      );
+    const offset = offsetGet();
+    if (offset) {
+      const center = Math.floor((offset + 16) / 32);
+      const index = clamp(center, 0, childElements().length - 1);
       current = index;
       if (props.atCommit) props.atCommit(index);
-      return index * 32;
-    });
+      offsetSet(index * 32);
+    }
     changingSet(false);
   };
 
@@ -90,7 +111,7 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
   };
 
   const sliderItemStyle = (index: number): JSX.CSSProperties => {
-    const offset = offsetGet();
+    const offset = throttledOffset();
     const center = Math.floor((offset + 16) / 32);
     const focus = clamp(center, 0, childElements().length - 1);
     return {

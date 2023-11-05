@@ -4,7 +4,11 @@ const colors = require("tailwindcss/colors");
 module.exports = {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      transitionPropert: {
+        height: "height",
+      },
+    },
     colors: {
       blue: {
         ...colors.blue,
