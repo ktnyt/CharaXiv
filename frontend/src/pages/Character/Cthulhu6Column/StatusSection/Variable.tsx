@@ -1,7 +1,6 @@
-import { Component, For, Show, createSignal, untrack } from "solid-js";
+import { Component, For, untrack } from "solid-js";
 import {
   VARIABLE_DICE,
-  VARIABLE_LABEL,
   VariableKey,
   VariableValue,
   computeVariable,
@@ -9,6 +8,7 @@ import {
 import { SlideSelector } from "@charaxiv/components/SlideSelector";
 import { Sequence } from "@charaxiv/components/Sequence";
 import { Input } from "@charaxiv/components/Input";
+import { Either } from "@charaxiv/components/Either";
 
 export type VariableProps = {
   key: VariableKey;
@@ -82,9 +82,12 @@ export const Variable: Component<VariableProps> = (props) => {
       />
       <span>=</span>
 
-      <SlideSelector index={value()} readonly>
-        <Sequence min={0} max={Math.max(max(), value())} />
-      </SlideSelector>
+      <Either when={value() < 100}>
+        <SlideSelector index={value()} readonly>
+          <Sequence min={0} max={99} />
+        </SlideSelector>
+        <div class="w-8 h-8 flex justify-items items-center font-semibold proportional-nums leading-8">{value()}</div>
+      </Either>
     </>
   );
 };

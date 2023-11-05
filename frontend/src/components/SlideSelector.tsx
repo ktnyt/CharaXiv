@@ -26,11 +26,14 @@ export type SlideSelectorProps = {
   factor?: number;
   atCommit?: (index: number) => void;
   readonly?: boolean;
+  vertical?: boolean;
   children: JSX.Element;
 };
 
 export const SlideSelector: Component<SlideSelectorProps> = (props) => {
   let ref!: HTMLDivElement;
+
+  const vertical = () => props.vertical ?? false;
 
   const [factorGet, factorSet] = createSignal(props.factor ?? 1);
 
@@ -60,12 +63,13 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
   });
   createEffect(() => Viewport.scroll(!changingGet()));
 
-  const dragStartHandle = ({ pageX: coord }: EventCoords) => {
-    origin = coord;
+  const dragStartHandle = ({ pageX, pageY }: EventCoords) => {
+    origin = vertical() ? pageY : pageX;
   };
 
-  const dragMoveHandle = ({ pageX: coord }: EventCoords) => {
+  const dragMoveHandle = ({ pageX, pageY }: EventCoords) => {
     if (origin) {
+      const coord = vertical() ? pageY : pageX;
       const delta = (origin - coord) * factorGet();
       origin = coord;
       offsetSet((offset) => {
@@ -114,8 +118,9 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
     const offset = throttledOffset();
     const center = Math.floor((offset + 16) / 32);
     const focus = clamp(center, 0, childElements().length - 1);
+    const translate = `translate${vertical() ? "Y" : "X"}`
     return {
-      transform: `translateX(${computeTranslate(offset)}px)`,
+      transform: `${translate}(${computeTranslate(offset)}px)`,
       transition: origin === undefined ? "transform 0.3s" : "",
       opacity: focus === index ? "100%" : "33%",
     };
@@ -135,7 +140,7 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
           {...dragProps}
         >
           <div class="flex h-8 w-8">
-            <div class="flex flex-row">
+            <div class={clsx("flex", vertical() ? "flex-col" : "flex-row")}>
               <Index each={childElements()}>
                 {(getChild, index) => (
                   <Tap onTap={() => tapHandle(index)} disabled={props.readonly}>

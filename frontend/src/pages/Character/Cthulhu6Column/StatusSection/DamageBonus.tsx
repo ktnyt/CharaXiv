@@ -31,7 +31,7 @@ export const DamageBonus: Component<DamageBonusProps> = (props) => {
     <>
       <span class="text-center font-semibold">ﾀﾞﾒｰｼﾞﾎﾞｰﾅｽ</span>
 
-      <SlideSelector index={index()} readonly>
+      <SlideSelector index={index()} readonly vertical>
         <Index each={values()}>
           {(value) => (
             <div class="flex items-center justify-center font-semibold tabular-nums">
