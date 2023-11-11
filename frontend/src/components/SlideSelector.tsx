@@ -120,11 +120,18 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
     const focus = clamp(center, 0, childElements().length - 1);
     const translate = `translate${vertical() ? "Y" : "X"}`
     return {
-      transform: `${translate}(${computeTranslate(offset)}px)`,
-      transition: origin === undefined ? "transform 0.3s" : "",
       opacity: focus === index ? "100%" : "33%",
     };
   };
+
+  const sliderContainerStyle = (): JSX.CSSProperties => {
+    const offset = throttledOffset()
+    const translate = `translate${vertical() ? "Y" : "X"}`
+    return {
+      transform: `${translate}(${computeTranslate(offset)}px)`,
+      transition: origin === undefined ? "transform 0.3s" : "",
+    };
+  }
 
   return (
     <Drag
@@ -140,7 +147,7 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
           {...dragProps}
         >
           <div class="flex h-8 w-8">
-            <div class={clsx("flex", vertical() ? "flex-col" : "flex-row")}>
+            <div class={clsx("flex", vertical() ? "flex-col" : "flex-row")} style={sliderContainerStyle()}>
               <Index each={childElements()}>
                 {(getChild, index) => (
                   <Tap onTap={() => tapHandle(index)} disabled={props.readonly}>
