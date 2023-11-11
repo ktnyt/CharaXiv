@@ -57,7 +57,7 @@ export const Variable: Component<VariableProps> = (props) => {
         <For each={props.key.split("")}>{(c) => <span>{c}</span>}</For>
       </span>
 
-      <div class="mx-2">
+      <div class="mx-4">
         <SlideSelector
           index={props.value.base - min()}
           atCommit={(value) => updateBase(value + min())}
