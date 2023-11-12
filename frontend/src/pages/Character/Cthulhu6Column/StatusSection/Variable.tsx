@@ -86,7 +86,9 @@ export const Variable: Component<VariableProps> = (props) => {
         <SlideSelector index={value()} readonly>
           <Sequence min={0} max={99} />
         </SlideSelector>
-        <div class="w-8 h-8 flex justify-items items-center font-semibold proportional-nums leading-8">{value()}</div>
+        <div class="justify-items flex h-8 w-8 items-center font-semibold proportional-nums leading-8">
+          {value()}
+        </div>
       </Either>
     </>
   );

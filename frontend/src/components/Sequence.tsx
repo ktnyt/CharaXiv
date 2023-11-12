@@ -16,7 +16,7 @@ export const Sequence: Component<SequenceProps> = (props) => {
       {(value) => (
         <div
           class={twMerge(
-            "flex items-center justify-center font-semibold tabular-nums",
+            "flex items-center justify-center font-semibold tabular-nums w-full h-full",
             props.class,
           )}
         >

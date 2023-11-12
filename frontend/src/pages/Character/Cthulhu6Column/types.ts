@@ -110,8 +110,6 @@ export const PARAMETER_FORMULA: Record<ParameterKey, ParameterFormula> = {
   趣味P: (variables) => computeVariable(variables["INT"]) * 10,
 };
 
-export const PARAMETER_STEP: Record<ParameterKey, number> = {};
-
 export const MUTABLE_KEYS = ["HP", "MP", "SAN"] as const;
 
 export type MutableKey = (typeof MUTABLE_KEYS)[number];

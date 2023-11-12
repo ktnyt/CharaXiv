@@ -28,18 +28,18 @@ export const DamageBonus: Component<DamageBonusProps> = (props) => {
   ];
 
   return (
-    <>
-      <span class="text-center font-semibold">ﾀﾞﾒｰｼﾞﾎﾞｰﾅｽ</span>
+    <div class="grid grid-cols-[auto_32px] items-center justify-between">
+      <span class="text-center font-semibold">DB</span>
 
       <SlideSelector index={index()} readonly vertical>
         <Index each={values()}>
           {(value) => (
-            <div class="flex items-center justify-center font-semibold tabular-nums">
+            <div class="flex h-full items-center justify-center text-sm font-semibold tabular-nums">
               <span>{value()}</span>
             </div>
           )}
         </Index>
       </SlideSelector>
-    </>
+    </div>
   );
 };

@@ -41,7 +41,10 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
   const childElements = () => resolved.toArray();
 
   const resize: ResizeObserverCallback = (entry) => {
-    const ratio = (childElements().length * 32) / entry.contentRect.width;
+    const size = vertical()
+      ? entry.contentRect.height
+      : entry.contentRect.width;
+    const ratio = (childElements().length * 32) / size;
     factorSet(Math.pow(ratio, 0.5));
   };
   onMount(() => subscribe(ref, resize));
@@ -61,6 +64,7 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
       offsetSet(() => index * 32);
     }
   });
+
   createEffect(() => Viewport.scroll(!changingGet()));
 
   const dragStartHandle = ({ pageX, pageY }: EventCoords) => {
@@ -118,20 +122,19 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
     const offset = throttledOffset();
     const center = Math.floor((offset + 16) / 32);
     const focus = clamp(center, 0, childElements().length - 1);
-    const translate = `translate${vertical() ? "Y" : "X"}`
     return {
       opacity: focus === index ? "100%" : "33%",
     };
   };
 
   const sliderContainerStyle = (): JSX.CSSProperties => {
-    const offset = throttledOffset()
-    const translate = `translate${vertical() ? "Y" : "X"}`
+    const offset = throttledOffset();
+    const translate = `translate${vertical() ? "Y" : "X"}`;
     return {
       transform: `${translate}(${computeTranslate(offset)}px)`,
       transition: origin === undefined ? "transform 0.3s" : "",
     };
-  }
+  };
 
   return (
     <Drag
@@ -143,18 +146,25 @@ export const SlideSelector: Component<SlideSelectorProps> = (props) => {
       {(dragProps) => (
         <div
           ref={ref}
-          class="flex h-8 w-full select-none justify-center overflow-clip"
+          class={clsx(
+            "flex h-8 w-full select-none justify-center",
+            (props.readonly ?? false) && "cursor-default",
+            vertical() ? "overflow-y-clip" : "overflow-x-clip",
+          )}
           {...dragProps}
         >
           <div class="flex h-8 w-8">
-            <div class={clsx("flex", vertical() ? "flex-col" : "flex-row")} style={sliderContainerStyle()}>
+            <div
+              class={clsx("flex", vertical() ? "flex-col" : "flex-row")}
+              style={sliderContainerStyle()}
+            >
               <Index each={childElements()}>
                 {(getChild, index) => (
                   <Tap onTap={() => tapHandle(index)} disabled={props.readonly}>
                     {(tapProps) => (
                       <div
                         class={clsx(
-                          "flex h-8 w-8 justify-center align-middle leading-8",
+                          "flex h-8 w-8 justify-center align-middle",
                           props.readonly ?? false
                             ? "cursor-default"
                             : "cursor-pointer",

@@ -1,7 +1,8 @@
-import { Component, Index } from "solid-js";
-import { PARAMETER_KEYS, ParameterKey, Parameters, Variables } from "../types";
+import { Component, Index, createSignal, onCleanup, onMount } from "solid-js";
+import { PARAMETER_KEYS, Parameters, Variables } from "../types";
 import { Parameter } from "./Parameter";
 import { DamageBonus } from "./DamageBonus";
+import clsx from "clsx";
 
 export type ParameterListProps = {
   parameters: Parameters;
@@ -13,7 +14,7 @@ export const ParameterList: Component<ParameterListProps> = (props) => {
     PARAMETER_KEYS.map((key) => ({ key, value: props.parameters[key] }));
 
   return (
-    <div class="grid grid-cols-[1fr_32px_1fr_32px] items-center justify-center gap-x-2">
+    <div class="xs:gap-x-4 grid w-full grid-cols-3 justify-between gap-x-2">
       <Index each={parameterList()}>
         {(item) => <Parameter key={item().key} variables={props.variables} />}
       </Index>

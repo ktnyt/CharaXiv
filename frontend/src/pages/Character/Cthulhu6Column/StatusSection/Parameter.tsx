@@ -20,12 +20,12 @@ export const Parameter: Component<ParameterProps> = (props) => {
   const value = () => PARAMETER_FORMULA[props.key](props.variables);
 
   return (
-    <>
+    <div class="grid grid-cols-[auto_32px] items-center justify-between">
       <span class="text-center font-semibold">{props.key}</span>
 
       <SlideSelector index={value() - min()} readonly>
         <Sequence min={min()} max={max()} class="text-sm" />
       </SlideSelector>
-    </>
+    </div>
   );
 };

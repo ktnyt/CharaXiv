@@ -4,6 +4,7 @@ import { StatusSection } from "./StatusSection";
 import { CthulhuData } from "./types";
 import { createReducer } from "@charaxiv/hooks/createReducer";
 import { CthulhuReducer } from "./reducer";
+import { SkillsSection } from "./SkillsSection";
 
 export type Cthulhu6Props = {
   init: CthulhuData;
@@ -18,13 +19,16 @@ export const Cthulhu6: Component<Cthulhu6Props> = (props) => {
 
   return (
     <>
-      <Section class="flex w-full flex-col">
+      <Section class="flex w-full flex-col gap-4 p-2">
         <StatusSection
           status={state().status}
           atUpdate={(value) => dispatch({ type: "status", value })}
         />
       </Section>
-      <Section class="flex w-full flex-col"></Section>
+
+      <Section class="flex w-full flex-col">
+        <SkillsSection />
+      </Section>
     </>
   );
 };

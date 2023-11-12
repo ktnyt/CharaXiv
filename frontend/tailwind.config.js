@@ -5,7 +5,11 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
-      transitionPropert: {
+      screens: {
+        xs: "360px",
+      },
+      transitionProperty: {
+        width: "width",
         height: "height",
       },
     },
